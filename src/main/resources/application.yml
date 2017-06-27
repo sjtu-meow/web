@@ -1,0 +1,17 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost/meow?useUnicode=yes&characterEncoding=UTF-8
+    username: root
+
+  jpa:
+    database-platform: MySQL5InnoDB
+
+  logging:
+    level:
+      org.hibernate.SQL: debug
+      org.springframework.web: DEBUG
+
+  thymeleaf:
+    mode: LEGACYHTML5
+    cache: true
