@@ -3,16 +3,18 @@ package me.sjtumeow.meow.model;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import javax.persistence.MappedSuperclass;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 @MappedSuperclass
 public abstract class BaseEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    protected static final String NOT_DELETED = "deleted_on > CURRENT_TIMESTAMP OR deleted_on IS NULL";
-
+    @CreationTimestamp
     protected LocalDateTime createdAt;
 
+    @UpdateTimestamp
     protected LocalDateTime updatedAt;
 
     protected LocalDateTime deletedAt;

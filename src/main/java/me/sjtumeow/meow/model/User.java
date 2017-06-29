@@ -2,23 +2,20 @@ package me.sjtumeow.meow.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
-
 
 @Entity(name = "users") // table name
 public class User {
     @Id
     @GeneratedValue
+    @JsonView(Views.Public.class)
     private Long id;
-
-    @Column
-    private String username;
 
     @JsonIgnore
     private String password;
 
+    @JsonView(Views.Public.class)
     private String phone;
 
     public Long getId() {
@@ -27,14 +24,6 @@ public class User {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
     }
 
     public String getPassword() {
@@ -52,4 +41,9 @@ public class User {
     public void setPhone(String phone) {
         this.phone = phone;
     }
+
+    public static class Views {
+        public interface Public { }
+    }
 }
+
