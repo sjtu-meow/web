@@ -9,7 +9,7 @@ import javax.persistence.PrimaryKeyJoinColumn;
 public class Article extends Item {
     String title, summary, readCount;
 
-    @OneToOne(mappedBy = "banners")
+    @OneToOne(mappedBy = "item")
     @JsonBackReference
     Banner banner;
 

@@ -1,8 +1,13 @@
 package me.sjtumeow.meow.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.MapsId;
+import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
+import org.springframework.context.annotation.Primary;
 
 @Entity
 public class Profile {
@@ -10,6 +15,19 @@ public class Profile {
 
     @Id
     Long id;
+
+    @OneToOne
+    @JoinColumn
+    @JsonBackReference
+    User user;
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 
     public String getNickname() {
         return nickname;
@@ -34,4 +52,5 @@ public class Profile {
     public void setAvatar(String avatar) {
         this.avatar = avatar;
     }
+
 }

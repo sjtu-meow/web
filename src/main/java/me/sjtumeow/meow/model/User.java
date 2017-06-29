@@ -1,5 +1,6 @@
 package me.sjtumeow.meow.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import com.fasterxml.jackson.annotation.JsonView;
@@ -16,7 +17,12 @@ public class User {
     private String password;
 
     @JsonView(Views.Public.class)
+    @Column(unique = true)
     private String phone;
+
+    @OneToOne(mappedBy = "user")
+    @JsonBackReference
+    private Profile profile;
 
     public Long getId() {
         return id;
