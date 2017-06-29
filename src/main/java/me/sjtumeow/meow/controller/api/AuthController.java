@@ -27,7 +27,7 @@ public class AuthController {
 	
 	@PostMapping(consumes = "application/json")
 	ResponseEntity<?> login(@RequestBody UserCredentials cred) {
-		if (!userService.checkUserPassword(cred)) {
+		if (!userService.checkPassword(cred)) {
 			return ResponseEntity.notFound().build();
 		}
 		

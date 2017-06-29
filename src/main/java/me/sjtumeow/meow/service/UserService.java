@@ -7,14 +7,16 @@ public interface UserService {
 	
 	Iterable<User> findAll();
 	
-	User findUserbyId(Long id);
+	User findById(Long id);
 	
-	User findUserbyPhone(String phone);
+	User findByPhone(String phone);
 	
-    void createUser(User user);
+    Long create(String phone, String password);
     
-    // update, delete
+    boolean update(Long id, UserCredentials cred);
     
-    boolean checkUserPassword(UserCredentials cred);
+    public boolean delete(Long id);
+    
+    boolean checkPassword(UserCredentials cred);
 
 }

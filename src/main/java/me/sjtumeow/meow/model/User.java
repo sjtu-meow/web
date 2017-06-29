@@ -25,9 +25,10 @@ public class User extends BaseEntity {
     @Column(nullable = false)
     private String password;
 
+    @JsonView(Views.Public.class)
     @Column(nullable = false)
 	private boolean isAdmin = false;
-
+    
     @OneToOne(mappedBy = "user")
     @JsonBackReference
     private Profile profile;
