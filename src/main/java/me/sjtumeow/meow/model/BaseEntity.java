@@ -36,4 +36,21 @@ public abstract class BaseEntity implements Serializable {
     @JsonIgnore
     protected LocalDateTime deletedAt;
 
+    
+    public LocalDateTime getCreatedAt() {
+		return createdAt;
+	}
+
+	public LocalDateTime getUpdatedAt() {
+		return updatedAt;
+	}
+	
+	public LocalDateTime getDeletedAt() {
+		return deletedAt;
+	}
+
+	public void setDeletedAt(LocalDateTime deletedAt) {
+		this.deletedAt = deletedAt;
+	}
+
 }

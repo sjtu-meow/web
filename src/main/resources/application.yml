@@ -1,8 +1,9 @@
 spring:
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://localhost/meow?useUnicode=yes&characterEncoding=UTF-8
-    username: root
+    url: jdbc:mysql://localhost/Meow?useUnicode=yes&characterEncoding=UTF-8
+    username: meow
+    password: meow
 
   jpa:
     database-platform: MySQL5InnoDB

@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.JsonView;
 import javax.persistence.*;
 
 @Entity(name = "users") // table name
-public class User {
+public class User extends BaseEntity {
     @Id
     @GeneratedValue
     @JsonView(Views.Public.class)

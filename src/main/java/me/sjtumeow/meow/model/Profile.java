@@ -10,7 +10,7 @@ import javax.persistence.PrimaryKeyJoinColumn;
 import org.springframework.context.annotation.Primary;
 
 @Entity
-public class Profile {
+public class Profile extends BaseEntity {
     String nickname, bio, avatar;
 
     @Id

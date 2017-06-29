@@ -28,3 +28,4 @@ nbdist/
 upload/
 
 out
+/bin/
