@@ -1,8 +1,6 @@
 package me.sjtumeow.meow.controller.api;
 
-import java.util.List;
 import me.sjtumeow.meow.dao.UserRepository;
-import me.sjtumeow.meow.model.RegisterForm;
 import me.sjtumeow.meow.model.User;
 import me.sjtumeow.meow.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,20 +19,16 @@ public class UserController {
     @Autowired
     private UserRepository userRepository;
 
-    @GetMapping("/api/users") List<User> getUsers(@RequestHeader(value = "X-Access-Token", required = false) String token) {
-        return userRepository.findAll();
+    @GetMapping("/api/users") Iterable<User> getUsers() {
+        return userRepository.findAllActive();
     }
 
-    @GetMapping("/api/users/{id}") User getUser(@RequestHeader(value = "X-Access-Token", required = false) String token,
-        @PathVariable("id") Long id) {
-        return userRepository.findOne(id);
+    @GetMapping("/api/users/{id}") User getUser(@PathVariable("id") Long id) {
+        return userRepository.findOneActive(id);
     }
 
-    @PostMapping("/api/users") ResponseEntity<?> createUser(RegisterForm registerForm) {
-        User user = new User();
-        user.setPassword(registerForm.getPassword());
-        user.setPhone(registerForm.getPhone());
-        user.setUsername(registerForm.getUsername());
+    @PostMapping("/api/users") ResponseEntity<?> createUser(User user) {
+
         userRepository.save(user);
         return ResponseEntity.ok().build();
     }

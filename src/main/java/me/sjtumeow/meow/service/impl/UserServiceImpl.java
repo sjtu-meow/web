@@ -22,7 +22,7 @@ public class UserServiceImpl implements UserService {
         return userRepository.findByUsername(username);
     }
 
-    @Override public List<User> findAll() {
-        return userRepository.findAll();
+    @Override public Iterable<User> findAll() {
+        return userRepository.findAllActive();
     }
 }

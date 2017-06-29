@@ -13,7 +13,7 @@ public class User {
     @GeneratedValue
     private Long id;
 
-    @Column(name = "username") // set column name or use default value
+    @Column
     private String username;
 
     @JsonIgnore
