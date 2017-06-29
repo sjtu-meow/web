@@ -4,14 +4,14 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
-import javax.persistence.PrimaryKeyJoinColumn;
-import org.springframework.context.annotation.Primary;
 
 @Entity
 public class Profile extends BaseEntity {
-    String nickname, bio, avatar;
+    
+	private static final long serialVersionUID = 1L;
+
+	String nickname, bio, avatar;
 
     @Id
     private Long id;

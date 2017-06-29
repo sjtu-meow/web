@@ -9,10 +9,22 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class UserServiceImpl implements UserService {
+	
     @Autowired
     private UserRepository userRepository;
+    
+    public Iterable<User> findAll() {
+        return userRepository.findAllActive();
+    }
+    
+    public User findUserbyId(Long id) {
+    	return userRepository.findById(id);
+    }
+	
+	public User findUserbyPhone(String phone) {
+		return userRepository.findByPhone(phone);
+	}
 
-    @Override
     public void createUser(User user) {
         userRepository.save(user);
     }
@@ -22,8 +34,5 @@ public class UserServiceImpl implements UserService {
     	// To be modified to BCrypt checking
     	return !(user == null || !user.getPassword().equals(cred.getPassword()));
     }
-
-    @Override public Iterable<User> findAll() {
-        return userRepository.findAllActive();
-    }
+    
 }

@@ -8,21 +8,31 @@ import javax.persistence.*;
 
 @Entity(name = "users") // table name
 public class User extends BaseEntity {
-    @Id
+    
+	private static final long serialVersionUID = 1L;
+
+	@Id
     @GeneratedValue
     @JsonView(Views.Public.class)
+    @Column(nullable = false)
     private Long id;
+	
+	@JsonView(Views.Public.class)
+    @Column(unique = true, nullable = false)
+    private String phone;
 
     @JsonIgnore
+    @Column(nullable = false)
     private String password;
-
-    @JsonView(Views.Public.class)
-    @Column(unique = true)
-    private String phone;
 
     @OneToOne(mappedBy = "user")
     @JsonBackReference
     private Profile profile;
+    
+    public User(String phone, String password) {
+    	this.phone = phone;
+    	this.password = password;
+    }
 
     public Long getId() {
         return id;

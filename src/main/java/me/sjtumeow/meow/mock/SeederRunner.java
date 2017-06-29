@@ -15,8 +15,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class SeederRunner implements ApplicationRunner {
-    @Autowired
-    MomentRepository momentRepository;
+    @Autowired MomentRepository momentRepository;
     @Autowired ArticleRepository articleRepository;
     @Autowired UserRepository userRepository;
     @Autowired ProfileRepository profileRepository;
@@ -24,18 +23,17 @@ public class SeederRunner implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) {
         // Put some initializing code here
-        for(int i = 0;i<10;i++) {
+        for(int i = 0; i < 10; i++) {
             momentRepository.save(new Moment());
             articleRepository.save(new Article());
         }
-        User user = new User();
+        User user = new User("111", "test");
 
         userRepository.save(user);
         Profile profile = new Profile();
 
         profile.setUser(user);
         profileRepository.save(profile);
-
 
     }
 
