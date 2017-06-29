@@ -14,18 +14,18 @@ public abstract class BaseEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    @JsonIgnore
     protected LocalDateTime createdAt;
 
+    @JsonIgnore
     protected LocalDateTime updatedAt;
 
     @PrePersist
-    @JsonIgnore
     protected void onCreate() {
         createdAt = updatedAt = LocalDateTime.now();
     }
 
     @PreUpdate
-    @JsonIgnore
     protected void onUpdate() {
         updatedAt = LocalDateTime.now();
     }
