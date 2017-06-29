@@ -1,7 +1,6 @@
 package me.sjtumeow.meow.controller.api;
 
 import com.fasterxml.jackson.annotation.JsonView;
-import me.sjtumeow.meow.dao.UserRepository;
 import me.sjtumeow.meow.model.User;
 import me.sjtumeow.meow.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,16 +17,14 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
     @Autowired
     private UserService userService;
-    @Autowired
-    private UserRepository userRepository;
 
     @JsonView(User.Views.Public.class)
-    @GetMapping()
+    @GetMapping
     Iterable<User> getUsers() {
-        return userRepository.findAllActive();
+        return userService.findAll();
     }
 
-    @JsonView(User.Views.Public.class)
+    /*@JsonView(User.Views.Public.class)
     @GetMapping("/{id}")
     User getUser(@PathVariable("id") Long id) {
         return userRepository.findOneActive(id);
@@ -44,6 +41,6 @@ public class UserController {
     ResponseEntity<?> deleteUser(@PathVariable("id") Long id) {
         userRepository.delete(id);
         return ResponseEntity.noContent().build();
-    }
+    }*/
 
 }

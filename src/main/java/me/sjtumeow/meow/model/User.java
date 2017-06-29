@@ -25,9 +25,14 @@ public class User extends BaseEntity {
     @Column(nullable = false)
     private String password;
 
+    @Column(nullable = false)
+	private boolean isAdmin = false;
+
     @OneToOne(mappedBy = "user")
     @JsonBackReference
     private Profile profile;
+    
+    public User() {}
     
     public User(String phone, String password) {
     	this.phone = phone;
@@ -49,6 +54,14 @@ public class User extends BaseEntity {
     public void setPassword(String password) {
         this.password = password;
     }
+    
+    public boolean isAdmin() {
+		return isAdmin;
+	}
+
+	public void setAdmin(boolean isAdmin) {
+		this.isAdmin = isAdmin;
+	}
 
     public String getPhone() {
         return phone;

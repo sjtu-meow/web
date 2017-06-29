@@ -4,5 +4,5 @@ import me.sjtumeow.meow.model.Comment;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class CommentRepository extends SoftDeleteRepository<Comment, Long> {
+public interface CommentRepository extends SoftDeleteRepository<Comment, Long> {
 }

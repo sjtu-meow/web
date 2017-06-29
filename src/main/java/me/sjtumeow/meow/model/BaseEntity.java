@@ -3,6 +3,8 @@ package me.sjtumeow.meow.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+
+import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
@@ -29,6 +31,7 @@ public abstract class BaseEntity implements Serializable {
     }
 
     @JsonIgnore
+    @Column(name = "deleted_at")
     protected LocalDateTime deletedAt;
 
     
