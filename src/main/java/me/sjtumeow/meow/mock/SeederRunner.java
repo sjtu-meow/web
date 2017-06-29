@@ -1,6 +1,5 @@
 package me.sjtumeow.meow.mock;
 
-import javax.persistence.OneToOne;
 import me.sjtumeow.meow.dao.ArticleRepository;
 import me.sjtumeow.meow.dao.MomentRepository;
 import me.sjtumeow.meow.dao.ProfileRepository;

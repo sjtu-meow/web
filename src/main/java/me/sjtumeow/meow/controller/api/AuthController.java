@@ -28,7 +28,7 @@ public class AuthController {
 	@PostMapping(consumes = "application/json")
 	ResponseEntity<?> login(@RequestBody UserCredentials cred) {
 		if (!userService.checkUserPassword(cred)) {
-			return ResponseEntity.badRequest().build();
+			return ResponseEntity.notFound().build();
 		}
 		
 		return ResponseEntity.ok(authService.generateUserToken(cred));

@@ -22,7 +22,8 @@ public class RedisTokenManager implements TokenManager {
 
     private RedisTemplate<Long, String> redis;
 
-    @Autowired
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+	@Autowired
     public void setRedis(RedisTemplate redis) {
         this.redis = redis;
         //泛型设置成Long后必须更改对应的序列化方案
