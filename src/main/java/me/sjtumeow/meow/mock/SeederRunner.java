@@ -3,9 +3,12 @@ package me.sjtumeow.meow.mock;
 import javax.persistence.OneToOne;
 import me.sjtumeow.meow.dao.ArticleRepository;
 import me.sjtumeow.meow.dao.MomentRepository;
+import me.sjtumeow.meow.dao.ProfileRepository;
 import me.sjtumeow.meow.dao.UserRepository;
 import me.sjtumeow.meow.model.Article;
 import me.sjtumeow.meow.model.Moment;
+import me.sjtumeow.meow.model.Profile;
+import me.sjtumeow.meow.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -17,6 +20,7 @@ public class SeederRunner implements ApplicationRunner {
     MomentRepository momentRepository;
     @Autowired ArticleRepository articleRepository;
     @Autowired UserRepository userRepository;
+    @Autowired ProfileRepository profileRepository;
 
     @Override
     public void run(ApplicationArguments args) {
@@ -25,6 +29,15 @@ public class SeederRunner implements ApplicationRunner {
             momentRepository.save(new Moment());
             articleRepository.save(new Article());
         }
+        User user = new User();
+
+        userRepository.save(user);
+        Profile profile = new Profile();
+
+        profile.setUser(user);
+        profileRepository.save(profile);
+
+
     }
 
 }

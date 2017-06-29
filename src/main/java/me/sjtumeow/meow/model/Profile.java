@@ -14,12 +14,12 @@ public class Profile {
     String nickname, bio, avatar;
 
     @Id
-    Long id;
+    private Long id;
 
     @OneToOne
     @JoinColumn
     @JsonBackReference
-    User user;
+    private User user;
 
     public User getUser() {
         return user;
@@ -27,6 +27,7 @@ public class Profile {
 
     public void setUser(User user) {
         this.user = user;
+        this.id = user.getId();
     }
 
     public String getNickname() {

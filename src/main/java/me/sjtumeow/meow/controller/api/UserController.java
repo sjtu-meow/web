@@ -10,9 +10,11 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@RequestMapping("/api/users")
 public class UserController {
     @Autowired
     private UserService userService;
@@ -20,25 +22,25 @@ public class UserController {
     private UserRepository userRepository;
 
     @JsonView(User.Views.Public.class)
-    @GetMapping("/api/users")
+    @GetMapping()
     Iterable<User> getUsers() {
         return userRepository.findAllActive();
     }
 
     @JsonView(User.Views.Public.class)
-    @GetMapping("/api/users/{id}")
+    @GetMapping("/{id}")
     User getUser(@PathVariable("id") Long id) {
         return userRepository.findOneActive(id);
     }
 
-    @PostMapping("/api/users")
+    @PostMapping()
     ResponseEntity<?> createUser(User user) {
 
         userRepository.save(user);
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping("/api/users/{id}")
+    @DeleteMapping("/{id}")
     ResponseEntity<?> deleteUser(@PathVariable("id") Long id) {
         userRepository.delete(id);
         return ResponseEntity.noContent().build();

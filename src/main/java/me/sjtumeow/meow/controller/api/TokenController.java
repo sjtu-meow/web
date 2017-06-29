@@ -29,9 +29,9 @@ public class TokenController {
     private TokenManager tokenManager;
 
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<?> login(@RequestParam String username, @RequestParam String password) {
+    public ResponseEntity<?> login(@RequestParam String phone, @RequestParam String password) {
 
-        User user = userRepository.findByUsername(username);
+        User user = userRepository.findByPhone(phone);
         if (user == null ||  //未注册
                 !user.getPassword().equals(password)) {  //密码错误
             //提示用户名或密码错误

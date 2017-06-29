@@ -1,5 +1,6 @@
 package me.sjtumeow.meow.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -17,20 +18,22 @@ public abstract class BaseEntity implements Serializable {
 
     protected LocalDateTime createdAt;
 
-
     protected LocalDateTime updatedAt;
 
 
     @PrePersist
+    @JsonIgnore
     protected void onCreate() {
-        createdAt = LocalDateTime.now();
+        createdAt = updatedAt = LocalDateTime.now();
     }
 
     @PreUpdate
+    @JsonIgnore
     protected void onUpdate() {
         updatedAt = LocalDateTime.now();
     }
 
+    @JsonIgnore
     protected LocalDateTime deletedAt;
 
 }
