@@ -1,5 +1,6 @@
 package me.sjtumeow.meow.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import javax.persistence.Entity;
 import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
@@ -9,6 +10,7 @@ public class Article extends Item {
     String title, summary, readCount;
 
     @OneToOne(mappedBy = "banners")
+    @JsonBackReference
     Banner banner;
 
     public String getTitle() {
