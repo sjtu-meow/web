@@ -31,7 +31,6 @@ public abstract class BaseEntity implements Serializable {
     }
 
     @JsonIgnore
-    @Column(name = "deleted_at")
     protected LocalDateTime deletedAt;
 
     

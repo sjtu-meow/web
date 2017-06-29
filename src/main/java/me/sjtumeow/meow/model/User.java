@@ -6,12 +6,11 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
 import javax.persistence.*;
 
-@Entity(name = "users") // table name
 public class User extends BaseEntity {
     
 	private static final long serialVersionUID = 1L;
 
-	@Id
+    @Id
     @GeneratedValue
     @JsonView(Views.Public.class)
     @Column(nullable = false)
@@ -70,6 +69,14 @@ public class User extends BaseEntity {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public Profile getProfile() {
+        return profile;
+    }
+
+    public void setProfile(Profile profile) {
+        this.profile = profile;
     }
 
     public static class Views {

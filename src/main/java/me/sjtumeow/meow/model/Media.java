@@ -1,13 +1,15 @@
 package me.sjtumeow.meow.model;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 @Entity
-public class Media {
+public class Media extends BaseEntity{
     enum MediaType {Image, Video}
 
     @Id
+    @GeneratedValue
     Long id;
 
     MediaType type;

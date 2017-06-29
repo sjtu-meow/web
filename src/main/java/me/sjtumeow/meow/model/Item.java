@@ -32,4 +32,20 @@ public abstract class Item extends BaseEntity {
     @OneToOne
     @JoinColumn
     Profile profile;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Profile getProfile() {
+        return profile;
+    }
+
+    public void setProfile(Profile profile) {
+        this.profile = profile;
+    }
 }

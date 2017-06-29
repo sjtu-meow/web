@@ -40,7 +40,7 @@ public class SoftDeleteRepositoryImpl<T, ID extends Serializable> extends Simple
     private final JpaEntityInformation<T, ?> entityInformation;
     private final EntityManager em;
     private final Class<T> domainClass;
-    private static final String DELETED_FIELD = "deleted_at";
+    private static final String DELETED_FIELD = "deletedAt";
 
     public SoftDeleteRepositoryImpl(Class<T> domainClass, EntityManager em) {
         super(domainClass, em);
