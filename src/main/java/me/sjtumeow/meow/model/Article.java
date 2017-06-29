@@ -4,6 +4,5 @@ import javax.persistence.Entity;
 import javax.persistence.PrimaryKeyJoinColumn;
 
 @Entity
-public class Moment extends Item {
-    String content;
+public class Article extends Item {
 }
