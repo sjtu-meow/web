@@ -12,7 +12,7 @@ public class Article extends Item {
 
     @OneToOne(mappedBy = "item")
     @JsonBackReference
-    Banner banner;
+    Media cover;
 
     public String getTitle() {
         return title;
@@ -38,11 +38,11 @@ public class Article extends Item {
         this.readCount = readCount;
     }
 
-    public Banner getBanner() {
-        return banner;
+    public Media getCover() {
+        return cover;
     }
 
-    public void setBanner(Banner banner) {
-        this.banner = banner;
+    public void setCover(Media cover) {
+        this.cover = cover;
     }
 }
