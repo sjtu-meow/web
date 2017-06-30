@@ -25,4 +25,6 @@ spring:
 leanCloud:
   appId: APP_ID
   appKey: APP_KEY
- 
+
+server:
+    port: 80
