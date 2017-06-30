@@ -1,9 +1,9 @@
 spring:
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://localhost/Meow?useUnicode=yes&characterEncoding=UTF-8
-    username: meow
-    password: meow
+    url: jdbc:mysql://localhost/DB_NAME?useUnicode=yes&characterEncoding=UTF-8
+    username: DB_USER
+    password: DB_PASS
 
   jpa:
     database-platform: MySQL5InnoDB
@@ -20,3 +20,9 @@ spring:
   thymeleaf:
     mode: LEGACYHTML5
     cache: true
+    
+ 
+leanCloud:
+  appId: APP_ID
+  appKey: APP_KEY
+ 

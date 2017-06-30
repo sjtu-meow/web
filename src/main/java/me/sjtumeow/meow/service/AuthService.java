@@ -9,4 +9,6 @@ public interface AuthService {
 	ReturnedToken generateUserToken(UserCredentials cred);
 	
 	void deleteUserToken(User user);
+	
+	boolean verifySmsCode(String phone, String code);
 }

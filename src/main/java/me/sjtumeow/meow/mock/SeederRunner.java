@@ -1,7 +1,6 @@
 package me.sjtumeow.meow.mock;
 
 import com.github.javafaker.Faker;
-import javax.persistence.OneToOne;
 import me.sjtumeow.meow.dao.ArticleRepository;
 import me.sjtumeow.meow.dao.MediaRepository;
 import me.sjtumeow.meow.dao.MomentRepository;

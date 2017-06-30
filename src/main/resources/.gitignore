@@ -1,4 +1,5 @@
 application.properties
+application.yml
 static/fonts/
 static/scripts/
 static/styles

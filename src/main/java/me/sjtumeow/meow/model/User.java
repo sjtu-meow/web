@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
 import javax.persistence.*;
 
+@Entity
 public class User extends BaseEntity {
     
 	private static final long serialVersionUID = 1L;
