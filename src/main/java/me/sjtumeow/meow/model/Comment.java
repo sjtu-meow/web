@@ -51,5 +51,4 @@ public class Comment extends BaseEntity {
     public void setContent(String content) {
         this.content = content;
     }
->>>>>>> Fix models and dao
 }
