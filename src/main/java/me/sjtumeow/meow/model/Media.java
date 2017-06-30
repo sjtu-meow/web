@@ -3,6 +3,9 @@ package me.sjtumeow.meow.model;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 public class Media extends BaseEntity {
@@ -17,6 +20,10 @@ public class Media extends BaseEntity {
 
     MediaType type;
     String thumbnail, url;
+    
+    @JsonBackReference
+    @ManyToOne(optional = false)
+    Moment moment;
 
     public Long getId() {
         return id;
@@ -49,4 +56,12 @@ public class Media extends BaseEntity {
     public void setUrl(String url) {
         this.url = url;
     }
+
+	public Moment getMoment() {
+		return moment;
+	}
+
+	public void setMoment(Moment moment) {
+		this.moment = moment;
+	}
 }

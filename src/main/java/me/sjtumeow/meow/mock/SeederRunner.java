@@ -6,7 +6,6 @@ import me.sjtumeow.meow.dao.MediaRepository;
 import me.sjtumeow.meow.dao.MomentRepository;
 import me.sjtumeow.meow.dao.ProfileRepository;
 import me.sjtumeow.meow.dao.UserRepository;
-import me.sjtumeow.meow.model.Article;
 import me.sjtumeow.meow.model.Media;
 import me.sjtumeow.meow.model.Media.MediaType;
 import me.sjtumeow.meow.model.Moment;
@@ -48,15 +47,18 @@ public class SeederRunner implements ApplicationRunner {
         profileRepository.save(profile);
         
         for (int j = 0; j < 10; j++) {
+            Moment moment = new Moment();
+            moment.setProfile(profile);
+            moment.setContent(faker.shakespeare().hamletQuote());
+            momentRepository.save(moment);
+            
             Media media = new Media();
             media.setType(MediaType.Image);
             media.setUrl(String.format("http://lorempixel.com/%d/%d", 200 + j, 200 + j));
             media.setThumbnail("http://lorempixel.com/50/50");
+            media.setMoment(moment);
             mediaRepository.save(media);
             
-            Moment moment = new Moment();
-            moment.setProfile(profile);
-            moment.setContent(faker.shakespeare().hamletQuote());
             moment.addMedia(media);
             momentRepository.save(moment);
         }

@@ -20,6 +20,14 @@ public class Profile extends BaseEntity {
     @JoinColumn
     @JsonBackReference
     private User user;
+    
+    public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
 
     public User getUser() {
         return user;

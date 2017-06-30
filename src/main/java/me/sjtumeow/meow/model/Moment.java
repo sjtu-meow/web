@@ -14,7 +14,7 @@ public class Moment extends Item {
 
     String content;
 
-    @OneToMany
+    @OneToMany(mappedBy = "moment")
     List<Media> medias = new ArrayList<>();
 
     public String getContent() {
