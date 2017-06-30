@@ -10,8 +10,7 @@ public class Article extends Item {
     String title, summary;
     Long readCount;
 
-    @OneToOne(mappedBy = "item")
-    @JsonBackReference
+    @OneToOne
     Media cover;
 
     public String getTitle() {
