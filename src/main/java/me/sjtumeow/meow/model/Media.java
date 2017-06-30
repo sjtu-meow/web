@@ -9,7 +9,7 @@ public class Media extends BaseEntity {
     
 	private static final long serialVersionUID = 1L;
 
-	enum MediaType {Image, Video}
+	public enum MediaType {Image, Video}
 
     @Id
     @GeneratedValue

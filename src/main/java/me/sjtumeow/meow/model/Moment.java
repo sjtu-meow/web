@@ -9,6 +9,8 @@ import javax.persistence.OneToMany;
 public class Moment extends Item {
 
     private static final long serialVersionUID = 1L;
+    
+    Integer type = Item.ITEM_TYPE_MOMENT;
 
     String content;
 

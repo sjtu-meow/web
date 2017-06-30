@@ -8,6 +8,7 @@ import me.sjtumeow.meow.dao.ProfileRepository;
 import me.sjtumeow.meow.dao.UserRepository;
 import me.sjtumeow.meow.model.Article;
 import me.sjtumeow.meow.model.Media;
+import me.sjtumeow.meow.model.Media.MediaType;
 import me.sjtumeow.meow.model.Moment;
 import me.sjtumeow.meow.model.Profile;
 import me.sjtumeow.meow.model.User;
@@ -34,8 +35,8 @@ public class SeederRunner implements ApplicationRunner {
             articleRepository.save(new Article());
         }*/
         
-    	User user1 = new User("12312312312", "meow");
-    	User user2 = new User("32132132132", "test");
+    	User user1 = new User("12312312312", "meow233");
+    	User user2 = new User("12132132132", "test123");
     	user1.setAdmin(true);
     	userRepository.save(user1);
         userRepository.save(user2);
@@ -45,6 +46,21 @@ public class SeederRunner implements ApplicationRunner {
         profile.setBio("Web 开发专家");
         profile.setUser(user1);
         profileRepository.save(profile);
+        
+        for (int j = 0; j < 10; j++) {
+            Media media = new Media();
+            media.setType(MediaType.Image);
+            media.setUrl(String.format("http://lorempixel.com/%d/%d", 200 + j, 200 + j));
+            media.setThumbnail("http://lorempixel.com/50/50");
+            mediaRepository.save(media);
+            
+            Moment moment = new Moment();
+            moment.setProfile(profile);
+            moment.setContent(faker.shakespeare().hamletQuote());
+            moment.addMedia(media);
+            momentRepository.save(moment);
+        }
+        
   /*
         for(int i = 0;i<10;i++) {
             User user = new User();

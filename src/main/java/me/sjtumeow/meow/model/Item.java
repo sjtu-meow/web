@@ -27,7 +27,7 @@ public abstract class Item extends BaseEntity {
     Long id;
     
     @Column(nullable = false)
-    Long type;
+    Integer type;
 
     @OneToOne
     @JoinColumn

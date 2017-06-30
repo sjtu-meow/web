@@ -69,7 +69,9 @@ public class AuthServiceImpl implements AuthService {
 
 		try {
 			Response response = client.newCall(request).execute();
-			return response.code() == 200;
+			boolean result = response.code() == 200;
+			response.close();
+			return result;
 		} catch (IOException e) {
 			e.printStackTrace();
 			return false;
