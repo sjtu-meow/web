@@ -7,7 +7,8 @@ import javax.persistence.PrimaryKeyJoinColumn;
 
 @Entity
 public class Article extends Item {
-    String title, summary, readCount;
+    String title, summary;
+    Long readCount;
 
     @OneToOne(mappedBy = "item")
     @JsonBackReference
@@ -29,11 +30,11 @@ public class Article extends Item {
         this.summary = summary;
     }
 
-    public String getReadCount() {
+    public Long getReadCount() {
         return readCount;
     }
 
-    public void setReadCount(String readCount) {
+    public void setReadCount(Long readCount) {
         this.readCount = readCount;
     }
 
