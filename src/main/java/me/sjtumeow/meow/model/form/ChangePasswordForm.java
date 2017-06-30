@@ -1,4 +1,4 @@
-package me.sjtumeow.meow.model;
+package me.sjtumeow.meow.model.form;
 
 public class ChangePasswordForm {
 	protected String password;

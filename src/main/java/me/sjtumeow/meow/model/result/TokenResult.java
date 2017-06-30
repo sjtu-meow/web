@@ -1,9 +1,9 @@
-package me.sjtumeow.meow.model;
+package me.sjtumeow.meow.model.result;
 
-public class TokenReturned {
+public class TokenResult {
 	protected String token;
 	
-	public TokenReturned(String token) {
+	public TokenResult(String token) {
 		this.token = token;
 	}
 

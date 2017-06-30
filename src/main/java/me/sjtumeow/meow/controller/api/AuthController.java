@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import me.sjtumeow.meow.authorization.annotation.Authorization;
 import me.sjtumeow.meow.authorization.annotation.CurrentUser;
 import me.sjtumeow.meow.model.User;
-import me.sjtumeow.meow.model.UserCredentialsForm;
+import me.sjtumeow.meow.model.form.UserCredentialsForm;
 import me.sjtumeow.meow.service.AuthService;
 import me.sjtumeow.meow.service.UserService;
 

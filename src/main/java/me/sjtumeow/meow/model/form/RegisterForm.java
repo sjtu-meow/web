@@ -1,9 +1,10 @@
-package me.sjtumeow.meow.model;
+package me.sjtumeow.meow.model.form;
 
-public class UserCredentialsForm {
+public class RegisterForm {
 	
 	protected String phone;
 	protected String password;
+	protected String code;
 	
 	public String getPhone() {
 		return phone;
@@ -19,6 +20,14 @@ public class UserCredentialsForm {
 	
 	public void setPassword(String password) {
 		this.password = password;
+	}
+	
+	public String getCode() {
+		return code;
+	}
+	
+	public void setCode(String code) {
+		this.code = code;
 	}
 	
 }

@@ -4,7 +4,7 @@ import me.sjtumeow.meow.dao.ProfileRepository;
 import me.sjtumeow.meow.dao.UserRepository;
 import me.sjtumeow.meow.model.Profile;
 import me.sjtumeow.meow.model.User;
-import me.sjtumeow.meow.model.UserCredentialsForm;
+import me.sjtumeow.meow.model.form.UserCredentialsForm;
 import me.sjtumeow.meow.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

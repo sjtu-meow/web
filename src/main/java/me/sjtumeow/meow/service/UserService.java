@@ -2,7 +2,7 @@ package me.sjtumeow.meow.service;
 
 import me.sjtumeow.meow.model.Profile;
 import me.sjtumeow.meow.model.User;
-import me.sjtumeow.meow.model.UserCredentialsForm;
+import me.sjtumeow.meow.model.form.UserCredentialsForm;
 
 public interface UserService {
 	

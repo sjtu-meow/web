@@ -2,9 +2,9 @@ package me.sjtumeow.meow.controller.api;
 
 import me.sjtumeow.meow.authorization.annotation.Authorization;
 import me.sjtumeow.meow.authorization.annotation.CurrentUser;
-import me.sjtumeow.meow.model.ChangePasswordForm;
-import me.sjtumeow.meow.model.RegisterForm;
 import me.sjtumeow.meow.model.User;
+import me.sjtumeow.meow.model.form.ChangePasswordForm;
+import me.sjtumeow.meow.model.form.RegisterForm;
 import me.sjtumeow.meow.service.AuthService;
 import me.sjtumeow.meow.service.UserService;
 import me.sjtumeow.meow.util.FormatValidator;

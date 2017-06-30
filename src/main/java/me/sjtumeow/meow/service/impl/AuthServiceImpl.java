@@ -9,9 +9,9 @@ import org.springframework.stereotype.Service;
 import me.sjtumeow.meow.authorization.manager.TokenManager;
 import me.sjtumeow.meow.authorization.model.TokenModel;
 import me.sjtumeow.meow.dao.UserRepository;
-import me.sjtumeow.meow.model.TokenReturned;
 import me.sjtumeow.meow.model.User;
-import me.sjtumeow.meow.model.UserCredentialsForm;
+import me.sjtumeow.meow.model.form.UserCredentialsForm;
+import me.sjtumeow.meow.model.result.TokenResult;
 import me.sjtumeow.meow.service.AuthService;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -44,11 +44,11 @@ public class AuthServiceImpl implements AuthService {
 		this.appKey = appKey;
 	}
 
-	public TokenReturned generateUserToken(UserCredentialsForm cred) {
+	public TokenResult generateUserToken(UserCredentialsForm cred) {
 		Long userId = userRepository.findByPhone(cred.getPhone()).getId();
 		tokenManager.deleteToken(userId);
 		TokenModel tokenModel = tokenManager.createToken(userId);
-		return new TokenReturned(tokenModel.getUserId() + "_" + tokenModel.getToken());
+		return new TokenResult(tokenModel.getUserId() + "_" + tokenModel.getToken());
 	}
 	
 	public void deleteUserToken(User user) {
