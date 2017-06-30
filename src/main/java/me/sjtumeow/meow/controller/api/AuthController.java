@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import me.sjtumeow.meow.authorization.annotation.Authorization;
 import me.sjtumeow.meow.authorization.annotation.CurrentUser;
 import me.sjtumeow.meow.model.User;
-import me.sjtumeow.meow.model.UserCredentials;
+import me.sjtumeow.meow.model.UserCredentialsForm;
 import me.sjtumeow.meow.service.AuthService;
 import me.sjtumeow.meow.service.UserService;
 
@@ -26,7 +26,7 @@ public class AuthController {
     private AuthService authService;
 	
 	@PostMapping(consumes = "application/json")
-	ResponseEntity<?> login(@RequestBody UserCredentials cred) {
+	ResponseEntity<?> login(@RequestBody UserCredentialsForm cred) {
 		if (!userService.checkPassword(cred)) {
 			return ResponseEntity.notFound().build();
 		}

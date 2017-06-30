@@ -1,10 +1,10 @@
 package me.sjtumeow.meow.controller.api;
 
-import com.fasterxml.jackson.annotation.JsonView;
-
-import me.sjtumeow.meow.model.RegisterParam;
+import me.sjtumeow.meow.authorization.annotation.Authorization;
+import me.sjtumeow.meow.authorization.annotation.CurrentUser;
+import me.sjtumeow.meow.model.ChangePasswordForm;
+import me.sjtumeow.meow.model.RegisterForm;
 import me.sjtumeow.meow.model.User;
-import me.sjtumeow.meow.model.UserCredentials;
 import me.sjtumeow.meow.service.AuthService;
 import me.sjtumeow.meow.service.UserService;
 import me.sjtumeow.meow.util.FormatValidator;
@@ -12,9 +12,6 @@ import me.sjtumeow.meow.util.FormatValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/api")
 public class UserController {
     @Autowired
     private UserService userService;
@@ -30,7 +27,7 @@ public class UserController {
     @Autowired
     private AuthService authService;
     
-    @JsonView(User.Views.Public.class)
+    /*@JsonView(User.Views.Public.class)
     @GetMapping
     Iterable<User> getUsers() {
         return userService.findAll();
@@ -41,10 +38,10 @@ public class UserController {
     ResponseEntity<?> getUser(@PathVariable("id") Long id) {
         User user = userService.findById(id);
         return user == null ? ResponseEntity.notFound().build() : ResponseEntity.ok(user);
-    }
+    }*/
 
-    @PostMapping(consumes = "application/json")
-    ResponseEntity<?> createUser(@RequestBody RegisterParam rp) {
+    @PostMapping(path = "/users", consumes = "application/json")
+    ResponseEntity<?> createUser(@RequestBody RegisterForm rp) {
     	
     	String phone = rp.getPhone();
     	String password = rp.getPassword();
@@ -59,26 +56,25 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
     
-    @PutMapping(path = "/{id}", consumes = "application/json")
-    ResponseEntity<?> updateUser(@PathVariable("id") Long id, @RequestBody UserCredentials cred) {
+    @Authorization
+    @PutMapping(path = "/user", consumes = "application/json")
+    ResponseEntity<?> changePassword(@CurrentUser User user, @RequestBody ChangePasswordForm cpf) {
     	
-    	String phone = cred.getPhone();
-    	String password = cred.getPassword();
+    	String phone = user.getPhone();
+    	String password = cpf.getPassword();
+    	String code = cpf.getCode();
     	
-    	if (!FormatValidator.checkPhone(phone) || !FormatValidator.checkPassword(password))
+    	if (!FormatValidator.checkPassword(password) || !FormatValidator.checkSmsCode(code)
+    			|| !authService.verifySmsCode(phone, code))
     		return ResponseEntity.badRequest().build();
     	
-    	User user = userService.findById(id);
-    	if (user != null && !user.getPhone().equals(phone) && userService.findByPhone(phone) != null)
-    		return ResponseEntity.badRequest().build();
-    	
-    	return userService.update(id, cred) ? ResponseEntity.status(HttpStatus.CREATED).build() : ResponseEntity.notFound().build();
+    	return userService.changePassword(user.getId(), password) ? ResponseEntity.status(HttpStatus.CREATED).build() : ResponseEntity.notFound().build();
     	
     }
 
-    @DeleteMapping("/{id}")
+    /*@DeleteMapping("/{id}")
     ResponseEntity<?> deleteUser(@PathVariable("id") Long id) {
         return userService.delete(id) ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
-    }
+    }*/
 
 }

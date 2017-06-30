@@ -1,7 +1,8 @@
 package me.sjtumeow.meow.service;
 
+import me.sjtumeow.meow.model.Profile;
 import me.sjtumeow.meow.model.User;
-import me.sjtumeow.meow.model.UserCredentials;
+import me.sjtumeow.meow.model.UserCredentialsForm;
 
 public interface UserService {
 	
@@ -11,12 +12,14 @@ public interface UserService {
 	
 	User findByPhone(String phone);
 	
+	boolean checkPassword(UserCredentialsForm cred);
+	
+	Profile getProfile(Long id);
+	
     Long create(String phone, String password);
     
-    boolean update(Long id, UserCredentials cred);
+    boolean changePassword(Long id, String password);
     
     public boolean delete(Long id);
     
-    boolean checkPassword(UserCredentials cred);
-
 }

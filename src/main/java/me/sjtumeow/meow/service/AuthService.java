@@ -1,12 +1,12 @@
 package me.sjtumeow.meow.service;
 
-import me.sjtumeow.meow.model.ReturnedToken;
+import me.sjtumeow.meow.model.TokenReturned;
 import me.sjtumeow.meow.model.User;
-import me.sjtumeow.meow.model.UserCredentials;
+import me.sjtumeow.meow.model.UserCredentialsForm;
 
 public interface AuthService {
 	
-	ReturnedToken generateUserToken(UserCredentials cred);
+	TokenReturned generateUserToken(UserCredentialsForm cred);
 	
 	void deleteUserToken(User user);
 	
