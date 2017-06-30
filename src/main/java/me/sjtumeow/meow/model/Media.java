@@ -5,8 +5,11 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 @Entity
-public class Media extends BaseEntity{
-    enum MediaType {Image, Video}
+public class Media extends BaseEntity {
+    
+	private static final long serialVersionUID = 1L;
+
+	enum MediaType {Image, Video}
 
     @Id
     @GeneratedValue

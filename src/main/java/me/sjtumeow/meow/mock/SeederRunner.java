@@ -34,15 +34,16 @@ public class SeederRunner implements ApplicationRunner {
             articleRepository.save(new Article());
         }*/
         
-    	User user = new User("12312312312", "meow");
-    	user.setAdmin(true);
-    	userRepository.save(user);
-        userRepository.save(new User("32132132132", "test"));
+    	User user1 = new User("12312312312", "meow");
+    	User user2 = new User("32132132132", "test");
+    	user1.setAdmin(true);
+    	userRepository.save(user1);
+        userRepository.save(user2);
         
         Profile profile = new Profile();
         profile.setNickname("喵喵喵的伙伴");
         profile.setBio("Web 开发专家");
-        profile.setUser(user);
+        profile.setUser(user1);
         profileRepository.save(profile);
   /*
         for(int i = 0;i<10;i++) {

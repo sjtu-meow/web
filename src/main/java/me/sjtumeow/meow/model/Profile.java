@@ -9,9 +9,9 @@ import javax.persistence.OneToOne;
 @Entity
 public class Profile extends BaseEntity {
     
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	String nickname, bio, avatar;
+    String nickname, bio, avatar;
 
     @Id
     private Long id;

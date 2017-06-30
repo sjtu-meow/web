@@ -9,15 +9,15 @@ import javax.persistence.*;
 @Entity
 public class User extends BaseEntity {
     
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue
     @JsonView(Views.Public.class)
     @Column(nullable = false)
     private Long id;
-	
-	@JsonView(Views.Public.class)
+    
+    @JsonView(Views.Public.class)
     @Column(unique = true, nullable = false)
     private String phone;
 
@@ -27,7 +27,7 @@ public class User extends BaseEntity {
 
     @JsonView(Views.Public.class)
     @Column(nullable = false)
-	private boolean isAdmin = false;
+    private boolean isAdmin = false;
     
     @OneToOne(mappedBy = "user")
     @JsonBackReference
@@ -36,8 +36,8 @@ public class User extends BaseEntity {
     public User() {}
     
     public User(String phone, String password) {
-    	this.phone = phone;
-    	this.password = password;
+        this.phone = phone;
+        this.password = password;
     }
 
     public Long getId() {
@@ -57,12 +57,12 @@ public class User extends BaseEntity {
     }
     
     public boolean isAdmin() {
-		return isAdmin;
-	}
+        return isAdmin;
+    }
 
-	public void setAdmin(boolean isAdmin) {
-		this.isAdmin = isAdmin;
-	}
+    public void setAdmin(boolean isAdmin) {
+        this.isAdmin = isAdmin;
+    }
 
     public String getPhone() {
         return phone;
