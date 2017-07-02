@@ -1,6 +1,7 @@
 package me.sjtumeow.meow.model;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
@@ -8,6 +9,7 @@ import javax.persistence.OneToOne;
 @Entity
 public class Comment extends BaseEntity {
     @Id
+    @GeneratedValue
     private Long id;
 
     @OneToOne

@@ -2,6 +2,7 @@ package me.sjtumeow.meow.model;
 
 import com.fasterxml.jackson.databind.ser.Serializers;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
@@ -9,6 +10,7 @@ import javax.persistence.OneToOne;
 @Entity
 public class Banner extends BaseEntity {
     @Id
+    @GeneratedValue
     Long id;
 
     String url;
