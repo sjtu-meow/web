@@ -3,6 +3,7 @@ package me.sjtumeow.meow.model;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -22,8 +23,11 @@ public class Media extends BaseEntity {
     String url;
     
     @JsonBackReference
-    @ManyToOne(optional = false)
+    @ManyToOne
+    @JoinColumn(name = "moment_id", referencedColumnName = "id", nullable = false)
     Moment moment;
+    
+    public Media() {}
     
     public Media(MediaType type, String url, Moment moment) {
     	this.type = type;

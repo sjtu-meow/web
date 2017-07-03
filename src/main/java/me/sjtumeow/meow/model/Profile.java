@@ -20,7 +20,7 @@ public class Profile extends BaseEntity {
     private Long id;
 
     @OneToOne
-    @JoinColumn
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
     @JsonBackReference
     private User user;
     

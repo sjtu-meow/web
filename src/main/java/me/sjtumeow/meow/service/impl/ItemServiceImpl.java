@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class ItemServiceImpl implements ItemService {
@@ -40,6 +41,7 @@ public class ItemServiceImpl implements ItemService {
 		
 	}
 	
+	@Transactional
 	public boolean addMoment(AddMomentForm amf, User user) {
 		String content = amf.getContent();
 		if ((content == null || content.trim().length() == 0) && (amf.getMedias() == null || amf.getMedias().isEmpty()))

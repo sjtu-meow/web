@@ -29,7 +29,7 @@ public class User extends BaseEntity {
     @Column(nullable = false)
     private boolean isAdmin = false;
     
-    @OneToOne(mappedBy = "user")
+    @OneToOne(fetch = FetchType.EAGER, mappedBy = "user")
     @JsonBackReference
     private Profile profile;
     
