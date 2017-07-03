@@ -12,10 +12,14 @@ import org.springframework.context.annotation.PropertySource;
 @ConfigurationProperties(prefix = "meow",ignoreInvalidFields = false,ignoreUnknownFields = false)
 @PropertySource("classpath:asset.properties")
 public class AssetProperties {
+
+    private final Asset admin = new Asset();
+
+    public Asset getAdmin() {
+        return admin;
+    }
+
     public static class Asset {
-
-        private final Asset admin = new Asset();
-
         List<String> styles, scripts;
 
         public List<String> getStyles() {
@@ -33,10 +37,6 @@ public class AssetProperties {
         public void setScripts(List<String> scripts) {
             this.scripts = scripts;
         }
-    }
-
-    public Asset getAdmin() {
-        return admin;
     }
 
 }
