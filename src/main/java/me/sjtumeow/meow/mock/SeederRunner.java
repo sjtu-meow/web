@@ -58,11 +58,7 @@ public class SeederRunner implements ApplicationRunner {
             moment.setContent(faker.shakespeare().hamletQuote());
             momentRepository.save(moment);
             
-            Media media = new Media();
-            media.setType(MediaType.Image);
-            media.setUrl(String.format("http://lorempixel.com/%d/%d", 200 + j, 200 + j));
-            media.setThumbnail("http://lorempixel.com/50/50");
-            media.setMoment(moment);
+            Media media = new Media(MediaType.Image, String.format("http://lorempixel.com/%d/%d", 200 + j, 200 + j), moment);
             mediaRepository.save(media);
             //momentRepository.save(moment);
             

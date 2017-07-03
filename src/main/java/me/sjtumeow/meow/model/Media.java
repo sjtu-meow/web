@@ -19,11 +19,17 @@ public class Media extends BaseEntity {
     Long id;
 
     MediaType type;
-    String thumbnail, url;
+    String url;
     
     @JsonBackReference
     @ManyToOne(optional = false)
     Moment moment;
+    
+    public Media(MediaType type, String url, Moment moment) {
+    	this.type = type;
+    	this.url = url;
+    	this.moment = moment;
+    }
 
     public Long getId() {
         return id;
@@ -39,14 +45,6 @@ public class Media extends BaseEntity {
 
     public void setType(MediaType type) {
         this.type = type;
-    }
-
-    public String getThumbnail() {
-        return thumbnail;
-    }
-
-    public void setThumbnail(String thumbnail) {
-        this.thumbnail = thumbnail;
     }
 
     public String getUrl() {

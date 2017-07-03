@@ -2,6 +2,7 @@ package me.sjtumeow.meow.service;
 
 import me.sjtumeow.meow.model.Moment;
 import me.sjtumeow.meow.model.User;
+import me.sjtumeow.meow.model.form.AddMomentForm;
 
 public interface ItemService {
 	
@@ -10,6 +11,8 @@ public interface ItemService {
 	Moment findMomentById(Long id);
 	
 	User getMomentCreator(Long id);
+	
+	boolean addMoment(AddMomentForm amf, User user);
 	
 	boolean deleteMoment(Long id);
 }
