@@ -32,7 +32,7 @@ public class AssetProperties {
         }
     }
 
-    private final Asset admin = new Asset()
+    private final Asset admin = new Asset();
 
     public Asset getAdmin() {
         return admin;

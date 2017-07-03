@@ -15,9 +15,7 @@ public class AssetConfig {
     @Autowired
     public AssetConfig(AssetProperties assetProperties) {
         admin = assetProperties.getAdmin();
-        store = assetProperties.getStore();
         addAssetPrefix(admin);
-        addAssetPrefix(store);
     }
 
     private void addAssetPrefix(AssetProperties.Asset asset) {
@@ -29,11 +27,5 @@ public class AssetConfig {
     public AssetProperties.Asset getAdminAsset() {
         return admin;
     }
-
-    @ModelAttribute("storeAsset")
-    public AssetProperties.Asset getStoreAsset() {
-        return store;
-    }
-
 
 }
