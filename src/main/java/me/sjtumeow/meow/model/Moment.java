@@ -11,8 +11,10 @@ import javax.persistence.OneToMany;
 public class Moment extends Item {
 
     private static final long serialVersionUID = 1L;
-    
-    Integer type = Item.ITEM_TYPE_MOMENT;
+
+    public Moment() {
+        type = Item.ITEM_TYPE_MOMENT;
+    }
 
     @Column(nullable = false)
     String content;
