@@ -1,5 +1,7 @@
 package me.sjtumeow.meow.model;
 
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -8,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 @Entity
@@ -32,6 +35,9 @@ public abstract class Item extends BaseEntity {
     @OneToOne
     @JoinColumn
     Profile profile;
+    
+    @OneToMany(mappedBy = "item")
+    private List<Comment> comments;
 
     public Long getId() {
         return id;
@@ -40,6 +46,14 @@ public abstract class Item extends BaseEntity {
     public void setId(Long id) {
         this.id = id;
     }
+    
+    public Integer getType() {
+		return type;
+	}
+
+	public void setType(Integer type) {
+		this.type = type;
+	}
 
     public Profile getProfile() {
         return profile;
@@ -48,4 +62,12 @@ public abstract class Item extends BaseEntity {
     public void setProfile(Profile profile) {
         this.profile = profile;
     }
+
+	public List<Comment> getComments() {
+		return comments;
+	}
+
+	public void setComments(List<Comment> comments) {
+		this.comments = comments;
+	}
 }

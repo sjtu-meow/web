@@ -1,6 +1,8 @@
 package me.sjtumeow.meow.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -14,6 +16,7 @@ public class Profile extends BaseEntity {
     String nickname, bio, avatar;
 
     @Id
+    @Column(nullable = false)
     private Long id;
 
     @OneToOne

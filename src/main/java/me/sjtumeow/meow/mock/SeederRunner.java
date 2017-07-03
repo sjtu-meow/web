@@ -2,10 +2,14 @@ package me.sjtumeow.meow.mock;
 
 import com.github.javafaker.Faker;
 import me.sjtumeow.meow.dao.ArticleRepository;
+import me.sjtumeow.meow.dao.BannerRepository;
+import me.sjtumeow.meow.dao.CommentRepository;
 import me.sjtumeow.meow.dao.MediaRepository;
 import me.sjtumeow.meow.dao.MomentRepository;
 import me.sjtumeow.meow.dao.ProfileRepository;
 import me.sjtumeow.meow.dao.UserRepository;
+import me.sjtumeow.meow.model.Banner;
+import me.sjtumeow.meow.model.Comment;
 import me.sjtumeow.meow.model.Media;
 import me.sjtumeow.meow.model.Media.MediaType;
 import me.sjtumeow.meow.model.Moment;
@@ -23,6 +27,8 @@ public class SeederRunner implements ApplicationRunner {
     @Autowired UserRepository userRepository;
     @Autowired ProfileRepository profileRepository;
     @Autowired MediaRepository mediaRepository;
+    @Autowired CommentRepository commentRepository;
+    @Autowired BannerRepository bannerRepository;
 
     Faker faker = new Faker();
 
@@ -58,9 +64,18 @@ public class SeederRunner implements ApplicationRunner {
             media.setThumbnail("http://lorempixel.com/50/50");
             media.setMoment(moment);
             mediaRepository.save(media);
+            //momentRepository.save(moment);
             
-            moment.addMedia(media);
-            momentRepository.save(moment);
+            //moment.addMedia(media);
+            
+            Comment comment = new Comment(moment, profile, "神评论");
+            commentRepository.save(comment);
+            //momentRepository.save(moment);
+            
+            Banner banner = new Banner();
+        	banner.setUrl("xxx");
+        	banner.setItem(moment);
+        	bannerRepository.save(banner);
         }
         
   /*

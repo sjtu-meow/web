@@ -1,6 +1,6 @@
 package me.sjtumeow.meow.model;
 
-import com.fasterxml.jackson.databind.ser.Serializers;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -9,8 +9,12 @@ import javax.persistence.OneToOne;
 
 @Entity
 public class Banner extends BaseEntity {
-    @Id
+    
+	private static final long serialVersionUID = 1L;
+
+	@Id
     @GeneratedValue
+    @Column(nullable = false)
     Long id;
 
     String url;
