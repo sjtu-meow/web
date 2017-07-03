@@ -25,6 +25,11 @@ spring:
 leanCloud:
   appId: APP_ID
   appKey: APP_KEY
+  
+qiniu:
+  bucket: BUCKET
+  accessKey: ACCESS_KEY
+  secretKey: SECRET_KEY
 
 server:
-    port: 80
+    port: PORT

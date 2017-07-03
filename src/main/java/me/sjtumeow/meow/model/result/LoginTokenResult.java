@@ -1,9 +1,9 @@
 package me.sjtumeow.meow.model.result;
 
-public class TokenResult {
+public class LoginTokenResult {
     protected String token;
     
-    public TokenResult(String token) {
+    public LoginTokenResult(String token) {
         this.token = token;
     }
 
