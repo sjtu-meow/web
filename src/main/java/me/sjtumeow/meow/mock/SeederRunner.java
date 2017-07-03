@@ -79,7 +79,7 @@ public class SeederRunner implements ApplicationRunner {
             //momentRepository.save(moment);
             
             Banner banner = new Banner();
-        	banner.setUrl("xxx");
+        	banner.setUrl("http://lorempixel.com/200/200");
         	banner.setItem(moment);
         	bannerRepository.save(banner);
         }

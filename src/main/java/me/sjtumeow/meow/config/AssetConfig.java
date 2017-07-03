@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
  */
 @ControllerAdvice
 public class AssetConfig {
-    private AssetProperties.Asset admin, store;
+    private AssetProperties.Asset admin;
 
     @Autowired
     public AssetConfig(AssetProperties assetProperties) {

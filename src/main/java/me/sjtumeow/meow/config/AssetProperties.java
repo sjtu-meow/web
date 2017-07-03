@@ -13,6 +13,9 @@ import org.springframework.context.annotation.PropertySource;
 @PropertySource("classpath:asset.properties")
 public class AssetProperties {
     public static class Asset {
+
+        private final Asset admin = new Asset();
+
         List<String> styles, scripts;
 
         public List<String> getStyles() {
@@ -31,8 +34,6 @@ public class AssetProperties {
             this.scripts = scripts;
         }
     }
-
-    private final Asset admin = new Asset();
 
     public Asset getAdmin() {
         return admin;
