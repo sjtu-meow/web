@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <link rel="stylesheet" data-th-each="style:${adminAsset.styles}" data-th-href="${style}">
+  <link rel="stylesheet" href="/styles/admin-bundle.css">
+</head>
+
+<body class="skin-blue sidebar-mini">
+<div id="app">
+
+</div>
+<script data-th-each="script:${adminAsset.scripts}" data-th-src="${script}"></script>
+<script src="/scripts/admin-bundle.js"></script>
+</body>
+
+</html>

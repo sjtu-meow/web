@@ -6,7 +6,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class HomeController {
     @GetMapping("/")
-    public String getStoreIndex() {
+    public String getIndex() {
         return "index";
+    }
+
+    @GetMapping("/admin")
+    public String getAdminIndex() {
+        return "admin/index";
     }
 }
