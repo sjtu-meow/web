@@ -35,8 +35,8 @@ public abstract class BaseEntity implements Serializable {
     @JsonIgnore
     protected LocalDateTime deletedAt;
     
-    @Formula("deletedAt != NULL")
-    private boolean isDeleted;
+    @Formula("deleted_at IS NOT NULL")
+    boolean isDeleted;
     
     public LocalDateTime getCreatedAt() {
         return createdAt;
@@ -57,5 +57,13 @@ public abstract class BaseEntity implements Serializable {
     public void markDelete() {
         deletedAt = LocalDateTime.now();
     }
+
+	public boolean isDeleted() {
+		return isDeleted;
+	}
+
+	public void setDeleted(boolean isDeleted) {
+		this.isDeleted = isDeleted;
+	}
 
 }
