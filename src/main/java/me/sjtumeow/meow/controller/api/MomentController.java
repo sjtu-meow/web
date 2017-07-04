@@ -28,12 +28,12 @@ public class MomentController {
 	
 	@GetMapping
 	Iterable<Moment> getMoments(@RequestParam(required = false) Integer page, @RequestParam(required = false) Integer size) {
-		return itemService.findAllMoments(page, size);
+		return itemService.findAllMoments(page, size, false);
 	}
 	
 	@GetMapping("/{id}")
-	ResponseEntity<?> getMoment(@PathVariable Long id) {
-		Moment moment = itemService.findMomentById(id);
+	ResponseEntity<?> getMoment(@PathVariable("id") Long id) {
+		Moment moment = itemService.findMomentById(id, false);
         return moment == null ? ResponseEntity.notFound().build() : ResponseEntity.ok(moment);
 	}
 	

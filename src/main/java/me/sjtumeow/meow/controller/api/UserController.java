@@ -2,8 +2,10 @@ package me.sjtumeow.meow.controller.api;
 
 import me.sjtumeow.meow.authorization.annotation.Authorization;
 import me.sjtumeow.meow.authorization.annotation.CurrentUser;
+import me.sjtumeow.meow.model.Profile;
 import me.sjtumeow.meow.model.User;
 import me.sjtumeow.meow.model.form.ChangePasswordForm;
+import me.sjtumeow.meow.model.form.ProfileForm;
 import me.sjtumeow.meow.model.form.RegisterForm;
 import me.sjtumeow.meow.model.result.FailureMessageResult;
 import me.sjtumeow.meow.service.AuthService;
@@ -13,6 +15,8 @@ import me.sjtumeow.meow.util.FormatValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -28,18 +32,6 @@ public class UserController {
     @Autowired
     private AuthService authService;
     
-    /*@JsonView(User.Views.Public.class)
-    @GetMapping
-    Iterable<User> getUsers() {
-        return userService.findAll();
-    }
-
-    @JsonView(User.Views.Public.class)
-    @GetMapping("/{id}")
-    ResponseEntity<?> getUser(@PathVariable("id") Long id) {
-        User user = userService.findById(id);
-        return user == null ? ResponseEntity.notFound().build() : ResponseEntity.ok(user);
-    }*/
 
     @PostMapping(path = "/users", consumes = "application/json")
     ResponseEntity<?> createUser(@RequestBody RegisterForm rp) {
@@ -81,10 +73,23 @@ public class UserController {
     	return userService.changePassword(user.getId(), password) ? ResponseEntity.status(HttpStatus.CREATED).build() : ResponseEntity.notFound().build();
     	
     }
-
-    /*@DeleteMapping("/{id}")
-    ResponseEntity<?> deleteUser(@PathVariable("id") Long id) {
-        return userService.delete(id) ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
-    }*/
-
+    
+    @GetMapping("/user/profile")
+    @Authorization
+    Profile getProfile(@CurrentUser User user) {
+    	return user.getProfile();
+    }
+    
+    @PutMapping(path = "/user/profile", consumes = "application/json")
+    @Authorization
+    ResponseEntity<?> updateProfile(@CurrentUser User user, @RequestBody ProfileForm pf) {
+    	userService.UpdateProfile(user, pf);
+    	return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+    
+    @GetMapping("/users/{id}/profile")
+    ResponseEntity<?> getProfile(@PathVariable("id") Long id) {
+    	Profile profile = userService.getProfile(id, false);
+    	return profile == null ? ResponseEntity.notFound().build() : ResponseEntity.ok(profile);
+    }
 }

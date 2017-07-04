@@ -4,10 +4,12 @@ import me.sjtumeow.meow.dao.ProfileRepository;
 import me.sjtumeow.meow.dao.UserRepository;
 import me.sjtumeow.meow.model.Profile;
 import me.sjtumeow.meow.model.User;
+import me.sjtumeow.meow.model.form.ProfileForm;
 import me.sjtumeow.meow.model.form.UserCredentialsForm;
 import me.sjtumeow.meow.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -18,12 +20,12 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private ProfileRepository profileRepository;
     
-    public Iterable<User> findAll() {
-        return userRepository.findAllActive();
+    public Iterable<User> findAll(boolean isAdmin) {
+        return isAdmin ? userRepository.findAll() : userRepository.findAllActive();
     }
     
-    public User findById(Long id) {
-    	return userRepository.findOneActive(id);
+    public User findById(Long id, boolean isAdmin) {
+    	return isAdmin ? userRepository.findOne(id) : userRepository.findOneActive(id);
     }
 	
 	public User findByPhone(String phone) {
@@ -37,16 +39,26 @@ public class UserServiceImpl implements UserService {
     	return !(user == null || !user.getPassword().equals(cred.getPassword()));
     }
 	
-	public Profile getProfile(Long id) {
-		return profileRepository.findOneActive(id);
+	public Profile getProfile(Long id, boolean isAdmin) {
+		return isAdmin ? profileRepository.findOne(id) : profileRepository.findOneActive(id);
 	}
-
+	
+	@Transactional
+	public void UpdateProfile(User user, ProfileForm pf) {
+		Profile profile = user.getProfile();
+		profile.setNickname(pf.getNickname());
+		profile.setBio(pf.getBio());
+		profile.setAvatar(pf.getAvatar());
+	}
+	
+	@Transactional
     public Long create(String phone, String password) {
     	User user = new User(phone, password);
         userRepository.save(user);
     	return user.getId();
     }
     
+	@Transactional
     public boolean changePassword(Long id, String password) {
     	User user = userRepository.findOneActive(id);
     	if (user == null)
@@ -57,6 +69,7 @@ public class UserServiceImpl implements UserService {
     	return true;
     }
     
+	@Transactional
     public boolean delete(Long id) {
     	if (!userRepository.existsActive(id))
     		return false;

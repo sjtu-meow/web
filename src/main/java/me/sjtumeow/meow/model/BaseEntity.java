@@ -7,15 +7,19 @@ import javax.persistence.MappedSuperclass;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 
+import org.hibernate.annotations.Formula;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @MappedSuperclass
 public abstract class BaseEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    //@JsonIgnore
+    @JsonIgnore
     protected LocalDateTime createdAt;
 
-    //@JsonIgnore
+    @JsonIgnore
     protected LocalDateTime updatedAt;
 
     @PrePersist
@@ -28,9 +32,11 @@ public abstract class BaseEntity implements Serializable {
         updatedAt = LocalDateTime.now();
     }
 
-    //@JsonIgnore
+    @JsonIgnore
     protected LocalDateTime deletedAt;
-
+    
+    @Formula("deletedAt != NULL")
+    private boolean isDeleted;
     
     public LocalDateTime getCreatedAt() {
         return createdAt;
@@ -46,6 +52,10 @@ public abstract class BaseEntity implements Serializable {
 
     public void setDeletedAt(LocalDateTime deletedAt) {
         this.deletedAt = deletedAt;
+    }
+    
+    public void markDelete() {
+        deletedAt = LocalDateTime.now();
     }
 
 }
