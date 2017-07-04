@@ -131,30 +131,23 @@ export default {
   },
   methods: {
     fetchUsers: function() {
-      const self = this;
       //TODO: change url
-      $.ajax({
-        url: 'http://106.14.156.19/api/admin/users',
-        method: 'GET',
-        statusCode: {
-          200: function(data) {
-            self.users = data;
-          }
-        }
-      });
+      this.$http.get('http://106.14.156.19/api/admin/users')
+        .then(function(response) {
+          this.users = response.body;
+        })
     },
     promptAddUser: function(event) {
       $('#add-user-modal').modal('show');
     },
     addUser() {
-      const self = this;
       //TODO: change url
       this.$http.post('http://106.14.156.19/api/admin/users', {
         phone: this.newUserPhone,
         password: this.newUserPassword,
         isAdmin: this.newUserisAdmin
       }).then(function(response) {
-        self.fetchUsers();
+        this.fetchUsers();
         $('#add-user-modal').modal('hide');
       }, function(response) {
         alert(response.body.message)
@@ -165,13 +158,12 @@ export default {
       $('#delete-user-modal').modal('show');
     },
     deleteUser: function(event) {
-      const self = this;
-      //TODO: change url
+      //TODO: change url and test this function call
       this.$http.delete('http://106.14.156.19/api/admin/users/' + this.userToDelete.id)
         .then(function(response) {
-          self.fetchUsers();
+          this.fetchUsers();
           $('#delete-user-modal').modal('hide');
-        }， function(response) {
+        }, function(response) {
           alert('该用户不存在');
         })
     },

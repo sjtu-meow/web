@@ -1,7 +1,7 @@
 <template>
 <tr>
   <!-- TODO: update attribute name -->
-  <td>{{user.id}} {{user.admin ? '😎' : ''}}</td>
+  <td>{{user.id}} {{user.admin ? '😎' : ''}} {{user.deleted ? '（已删）' : ''}}</td>
   <td>
     <template v-if="editingNickname">
       <div class="input-group input-group-sm">
@@ -80,6 +80,7 @@ export default {
   },
   methods: {
     updateNickname: function(event) {
+      //TODO: finish this implemetation
       const self = this;
       $.ajax({
         url: '/',
@@ -95,6 +96,7 @@ export default {
       });
     },
     updatePhone: function(event) {
+      //TODO: finish this implemetation
       const self = this;
       $.ajax({
         url: '/',
@@ -110,6 +112,7 @@ export default {
       });
     },
     updatePassword: function(event) {
+      //TODO: finish this implemetation
       const self = this;
       $.ajax({
         url: '/',

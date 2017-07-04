@@ -1,17 +1,21 @@
 <template>
 <tr>
-  <td>{{moment.id}}</td>
+  <td>
+    {{moment.id}} {{moment.deleted ? '（已删）' : ''}}
+  </td>
   <td>{{moment.profile.nickname}}（{{moment.profile.id}}）</td>
-  <td>{{moment.content}}</td>
+  <td>{{moment.content.substring(0, 240)}}</td>
   <td>
     <template v-for="media in moment.medias">
-      <img v-if="media.type === 'Image'" class="img-rounded" :src="media.url" height="60">
-      <video v-if="media.type === 'Video'" :src="media.url" height="60" controls/>
-      &nbsp;
+      <img v-if="media.type === 'Image'" class="img-rounded" :src="media.url" style="height: 60px; padding-bottom: 4px">
+      <video v-if="media.type === 'Video'" :src="media.url" style="height: 60px; padding-bottom: 4px" controls/>
     </template>
   </td>
   <td>
-    <button type="button" class="btn btn-danger btn-xs" @click="deleteMoment">
+    <button v-if="moment.deleted" type="button" class="btn btn-primary btn-xs" @click="recoverMoment">
+      <span class="glyphicon glyphicon-ok"/>
+    </button>
+    <button v-else type="button" class="btn btn-danger btn-xs" @click="deleteMoment">
       <span class="glyphicon glyphicon-remove"/>
     </button>
   </td>
@@ -25,6 +29,9 @@ export default {
   methods: {
     deleteMoment() {
       this.$emit('deleteMoment', this.moment)
+    },
+    recoverMoment() {
+      this.$emit('recoverMoment', this.moment)
     }
   }
 }

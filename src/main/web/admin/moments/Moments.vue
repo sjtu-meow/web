@@ -16,7 +16,7 @@
           </tr>
         </thead>
         <tbody>
-          <moment-list-row v-for="moment in moments" :key="moment.id" :moment="moment" @deleteMoment="promptDeleteMoment" />
+          <moment-list-row v-for="moment in moments" :key="moment.id" :moment="moment" @deleteMoment="promptDeleteMoment" @recoverMoment="promptRecoverMoment" />
         </tbody>
       </table>
     </div>
@@ -31,11 +31,30 @@
           <h4 class="modal-title" id="delete-moment-modal-title">删除点滴</h4>
         </div>
         <div class="modal-body">
-          <p class="text-danger">确定删除 <b>{{momentToDelete.profile.nickname}}</b> 的点滴（{{momentToDelete.content.substring(0, 10)}}）吗？</p>
+          <p class="text-danger">确定删除 <b>{{momentToDelete.profile.nickname}}</b> 的点滴（{{momentToDelete.content.substring(0, 30)}}）吗？</p>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
           <button type="button" class="btn btn-danger" @click="deleteMoment">删除</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Recover Modal -->
+  <div class="modal fade" id="recover-moment-modal" tabindex="-1" role="dialog" aria-labelledby="recover-moment-modal-title">
+    <div class="modal-dialog modal-sm" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="recover-moment-modal-title">删除点滴</h4>
+        </div>
+        <div class="modal-body">
+          <p class="text-primary">确定恢复 <b>{{momentToRecover.profile.nickname}}</b> 的点滴（{{momentToRecover.content.substring(0, 30)}}）吗？</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+          <button type="button" class="btn btn-primary" @click="recoverMoment">删除</button>
         </div>
       </div>
     </div>
@@ -53,30 +72,14 @@ export default {
   },
   data() {
     return {
-      moments: [{
-        "id": 1,
-        "type": 0,
-        "profile": {
-          "nickname": "喵喵喵的伙伴",
-          "bio": "Web 开发专家",
-          "avatar": null,
-          "id": 1
-        },
-        "comments": null,
-        "likeCount": 0,
-        "commentCount": 0,
-        "content": "Rich gifts wax poor when givers prove unkind.",
-        "medias": [{
-          "id": 3,
-          "type": "Image",
-          "url": "https://i.ytimg.com/vi/prALrHUJ8Ns/hqdefault.jpg"
-        }, {
-          "id": 3,
-          "type": "Image",
-          "url": "https://i.ytimg.com/vi/prALrHUJ8Ns/hqdefault.jpg"
-        }]
-      }],
+      moments: [],
       momentToDelete: {
+        profile: {
+          nickname: 'haha'
+        },
+        content: '+1s now'
+      },
+      momentToRecover: {
         profile: {
           nickname: 'haha'
         },
@@ -84,25 +87,40 @@ export default {
       }
     }
   },
+  created() {
+    this.fetchMoments()
+  },
   methods: {
+    fetchMoments() {
+      //TODO: change url
+      this.$http.get('http://106.14.156.19/api/admin/moments')
+        .then(function(response) {
+          this.moments = response.body;
+        })
+    },
     promptDeleteMoment(moment) {
-      this.userToDelete = moment;
+      this.momentToDelete = moment;
       $('#delete-moment-modal').modal('show');
     },
     deleteMoment() {
-      const self = this;
-      //TODO: finish delete moment ajax call
-      $.ajax({
-        url: '/',
-        type: 'PUT',
-        data: {},
-        success: function(data) {
-          if (data === true) {
-            $('#delete-moment-modal').modal('hide');
-            self.fetchUsers();
-          }
-        }
-      });
+      //TODO: change url
+      this.$http.delete('http://106.14.156.19/api/admin/moments/' + this.momentToDelete.id)
+        .then(function(response) {
+          $('#delete-moment-modal').modal('hide');
+          this.fetchMoments();
+        })
+    },
+    promptRecoverMoment(moment) {
+      this.momentToRecover = moment;
+      $('#recover-moment-modal').modal('show');
+    },
+    recoverMoment() {
+      //TODO: change url and test implementation
+      this.$http.put('http://106.14.156.19/api/admin/moments/' + this.momentToDelete.id)
+        .then(function(response) {
+          $('#recover-moment-modal').modal('hide');
+          this.fetchMoments();
+        })
     }
   }
 }
