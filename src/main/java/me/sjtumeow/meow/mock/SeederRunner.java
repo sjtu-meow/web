@@ -58,28 +58,24 @@ public class SeederRunner implements ApplicationRunner {
         profile2.setUser(user2);
         profileRepository.save(profile2);
         
-        for (int j = 0; j < 10; j++) {
+        for (int i = 0; i < 10; i++) {
             Moment moment = new Moment();
             moment.setProfile(profile1);
             moment.setContent(faker.shakespeare().hamletQuote());
             momentRepository.save(moment);
             
-            Media media = new Media(MediaType.Image, String.format("http://lorempixel.com/%d/%d", 200 + j, 200 + j), moment);
-            mediaRepository.save(media);
+            for (int j = 0; j <= i; ++j) {
+            	Media media = new Media(MediaType.Image, "http://lorempixel.com/200/200", moment);
+                mediaRepository.save(media);
+            }
+            
             momentRepository.save(moment);
             
-         
-             
-            
-            
-            //moment.addMedia(media);
-            
-            Comment comment = new Comment(moment, profile1, "神评论");
+            Comment comment = new Comment(moment, profile1, String.format("神奇评论%d", i));
             commentRepository.save(comment);
-            //momentRepository.save(moment);
             
             Banner banner = new Banner();
-        	banner.setUrl("http://lorempixel.com/200/200");
+        	banner.setUrl("http://lorempixel.com/400/200");
         	banner.setItem(moment);
         	bannerRepository.save(banner);
         }

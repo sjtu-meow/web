@@ -5,6 +5,7 @@ import me.sjtumeow.meow.authorization.annotation.CurrentUser;
 import me.sjtumeow.meow.model.User;
 import me.sjtumeow.meow.model.form.ChangePasswordForm;
 import me.sjtumeow.meow.model.form.RegisterForm;
+import me.sjtumeow.meow.model.result.FailureMessageResult;
 import me.sjtumeow.meow.service.AuthService;
 import me.sjtumeow.meow.service.UserService;
 import me.sjtumeow.meow.util.FormatValidator;
@@ -47,10 +48,16 @@ public class UserController {
     	String password = rp.getPassword();
     	String code = rp.getCode();
     	
-    	if (!FormatValidator.checkPhone(phone) || !FormatValidator.checkPassword(password)
-    			|| !FormatValidator.checkSmsCode(code) || !authService.verifySmsCode(phone, code)
-    			|| userService.findByPhone(phone) != null)
-    		return ResponseEntity.badRequest().build();
+    	if (!FormatValidator.checkPhone(phone))
+    		return ResponseEntity.badRequest().body(new FailureMessageResult("手机号格式不正确"));
+    	if (!FormatValidator.checkPassword(password))
+    		return ResponseEntity.badRequest().body(new FailureMessageResult("密码的长度至少为 6 个字符"));
+    	if (!FormatValidator.checkSmsCode(code))
+    		return ResponseEntity.badRequest().body(new FailureMessageResult("验证码必须是 6 位数字"));
+    	if (!authService.verifySmsCode(phone, code))
+    		return ResponseEntity.badRequest().body(new FailureMessageResult("验证码验证失败"));
+    	if (userService.findByPhone(phone) != null)
+			return ResponseEntity.badRequest().body(new FailureMessageResult("该手机号已被注册"));
     	
         userService.create(phone, password);
         return ResponseEntity.status(HttpStatus.CREATED).build();
@@ -64,9 +71,12 @@ public class UserController {
     	String password = cpf.getPassword();
     	String code = cpf.getCode();
     	
-    	if (!FormatValidator.checkPassword(password) || !FormatValidator.checkSmsCode(code)
-    			|| !authService.verifySmsCode(phone, code))
-    		return ResponseEntity.badRequest().build();
+    	if (!FormatValidator.checkPassword(password))
+    		return ResponseEntity.badRequest().body(new FailureMessageResult("密码的长度至少为 6 个字符"));
+    	if (!FormatValidator.checkSmsCode(code))
+    		return ResponseEntity.badRequest().body(new FailureMessageResult("验证码必须是 6 位数字"));
+    	if (!authService.verifySmsCode(phone, code))
+    		return ResponseEntity.badRequest().body(new FailureMessageResult("验证码验证失败"));
     	
     	return userService.changePassword(user.getId(), password) ? ResponseEntity.status(HttpStatus.CREATED).build() : ResponseEntity.notFound().build();
     	

@@ -4,6 +4,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
@@ -21,7 +22,8 @@ public class Comment extends BaseEntity {
     private Long parent = 0L;
     
     @JsonBackReference
-    @ManyToOne(optional = false)
+    @ManyToOne
+    @JoinColumn(nullable = false)
     private Item item;
 
     @JsonBackReference
