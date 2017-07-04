@@ -22,6 +22,7 @@
       return {
         'items': [
           {'name': '用户管理', 'icon': 'fa-user', 'link': '/users'},
+          {'name': '点滴管理', 'icon': 'fa-tint', 'link': '/moments'}
         ]
       }
     }

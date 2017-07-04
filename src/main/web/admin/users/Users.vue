@@ -14,7 +14,7 @@
               </button>
             </th>
             <th class="col-md-3">昵称</th>
-            <th onload=""class="col-md-3">手机</th>
+            <th class="col-md-3">手机</th>
             <th class="col-md-4">密码</th>
             <th class="col-md-1"></th>
           </tr>
@@ -85,7 +85,7 @@
           <h4 class="modal-title" id="delete-user-modal-title">删除用户</h4>
         </div>
         <div class="modal-body">
-          <p class="text-danger">确定删除此用户 <b>{{userToDelete.nickname}} ({{userToDelete.phone}})</b> 吗？</p>
+          <p class="text-danger">确定删除此用户 <b>{{userToDelete.nickname}}（{{userToDelete.phone}}）</b> 吗？</p>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>

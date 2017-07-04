@@ -16,6 +16,7 @@
   import NavBar from './NavBar.vue'
   import SideBar from './SideBar.vue'
   import Users from './users/Users.vue'
+  import Moments from './moments/Moments.vue'
 
 
   Vue.use(VueRouter)
@@ -27,15 +28,16 @@
   const router = new VueRouter({
     routes: [
       { path: '/users', component: Users },
+      {path: '/moments', component: Moments}
     ]
   })
 
   export default {
     name: 'app',
     router,
-    mounted() {
-      //router.push('/books');
-    },
+    // mounted() {
+    //   //router.push('/books');
+    // },
     components: {
       NavBar,
       SideBar
