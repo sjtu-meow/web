@@ -22,7 +22,10 @@
       return {
         'items': [
           {'name': '用户管理', 'icon': 'fa-user', 'link': '/users'},
-          {'name': '点滴管理', 'icon': 'fa-tint', 'link': '/moments'}
+          {'name': '点滴管理', 'icon': 'fa-tint', 'link': '/moments'},
+          {'name': '文章管理', 'icon': 'fa-file-text', 'link': '/articles'},
+          {'name': '问答管理', 'icon': 'fa-comments-o', 'link': '/questions'},
+          {'name': '推送管理', 'icon': 'fa-arrow-circle-up', 'link': '/pushes'}
         ]
       }
     }

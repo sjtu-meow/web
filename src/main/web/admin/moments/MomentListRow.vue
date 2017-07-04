@@ -4,15 +4,10 @@
   <td>{{moment.profile.nickname}}（{{moment.profile.id}}）</td>
   <td>{{moment.content}}</td>
   <td>
-    <template v-if="moment.medias.length > 0">
-      <template v-if="moment.medias[0].type='Image'">
-        <template v-for="media in moment.medias">
-          <img class="img-rounded" :src="media.url" height="40">&nbsp;
-        </template>
-      </template>
-      <template v-else>
-        <video :src="moment.medias[0].url" height="40"/>
-      </template>
+    <template v-for="media in moment.medias">
+      <img v-if="media.type === 'Image'" class="img-rounded" :src="media.url" height="60">
+      <video v-if="media.type === 'Video'" :src="media.url" height="60" controls/>
+      &nbsp;
     </template>
   </td>
   <td>
@@ -29,7 +24,7 @@ export default {
   props: ['moment'],
   methods: {
     deleteMoment() {
-
+      this.$emit('deleteMoment', this.moment)
     }
   }
 }
