@@ -58,8 +58,8 @@
   </td>
   <td>
     <button type="button" class="btn btn-danger btn-xs" @click="deleteUser">
-        <span class="glyphicon glyphicon-remove"/>
-      </button>
+      <span class="glyphicon glyphicon-remove"/>
+    </button>
   </td>
 </tr>
 </template>
