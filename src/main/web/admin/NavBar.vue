@@ -2,7 +2,7 @@
   <header class="main-header">
     <a href="#" class="logo">
       <!-- LOGO -->
-      <span class="logo-lg"><b>Bookstore</b></span>
+      <span class="logo-lg"><b>喵喵喵的管理平台</b></span>
     </a>
     <!-- Header Navbar: style can be found in header.less -->
     <nav class="navbar navbar-static-top" role="navigation">
@@ -13,7 +13,7 @@
       <div class="navbar-custom-menu">
         <ul class="nav navbar-nav">
           <li>
-            <a href="/logout">Logout</a>
+            <a href="/logout">退出登录</a>
           </li>
         </ul>
       </div>

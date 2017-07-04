@@ -12,16 +12,23 @@
   import Vue from 'vue'
   import VueRouter from 'vue-router'
   import VueResource from 'vue-resource'
+  import Vue2Filters from 'vue2-filters'
   import NavBar from './NavBar.vue'
   import SideBar from './SideBar.vue'
-  import Vue2Filters from 'vue2-filters'
- // import Books from '../tmp/Books.vue'
+  import Users from './users/Users.vue'
+
 
   Vue.use(VueRouter)
   Vue.use(VueResource);
   Vue.use(Vue2Filters)
 
-  import router from './router'
+  // import router from './router'
+
+  const router = new VueRouter({
+    routes: [
+      { path: '/users', component: Users },
+    ]
+  })
 
   export default {
     name: 'app',

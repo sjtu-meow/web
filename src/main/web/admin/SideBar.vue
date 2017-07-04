@@ -21,7 +21,7 @@
     data() {
       return {
         'items': [
-          {'name': 'Users', 'icon': 'fa-user', 'link': '/users'},
+          {'name': '用户管理', 'icon': 'fa-user', 'link': '/users'},
         ]
       }
     }
