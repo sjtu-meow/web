@@ -1,7 +1,7 @@
 <template>
 <tr>
   <!-- TODO: update attribute name -->
-  <td>{{user.id}}</td>
+  <td>{{user.id}} {{user.admin ? '😎' : ''}}</td>
   <td>
     <template v-if="editingNickname">
       <div class="input-group input-group-sm">
@@ -13,8 +13,8 @@
         </span>
       </div>
     </template>
-    <template v-else>
-      {{user.nickname}}
+    <template v-else-if="user.deleted === false">
+      {{user.profile.nickname}}
       <button type="button" class="btn btn-default btn-xs" @click="editingNickname = true">
         <span class="glyphicon glyphicon-edit"/>
       </button>
@@ -31,7 +31,7 @@
         </span>
       </div>
     </template>
-    <template v-else>
+    <template v-else-if="user.deleted === false">
       {{user.phone}}
       <button type="button" class="btn btn-default btn-xs" @click="editingPhone = true">
           <span class="glyphicon glyphicon-edit"/>
@@ -49,7 +49,7 @@
         </span>
       </div>
     </template>
-    <template v-else>
+    <template v-else-if="user.deleted === false">
       ****
       <button type="button" class="btn btn-default btn-xs" @click="editingPassword = true">
           <span class="glyphicon glyphicon-edit"/>

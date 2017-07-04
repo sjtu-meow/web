@@ -75,7 +75,7 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-          <button type="button" class="btn btn-primary">添加</button>
+          <button type="button" class="btn btn-primary" @click="addUser">添加</button>
         </div>
       </div>
     </div>
@@ -90,7 +90,7 @@
           <h4 class="modal-title" id="delete-user-modal-title">删除用户</h4>
         </div>
         <div class="modal-body">
-          <p class="text-danger">确定删除此用户 <b>{{userToDelete.nickname}}（{{userToDelete.phone}}）</b> 吗？</p>
+          <p class="text-danger">确定删除此用户 <b>{{userToDelete.profile.nickname}}（{{userToDelete.phone}}）</b> 吗？</p>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
@@ -112,20 +112,17 @@ export default {
   },
   data: function() {
     return {
-      //TODO: remove default user
-      users: [{
-        id: 1,
-        nickname: 'haha',
-        phone: '13512341234'
-      }],
+      users: [],
       newUserNickname: '',
       newUserPassword: '',
       newUserPhone: '',
       newUserisAdmin: false,
       userToDelete: {
         id: 1,
-        nickname: 'haha',
-        phone: '13512341234'
+        phone: '13512341234',
+        profile: {
+          nickname: 'haha'
+        }
       }
     }
   },
@@ -135,14 +132,13 @@ export default {
   methods: {
     fetchUsers: function() {
       const self = this;
-      //TODO: finish fetch users list ajax call
+      //TODO: change url
       $.ajax({
-        url: '/',
-        type: 'PUT',
-        data: {},
-        success: function(data) {
-          if (data === true) {
-            // self.users = ...
+        url: 'http://106.14.156.19/api/admin/users',
+        method: 'GET',
+        statusCode: {
+          200: function(data) {
+            self.users = data;
           }
         }
       });
@@ -150,24 +146,34 @@ export default {
     promptAddUser: function(event) {
       $('#add-user-modal').modal('show');
     },
+    addUser() {
+      const self = this;
+      //TODO: change url
+      this.$http.post('http://106.14.156.19/api/admin/users', {
+        phone: this.newUserPhone,
+        password: this.newUserPassword,
+        isAdmin: this.newUserisAdmin
+      }).then(function(response) {
+        self.fetchUsers();
+        $('#add-user-modal').modal('hide');
+      }, function(response) {
+        alert(response.body.message)
+      });
+    },
     promptDeleteUser: function(user) {
       this.userToDelete = user;
       $('#delete-user-modal').modal('show');
     },
     deleteUser: function(event) {
       const self = this;
-      //TODO: finish delete user ajax call
-      $.ajax({
-        url: '/',
-        type: 'PUT',
-        data: {},
-        success: function(data) {
-          if (data === true) {
-            $('#delete-user-modal').modal('hide');
-            self.fetchUsers();
-          }
-        }
-      });
+      //TODO: change url
+      this.$http.delete('http://106.14.156.19/api/admin/users/' + this.userToDelete.id)
+        .then(function(response) {
+          self.fetchUsers();
+          $('#delete-user-modal').modal('hide');
+        }， function(response) {
+          alert('该用户不存在');
+        })
     },
     triggerAvatarInputClick: function() {
       $('#avatarInput').click();
@@ -175,7 +181,7 @@ export default {
     uploadPicture: function(event) {
       let data = new FormData();
       data.append('file', event.target.files[0])
-
+      //TODO: change the way of uploading avatar image
       $.ajax({
         url: "/image/avatar",
         type: "POST",
