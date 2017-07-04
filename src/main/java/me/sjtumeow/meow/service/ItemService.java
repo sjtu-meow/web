@@ -6,7 +6,9 @@ import me.sjtumeow.meow.model.form.AddMomentForm;
 
 public interface ItemService {
 	
-	Iterable<Moment> findAllMoments(Integer page, Integer size, boolean isAdmin);
+	Iterable<Moment> findAllMoments(boolean isAdmin);
+	
+	Iterable<Moment> findAllMomentsPageable(Integer page, Integer size, boolean isAdmin);
 	
 	Moment findMomentById(Long id, boolean isAdmin);
 	

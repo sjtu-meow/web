@@ -19,6 +19,7 @@ import me.sjtumeow.meow.model.User;
 import me.sjtumeow.meow.model.form.AddMomentForm;
 import me.sjtumeow.meow.model.result.FailureMessageResult;
 import me.sjtumeow.meow.service.ItemService;
+import me.sjtumeow.meow.util.FormatValidator;
 
 @RestController
 @RequestMapping("/api/moments")
@@ -28,7 +29,8 @@ public class MomentController {
 	
 	@GetMapping
 	Iterable<Moment> getMoments(@RequestParam(required = false) Integer page, @RequestParam(required = false) Integer size) {
-		return itemService.findAllMoments(page, size, false);
+		return (!FormatValidator.checkNonNegativeInt(page) || !FormatValidator.checkPositiveInt(size)) ? 
+				itemService.findAllMoments(false) : itemService.findAllMomentsPageable(page, size, false);
 	}
 	
 	@GetMapping("/{id}")

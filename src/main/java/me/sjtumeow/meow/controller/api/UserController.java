@@ -51,7 +51,7 @@ public class UserController {
     	if (userService.findByPhone(phone) != null)
 			return ResponseEntity.badRequest().body(new FailureMessageResult("该手机号已被注册"));
     	
-        userService.create(phone, password);
+        userService.create(phone, password, false);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
     

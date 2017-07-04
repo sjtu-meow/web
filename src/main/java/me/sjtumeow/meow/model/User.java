@@ -1,9 +1,7 @@
 package me.sjtumeow.meow.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import com.fasterxml.jackson.annotation.JsonView;
 import javax.persistence.*;
 
 @Entity
@@ -13,11 +11,9 @@ public class User extends BaseEntity {
 
     @Id
     @GeneratedValue
-    @JsonView(Views.Public.class)
     @Column(nullable = false)
     private Long id;
     
-    @JsonView(Views.Public.class)
     @Column(unique = true, nullable = false)
     private String phone;
 
@@ -25,12 +21,10 @@ public class User extends BaseEntity {
     @Column(nullable = false)
     private String password;
 
-    @JsonView(Views.Public.class)
     @Column(nullable = false)
     private boolean isAdmin = false;
     
     @OneToOne(fetch = FetchType.EAGER, mappedBy = "user")
-    @JsonBackReference
     private Profile profile;
     
     public User() {}
@@ -78,10 +72,6 @@ public class User extends BaseEntity {
 
     public void setProfile(Profile profile) {
         this.profile = profile;
-    }
-
-    public static class Views {
-        public interface Public { }
     }
 }
 

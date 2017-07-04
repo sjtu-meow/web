@@ -24,13 +24,14 @@ public class ItemServiceImpl implements ItemService {
     private MediaRepository mediaRepository;
 	
 	
-	public Iterable<Moment> findAllMoments(Integer page, Integer size, boolean isAdmin) {
-		if (isAdmin)
-			return (page == null || size == null) ? momentRepository.findAll()
-				: momentRepository.findAll(new PageRequest(page, size, Direction.DESC, "createdAt"));
-		else
-			return (page == null || size == null) ? momentRepository.findAllActive()
-				: momentRepository.findAllActive(new PageRequest(page, size, Direction.DESC, "createdAt"));
+	public Iterable<Moment> findAllMoments(boolean isAdmin) {
+		return isAdmin ? momentRepository.findAll() : momentRepository.findAllActive();
+	}
+	
+	public Iterable<Moment> findAllMomentsPageable(Integer page, Integer size, boolean isAdmin) {
+		return isAdmin ?
+			momentRepository.findAll(new PageRequest(page, size, Direction.DESC, "createdAt")) 
+			: momentRepository.findAllActive(new PageRequest(page, size, Direction.DESC, "createdAt"));
 	}
     
 	public Moment findMomentById(Long id, boolean isAdmin) {
@@ -48,7 +49,7 @@ public class ItemServiceImpl implements ItemService {
 	@Transactional
 	public boolean addMoment(AddMomentForm amf, User user) {
 		String content = amf.getContent();
-		if ((content == null || content.trim().length() == 0) && (amf.getMedias() == null || amf.getMedias().isEmpty()))
+		if ((content == null || content.trim().isEmpty()) && (amf.getMedias() == null || amf.getMedias().isEmpty()))
 			return false;
 		
 		Moment moment = new Moment();

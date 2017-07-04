@@ -1,7 +1,6 @@
 package me.sjtumeow.meow.model;
 
 import java.util.Collection;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
@@ -15,7 +14,6 @@ public class Moment extends Item {
         type = Item.ITEM_TYPE_MOMENT;
     }
 
-    @Column(nullable = false)
     String content;
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "moment")

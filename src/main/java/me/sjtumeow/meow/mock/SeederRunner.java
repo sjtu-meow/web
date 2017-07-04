@@ -60,7 +60,7 @@ public class SeederRunner implements ApplicationRunner {
         
         for (int i = 0; i < 10; i++) {
             Moment moment = new Moment();
-            moment.setProfile(profile1);
+            moment.setProfile(i % 2 == 0 ? profile1 : profile2);
             moment.setContent(faker.shakespeare().hamletQuote());
             momentRepository.save(moment);
             
@@ -69,8 +69,6 @@ public class SeederRunner implements ApplicationRunner {
                 mediaRepository.save(media);
             }
             
-            momentRepository.save(moment);
-            
             Comment comment = new Comment(moment, profile1, String.format("神奇评论%d", i));
             commentRepository.save(comment);
             
@@ -78,6 +76,12 @@ public class SeederRunner implements ApplicationRunner {
         	banner.setUrl("http://lorempixel.com/400/200");
         	banner.setItem(moment);
         	bannerRepository.save(banner);
+        	
+        	if (i == 0) {
+        		moment.markDelete();
+        		momentRepository.save(moment);
+        	}
+        		
         }
         
   /*

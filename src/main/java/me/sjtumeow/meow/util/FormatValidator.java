@@ -2,6 +2,13 @@ package me.sjtumeow.meow.util;
 
 public class FormatValidator {
 	
+	public static boolean checkNonNegativeInt(Integer x) {
+		return x != null && x >= 0;
+	}
+	public static boolean checkPositiveInt(Integer x) {
+		return x != null && x > 0;
+	}
+	
 	public static boolean checkPhone(String s) {
 		return s != null && s.matches("^1\\d{10}$");
 	}

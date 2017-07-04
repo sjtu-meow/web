@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import me.sjtumeow.meow.model.Moment;
 import me.sjtumeow.meow.service.ItemService;
+import me.sjtumeow.meow.util.FormatValidator;
 
 @RestController
 @RequestMapping("/api/admin/moments")
@@ -21,7 +22,8 @@ public class AdminMomentController {
 	
 	@GetMapping
 	Iterable<Moment> getMoments(@RequestParam(required = false) Integer page, @RequestParam(required = false) Integer size) {
-		return itemService.findAllMoments(page, size, true);
+		return (!FormatValidator.checkNonNegativeInt(page) || !FormatValidator.checkPositiveInt(size)) ? 
+				itemService.findAllMoments(true) : itemService.findAllMomentsPageable(page, size, true);
 	}
 	
 	@GetMapping("/{id}")

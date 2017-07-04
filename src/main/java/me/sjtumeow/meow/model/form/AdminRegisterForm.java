@@ -4,7 +4,8 @@ public class AdminRegisterForm {
 	
 	protected String phone;
 	protected String password;
-	
+	protected boolean isAdmin;
+
 	public String getPhone() {
 		return phone;
 	}
@@ -19,6 +20,14 @@ public class AdminRegisterForm {
 	
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public boolean isAdmin() {
+		return isAdmin;
+	}
+
+	public void setAdmin(boolean isAdmin) {
+		this.isAdmin = isAdmin;
 	}
 	
 }

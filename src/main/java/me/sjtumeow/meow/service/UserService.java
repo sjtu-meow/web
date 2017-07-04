@@ -19,7 +19,7 @@ public interface UserService {
 	
 	void UpdateProfile(User user, ProfileForm pf);
 	
-    Long create(String phone, String password);
+    Long create(String phone, String password, boolean isAdmin);
     
     boolean changePassword(Long id, String password);
     

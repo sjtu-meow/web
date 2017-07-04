@@ -1,5 +1,6 @@
 package me.sjtumeow.meow.service.impl;
 
+import me.sjtumeow.meow.authorization.manager.TokenManager;
 import me.sjtumeow.meow.dao.ProfileRepository;
 import me.sjtumeow.meow.dao.UserRepository;
 import me.sjtumeow.meow.model.Profile;
@@ -19,6 +20,9 @@ public class UserServiceImpl implements UserService {
     
     @Autowired
     private ProfileRepository profileRepository;
+    
+    @Autowired
+	private TokenManager tokenManager;
     
     public Iterable<User> findAll(boolean isAdmin) {
         return isAdmin ? userRepository.findAll() : userRepository.findAllActive();
@@ -52,9 +56,13 @@ public class UserServiceImpl implements UserService {
 	}
 	
 	@Transactional
-    public Long create(String phone, String password) {
+    public Long create(String phone, String password, boolean isAdmin) {
     	User user = new User(phone, password);
+    	user.setAdmin(isAdmin);
         userRepository.save(user);
+        Profile profile = new Profile();
+        profile.setUser(user);
+        profileRepository.save(profile);
     	return user.getId();
     }
     
@@ -74,6 +82,7 @@ public class UserServiceImpl implements UserService {
     	if (!userRepository.existsActive(id))
     		return false;
     	userRepository.softDelete(id);
+    	tokenManager.deleteToken(id);
     	return true;
     }
 
