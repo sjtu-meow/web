@@ -37,21 +37,26 @@
         <div class="modal-body">
           <div class="row">
             <form class="col-md-8">
-                <div class="form-group">
-                    <label class="control-label" for="new-user-phone">手机</label>
-                    <input type="number" class="form-control" id="new-user-phone" v-model="newUserPhone" required/>
-                    <span class="help-block"></span>
-                </div>
-                <div class="form-group">
-                    <label class="control-label " for="new-user-nickname">昵称</label>
-                    <input type="text" class="form-control" id="new-user-nickname" v-model="newUserNickname" required>
-                    <span class="help-block"></span>
-                </div>
-                <div class="form-group">
-                    <label class="control-label " for="new-user-password">密码</label>
-                    <input type="password" class="form-control" id="new-user-password" v-model="newUserPassword" required>
-                    <span class="help-block"></span>
-                </div>
+              <div class="form-group">
+                <label class="control-label" for="new-user-phone">手机</label>
+                <input type="number" class="form-control" id="new-user-phone" v-model="newUserPhone" required/>
+                <span class="help-block"></span>
+              </div>
+              <div class="form-group">
+                <label class="control-label " for="new-user-nickname">昵称</label>
+                <input type="text" class="form-control" id="new-user-nickname" v-model="newUserNickname" required>
+                <span class="help-block"></span>
+              </div>
+              <div class="form-group">
+                <label class="control-label " for="new-user-password">密码</label>
+                <input type="password" class="form-control" id="new-user-password" v-model="newUserPassword" required>
+                <span class="help-block"></span>
+              </div>
+              <div class="checkbox">
+                <label>
+                    <input type="checkbox" v-model="newUserisAdmin"/> 管理员权限
+                  </label>
+              </div>
             </form>
             <div class="col-md-4">
               <form action="/image/avatar" method="post" enctype="multipart/form-data">
@@ -61,7 +66,7 @@
                     <!-- TODO: add default image url -->
                     <img src="https://i.ytimg.com/vi/prALrHUJ8Ns/hqdefault.jpg">
                   </a>
-                  <input type="file" name="file" id="avatarInput" style="display: none;" @change="uploadPicture"/>
+                  <input type="file" name="file" id="avatarInput" style="display: none;" @change="uploadPicture" />
                   <span class="help-block">点击图片上传</span>
                 </div>
               </form>
@@ -98,92 +103,93 @@
 </template>
 
 <script>
-  import UserListRow from './UserListRow.vue'
+import UserListRow from './UserListRow.vue'
 
-  export default {
-    name: 'Users',
-    components: {
-      UserListRow
-    },
-    data: function() {
-      return {
-        //TODO: remove default user
-        users: [{
-          id: 1,
-          nickname: 'haha',
-          phone: '13512341234'
-        }],
-        newUserNickname: '',
-        newUserPassword: '',
-        newUserPhone: '',
-        userToDelete: {
-          id: 1,
-          nickname: 'haha',
-          phone: '13512341234'
-        }
-      }
-    },
-    created: function() {
-      this.fetchUsers()
-    },
-    methods: {
-      fetchUsers: function() {
-        const self = this;
-        //TODO: finish fetch users list ajax call
-        $.ajax({
-          url: '/',
-          type: 'PUT',
-          data: {},
-          success: function(data) {
-            if (data === true) {
-              // self.users = ...
-            }
-          }
-        });
-      },
-      promptAddUser: function(event) {
-        $('#add-user-modal').modal('show');
-      },
-      promptDeleteUser: function(user) {
-        this.userToDelete = user;
-        $('#delete-user-modal').modal('show');
-      },
-      deleteUser: function(event) {
-        const self = this;
-        //TODO: finish delete user ajax call
-        $.ajax({
-          url: '/',
-          type: 'PUT',
-          data: {},
-          success: function(data) {
-            if (data === true) {
-              $('#delete-user-modal').modal('hide');
-              self.fetchUsers();
-            }
-          }
-        });
-      },
-      triggerAvatarInputClick: function() {
-        $('#avatarInput').click();
-      },
-      uploadPicture: function(event) {
-        let data = new FormData();
-        data.append('file', event.target.files[0])
-
-        $.ajax({
-          url: "/image/avatar",
-          type: "POST",
-          data: data,
-          contentType: false,
-          cache: false,
-          processData: false,
-          success: function(data) {
-            if (data === true) {
-              window.location.reload()
-            }
-          }
-        });
+export default {
+  name: 'Users',
+  components: {
+    UserListRow
+  },
+  data: function() {
+    return {
+      //TODO: remove default user
+      users: [{
+        id: 1,
+        nickname: 'haha',
+        phone: '13512341234'
+      }],
+      newUserNickname: '',
+      newUserPassword: '',
+      newUserPhone: '',
+      newUserisAdmin: false,
+      userToDelete: {
+        id: 1,
+        nickname: 'haha',
+        phone: '13512341234'
       }
     }
+  },
+  created: function() {
+    this.fetchUsers()
+  },
+  methods: {
+    fetchUsers: function() {
+      const self = this;
+      //TODO: finish fetch users list ajax call
+      $.ajax({
+        url: '/',
+        type: 'PUT',
+        data: {},
+        success: function(data) {
+          if (data === true) {
+            // self.users = ...
+          }
+        }
+      });
+    },
+    promptAddUser: function(event) {
+      $('#add-user-modal').modal('show');
+    },
+    promptDeleteUser: function(user) {
+      this.userToDelete = user;
+      $('#delete-user-modal').modal('show');
+    },
+    deleteUser: function(event) {
+      const self = this;
+      //TODO: finish delete user ajax call
+      $.ajax({
+        url: '/',
+        type: 'PUT',
+        data: {},
+        success: function(data) {
+          if (data === true) {
+            $('#delete-user-modal').modal('hide');
+            self.fetchUsers();
+          }
+        }
+      });
+    },
+    triggerAvatarInputClick: function() {
+      $('#avatarInput').click();
+    },
+    uploadPicture: function(event) {
+      let data = new FormData();
+      data.append('file', event.target.files[0])
+
+      $.ajax({
+        url: "/image/avatar",
+        type: "POST",
+        data: data,
+        contentType: false,
+        cache: false,
+        processData: false,
+        success: function(data) {
+          if (data === true) {
+            window.location.reload()
+          }
+        }
+      });
+    }
   }
+}
 </script>
