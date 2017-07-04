@@ -36,8 +36,4 @@ public class Moment extends Item {
     public void setMedias(Collection<Media> medias) {
         this.medias = medias;
     }
-
-    /*public void addMedia(Media media) {
-        this.medias.add(media);
-    }*/
 }

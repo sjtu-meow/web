@@ -27,11 +27,7 @@ public class AuthController {
 	
 	@PostMapping(consumes = "application/json")
 	ResponseEntity<?> login(@RequestBody UserCredentialsForm cred) {
-		if (!userService.checkPassword(cred)) {
-			return ResponseEntity.notFound().build();
-		}
-		
-		return ResponseEntity.ok(authService.generateUserToken(cred));
+		return userService.checkPassword(cred) ? ResponseEntity.ok(authService.generateUserToken(cred)) : ResponseEntity.notFound().build();
 	}
 	
 	@DeleteMapping
