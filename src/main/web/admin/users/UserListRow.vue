@@ -57,7 +57,10 @@
     </template>
   </td>
   <td>
-    <button type="button" class="btn btn-danger btn-xs" @click="deleteUser">
+    <button v-if="user.deleted" type="button" class="btn btn-primary btn-xs" @click="recoverUser">
+      <span class="glyphicon glyphicon-ok"/>
+    </button>
+    <button v-else type="button" class="btn btn-danger btn-xs" @click="deleteUser">
       <span class="glyphicon glyphicon-remove"/>
     </button>
   </td>
@@ -79,7 +82,7 @@ export default {
     }
   },
   methods: {
-    updateNickname: function(event) {
+    updateNickname(event) {
       //TODO: finish this implemetation
       const self = this;
       $.ajax({
@@ -95,7 +98,7 @@ export default {
         }
       });
     },
-    updatePhone: function(event) {
+    updatePhone(event) {
       //TODO: finish this implemetation
       const self = this;
       $.ajax({
@@ -111,7 +114,7 @@ export default {
         }
       });
     },
-    updatePassword: function(event) {
+    updatePassword(event) {
       //TODO: finish this implemetation
       const self = this;
       $.ajax({
@@ -127,8 +130,11 @@ export default {
         }
       });
     },
-    deleteUser: function(event) {
+    deleteUser(event) {
       this.$emit('deleteUser', this.user)
+    },
+    recoverUser(event) {
+      this.$emit('recoverUser', this.user)
     }
   }
 }

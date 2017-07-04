@@ -99,6 +99,25 @@
       </div>
     </div>
   </div>
+
+  <!-- Recover Modal -->
+  <div class="modal fade" id="recover-user-modal" tabindex="-1" role="dialog" aria-labelledby="recover-user-modal-title">
+    <div class="modal-dialog modal-sm" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="recover-user-modal-title">删除用户</h4>
+        </div>
+        <div class="modal-body">
+          <p class="text-danger">确定删除此用户 <b>{{userToRecover.profile.nickname}}（{{userToRecover.phone}}）</b> 吗？</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+          <button type="button" class="btn btn-danger" @click="recoverUser">删除</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </section>
 </template>
 
@@ -118,6 +137,13 @@ export default {
       newUserPhone: '',
       newUserisAdmin: false,
       userToDelete: {
+        id: 1,
+        phone: '13512341234',
+        profile: {
+          nickname: 'haha'
+        }
+      },
+      userToRecover: {
         id: 1,
         phone: '13512341234',
         profile: {
@@ -187,6 +213,18 @@ export default {
           }
         }
       });
+    },
+    promptRecoverUser(user) {
+      this.userToRecover = user;
+      $('#recover-user-modal').modal('show');
+    },
+    recoverUser() {
+      //TODO: change url and test implementation
+      this.$http.put('http://106.14.156.19/api/admin/users/' + this.momentToDelete.id)
+        .then(function(response) {
+          $('#recover-user-modal').modal('hide');
+          this.fetchUsers();
+        })
     }
   }
 }
