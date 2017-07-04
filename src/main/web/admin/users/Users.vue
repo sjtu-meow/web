@@ -20,7 +20,7 @@
           </tr>
         </thead>
         <tbody>
-          <user-list-row v-for="user in users" :user="user" @deleteUser="promptDeleteUser" />
+          <user-list-row v-for="user in users" :key="user.id" :user="user" @deleteUser="promptDeleteUser" />
         </tbody>
       </table>
     </div>

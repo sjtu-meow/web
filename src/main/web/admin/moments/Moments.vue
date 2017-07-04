@@ -16,11 +16,30 @@
           </tr>
         </thead>
         <tbody>
-          <moment-list-row v-for="moment in moments" :moment="moment" @deleteMoment="promptDeleteMoment" />
+          <moment-list-row v-for="moment in moments" :key="moment.id" :moment="moment" @deleteMoment="promptDeleteMoment" />
         </tbody>
       </table>
     </div>
   </section>
+
+  <!-- Delete Modal -->
+  <div class="modal fade" id="delete-moment-modal" tabindex="-1" role="dialog" aria-labelledby="delete-moment-modal-title">
+    <div class="modal-dialog modal-sm" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="delete-moment-modal-title">删除点滴</h4>
+        </div>
+        <div class="modal-body">
+          <p class="text-danger">确定删除 <b>{{momentToDelete.profile.nickname}}</b> 的点滴（{{momentToDelete.content.substring(0, 10)}}）吗？</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+          <button type="button" class="btn btn-danger" @click="deleteMoment">删除</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </section>
 </template>
 
@@ -56,12 +75,34 @@ export default {
           "type": "Image",
           "url": "https://i.ytimg.com/vi/prALrHUJ8Ns/hqdefault.jpg"
         }]
-      }]
+      }],
+      momentToDelete: {
+        profile: {
+          nickname: 'haha'
+        },
+        content: '+1s now'
+      }
     }
   },
   methods: {
-    promptDeleteMoment: function() {
-
+    promptDeleteMoment(moment) {
+      this.userToDelete = moment;
+      $('#delete-moment-modal').modal('show');
+    },
+    deleteMoment() {
+      const self = this;
+      //TODO: finish delete moment ajax call
+      $.ajax({
+        url: '/',
+        type: 'PUT',
+        data: {},
+        success: function(data) {
+          if (data === true) {
+            $('#delete-moment-modal').modal('hide');
+            self.fetchUsers();
+          }
+        }
+      });
     }
   }
 }
