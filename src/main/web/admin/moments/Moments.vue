@@ -116,6 +116,8 @@ export default {
       this.$http.get('http://106.14.156.19/api/admin/moments')
         .then(function(response) {
           this.moments = response.body;
+        }, function (response) {
+          alert(response.body.message || '获取点滴失败');
         })
     },
     promptDeleteMoment(moment) {
@@ -128,6 +130,8 @@ export default {
         .then(function(response) {
           $('#delete-moment-modal').modal('hide');
           this.fetchMoments();
+        }, function (response) {
+          alert(response.body.message || '修改失败');
         })
     },
     promptRecoverMoment(moment) {
@@ -136,10 +140,12 @@ export default {
     },
     recoverMoment() {
       //TODO: change url and test implementation
-      this.$http.put('http://106.14.156.19/api/admin/moments/' + this.momentToDelete.id)
+      this.$http.put('http://106.14.156.19/api/admin/moments/' + this.momentToDelete.id + '/recover')
         .then(function(response) {
-          $('#recover-moment-modal').modal('hide');
+          $('#delete-moment-modal').modal('hide');
           this.fetchMoments();
+        }, function (response) {
+          alert(response.body.message || '修改失败');
         })
     },
     expandContent(moment) {

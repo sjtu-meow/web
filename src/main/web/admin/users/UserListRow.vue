@@ -1,7 +1,7 @@
 <template>
 <tr>
   <!-- TODO: update attribute name -->
-  <td>{{user.id}} {{user.admin ? '😎' : ''}} {{user.deleted ? '（已删）' : ''}}</td>
+  <td>{{user.id}} {{user.admin ? '🤓' : ''}} {{user.deleted ? '（已删）' : ''}}</td>
   <td>
     <img class="img-circle" :src="user.profile.avatar ? user.profile.avatar : 'https://pbs.twimg.com/profile_images/625633822235693056/lNGUneLX.jpg'"
       height="40px" />
@@ -59,11 +59,18 @@
     <template v-else-if="user.deleted === false">
       ****
       <button type="button" class="btn btn-default btn-xs" @click="editingPassword = true">
-          <span class="glyphicon glyphicon-edit"/>
+        <span class="glyphicon glyphicon-edit"/>
       </button>
     </template>
   </td>
   <td>
+    <button v-if="user.admin" type="button" class="btn btn-default btn-xs" @click="unsetAdmin">
+      <span class="glyphicon glyphicon-eye-close"/>
+    </button>
+    <button v-else type="button" class="btn btn-default btn-xs" @click="setAdmin">
+      <span class="glyphicon glyphicon-eye-open"/>
+    </button>
+
     <button v-if="user.deleted" type="button" class="btn btn-primary btn-xs" @click="recoverUser">
       <span class="glyphicon glyphicon-ok"/>
     </button>
@@ -84,7 +91,7 @@ export default {
       editingBio: false,
       editingPassword: false,
       newNickname: '',
-      newPhone: '',
+      newBio: '',
       newPassword: ''
     }
   },
@@ -94,50 +101,58 @@ export default {
       this.$http.patch('http://106.14.156.19/api/admin/users/' + this.user.id, {
         nickname: this.newNickname
       }).then(function (response) {
-        user.profile.nickname = newNickname;
-        editingNickname = false;
+        this.user.profile.nickname = this.newNickname;
+        this.editingNickname = false;
       }, function (response) {
-        console.log(response);
-        alert('该用户不存在')
+        alert(response.body.message || '修改失败')
       })
     },
     updateBio(event) {
-      //TODO: finish this implemetation
-      const self = this;
-      $.ajax({
-        url: '/',
-        type: 'PUT',
-        data: {},
-        success: function(data) {
-          if (data === true) {
-            self.editingPhone = false;
-            self.user.phone = self.newPhone;
-            self.newPhone = '';
-          }
-        }
-      });
+      //TODO: change url
+      this.$http.patch('http://106.14.156.19/api/admin/users/' + this.user.id, {
+        bio: this.newBio
+      }).then(function (response) {
+        this.user.profile.bio = this.newBio;
+        this.editingBio = false;
+      }, function (response) {
+        alert(response.body.message || '修改失败')
+      })
     },
     updatePassword(event) {
-      //TODO: finish this implemetation
-      const self = this;
-      $.ajax({
-        url: '/',
-        type: 'PUT',
-        data: {},
-        success: function(data) {
-          if (data === true) {
-            self.editingPassword = false;
-            self.user.password = self.newPassword;
-            self.newPassword = '';
-          }
-        }
-      });
+      //TODO: change url
+      this.$http.patch('http://106.14.156.19/api/admin/users/' + this.user.id, {
+        password: this.newPassword
+      }).then(function (response) {
+        this.editingPassword = false;
+      }, function (response) {
+        alert(response.body.message || '修改失败')
+      })
     },
     deleteUser(event) {
       this.$emit('deleteUser', this.user)
     },
     recoverUser(event) {
       this.$emit('recoverUser', this.user)
+    },
+    setAdmin(event) {
+      //TODO: change url
+      this.$http.patch('http://106.14.156.19/api/admin/users/' + this.user.id, {
+        admin: true
+      }).then(function (response) {
+        this.user.admin = true;
+      }, function (response) {
+        alert(response.body.message || '修改失败')
+      })
+    },
+    unsetAdmin(event) {
+      //TODO: change url
+      this.$http.patch('http://106.14.156.19/api/admin/users/' + this.user.id, {
+        admin: false
+      }).then(function (response) {
+        this.user.admin = false;
+      }, function (response) {
+        alert(response.body.message || '修改失败')
+      })
     }
   }
 }

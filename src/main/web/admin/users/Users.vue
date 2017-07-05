@@ -163,6 +163,8 @@ export default {
       this.$http.get('http://106.14.156.19/api/admin/users')
         .then(function(response) {
           this.users = response.body;
+        }, function (response) {
+          alert(response.body.message || '获取用户失败');
         })
     },
     promptAddUser: function(event) {
@@ -173,7 +175,8 @@ export default {
       this.$http.post('http://106.14.156.19/api/admin/users', {
         phone: this.newUserPhone,
         password: this.newUserPassword,
-        isAdmin: this.newUserisAdmin
+        nickname: this.newUserNickname,
+        admin: this.newUserisAdmin
       }).then(function(response) {
         this.fetchUsers();
         $('#add-user-modal').modal('hide');
@@ -192,7 +195,21 @@ export default {
           this.fetchUsers();
           $('#delete-user-modal').modal('hide');
         }, function(response) {
-          alert('该用户不存在');
+          alert(response.body.message || '修改失败');
+        })
+    },
+    promptRecoverUser(user) {
+      this.userToRecover = user;
+      $('#recover-user-modal').modal('show');
+    },
+    recoverUser() {
+      //TODO: change url and test implementation
+      this.$http.put('http://106.14.156.19/api/admin/users/' + this.momentToDelete.id + '/recover')
+        .then(function(response) {
+          $('#recover-user-modal').modal('hide');
+          this.fetchUsers();
+        }, function(response) {
+          alert(response.body.message || '修改失败');
         })
     },
     triggerAvatarInputClick: function() {
@@ -202,31 +219,6 @@ export default {
       let data = new FormData();
       data.append('file', event.target.files[0])
       //TODO: change the way of uploading avatar image
-      $.ajax({
-        url: "/image/avatar",
-        type: "POST",
-        data: data,
-        contentType: false,
-        cache: false,
-        processData: false,
-        success: function(data) {
-          if (data === true) {
-            window.location.reload()
-          }
-        }
-      });
-    },
-    promptRecoverUser(user) {
-      this.userToRecover = user;
-      $('#recover-user-modal').modal('show');
-    },
-    recoverUser() {
-      //TODO: change url and test implementation
-      this.$http.put('http://106.14.156.19/api/admin/users/' + this.momentToDelete.id)
-        .then(function(response) {
-          $('#recover-user-modal').modal('hide');
-          this.fetchUsers();
-        })
     }
   }
 }
