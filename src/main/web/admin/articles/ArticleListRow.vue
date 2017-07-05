@@ -7,7 +7,7 @@
     <a @click="expandContent">查看详情</a>
   </td>
   <td>
-    <button v-if="article.deleted" type="button" class="btn btn-primary btn-xs" @click="recoverMoment">
+    <button v-if="article.deleted" type="button" class="btn btn-primary btn-xs" @click="recoverArticle">
       <span class="glyphicon glyphicon-ok"/>
     </button>
     <button v-else type="button" class="btn btn-danger btn-xs" @click="deleteArticle">
