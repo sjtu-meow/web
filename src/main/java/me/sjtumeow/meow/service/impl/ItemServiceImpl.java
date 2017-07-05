@@ -1,13 +1,20 @@
 package me.sjtumeow.meow.service.impl;
 
+import me.sjtumeow.meow.dao.ArticleRepository;
 import me.sjtumeow.meow.dao.MediaRepository;
 import me.sjtumeow.meow.dao.MomentRepository;
+import me.sjtumeow.meow.model.Article;
 import me.sjtumeow.meow.model.Media;
 import me.sjtumeow.meow.model.Moment;
 import me.sjtumeow.meow.model.User;
 import me.sjtumeow.meow.model.form.AddMomentForm;
 import me.sjtumeow.meow.model.form.MediaForm;
+import me.sjtumeow.meow.model.result.ArticleSummaryResult;
 import me.sjtumeow.meow.service.ItemService;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
@@ -22,6 +29,9 @@ public class ItemServiceImpl implements ItemService {
 	
 	@Autowired
     private MediaRepository mediaRepository;
+	
+	@Autowired
+    private ArticleRepository articleRepository;
 	
 	
 	public Iterable<Moment> findAllMoments(boolean isAdmin) {
@@ -43,7 +53,6 @@ public class ItemServiceImpl implements ItemService {
 		if (moment == null)
 			return null;
 		return moment.getProfile().getUser();
-		
 	}
 	
 	@Transactional
@@ -88,5 +97,60 @@ public class ItemServiceImpl implements ItemService {
 		moment.recover();
 		momentRepository.save(moment);
 		return true;
+	}
+	
+	public Iterable<ArticleSummaryResult> findAllArticles(boolean isAdmin) {
+		Iterable<Article> articles = isAdmin ? articleRepository.findAll() : articleRepository.findAllActive();
+		List<ArticleSummaryResult> result = new ArrayList<ArticleSummaryResult>();
+		
+		for (Article article: articles) {
+			ArticleSummaryResult asr = new ArticleSummaryResult();
+			asr.setId(article.getId());
+			asr.setTitle(article.getTitle());
+			asr.setCover(article.getCover());
+			asr.setProfile(article.getProfile());
+			asr.setLikeCount(article.getLikeCount());
+			asr.setCommentCount(article.getCommentCount());
+			asr.setCreateTime(article.getCreateTime());
+			asr.setUpdateTime(article.getUpdateTime());
+			asr.setDeleted(article.isDeleted());
+			result.add(asr);
+		}
+		
+		return result;
+	}
+	
+	public Iterable<ArticleSummaryResult> findAllArticlesPageable(Integer page, Integer size, boolean isAdmin) {
+		Iterable<Article> articles = isAdmin ?
+				articleRepository.findAll(new PageRequest(page, size, Direction.DESC, "createdAt")) 
+				: articleRepository.findAllActive(new PageRequest(page, size, Direction.DESC, "createdAt"));
+		List<ArticleSummaryResult> result = new ArrayList<ArticleSummaryResult>();
+		
+		for (Article article: articles) {
+			ArticleSummaryResult asr = new ArticleSummaryResult();
+			asr.setId(article.getId());
+			asr.setTitle(article.getTitle());
+			asr.setCover(article.getCover());
+			asr.setProfile(article.getProfile());
+			asr.setLikeCount(article.getLikeCount());
+			asr.setCommentCount(article.getCommentCount());
+			asr.setCreateTime(article.getCreateTime());
+			asr.setUpdateTime(article.getUpdateTime());
+			asr.setDeleted(article.isDeleted());
+			result.add(asr);
+		}
+		
+		return result;
+	}
+	
+	public Article findArticleById(Long id, boolean isAdmin) {
+		return isAdmin ? articleRepository.findOne(id) : articleRepository.findOneActive(id);
+	}
+	
+	public User getArticleCreator(Long id) {
+		Article article = articleRepository.findOneActive(id);
+		if (article == null)
+			return null;
+		return article.getProfile().getUser();
 	}
 }

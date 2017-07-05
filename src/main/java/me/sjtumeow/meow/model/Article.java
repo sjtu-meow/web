@@ -1,47 +1,40 @@
 package me.sjtumeow.meow.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import javax.persistence.Entity;
-import javax.persistence.OneToOne;
-import javax.persistence.PrimaryKeyJoinColumn;
 
 @Entity
 public class Article extends Item {
-    String title, summary;
-    Long readCount;
-
-    @OneToOne
-    Media cover;
-
-    public String getTitle() {
-        return title;
+    
+	private static final long serialVersionUID = 1L;
+	
+	String title, content, cover;
+	
+	public Article() {
+        type = Item.ITEM_TYPE_ARTICLE;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
+	public String getTitle() {
+		return title;
+	}
 
-    public String getSummary() {
-        return summary;
-    }
+	public void setTitle(String title) {
+		this.title = title;
+	}
 
-    public void setSummary(String summary) {
-        this.summary = summary;
-    }
+	public String getContent() {
+		return content;
+	}
 
-    public Long getReadCount() {
-        return readCount;
-    }
+	public void setContent(String content) {
+		this.content = content;
+	}
 
-    public void setReadCount(Long readCount) {
-        this.readCount = readCount;
-    }
+	public String getCover() {
+		return cover;
+	}
 
-    public Media getCover() {
-        return cover;
-    }
+	public void setCover(String cover) {
+		this.cover = cover;
+	}
 
-    public void setCover(Media cover) {
-        this.cover = cover;
-    }
 }

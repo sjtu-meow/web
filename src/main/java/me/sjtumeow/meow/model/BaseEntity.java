@@ -35,8 +35,14 @@ public abstract class BaseEntity implements Serializable {
     @JsonIgnore
     protected LocalDateTime deletedAt;
     
+    @Formula("created_at")
+    protected String createTime;
+    
+    @Formula("updated_at")
+    protected String updateTime;
+    
     @Formula("deleted_at IS NOT NULL")
-    boolean isDeleted;
+    protected boolean isDeleted;
     
     public LocalDateTime getCreatedAt() {
         return createdAt;
@@ -58,6 +64,22 @@ public abstract class BaseEntity implements Serializable {
         deletedAt = null;
     }
 
+	public String getCreateTime() {
+		return createTime;
+	}
+
+	public void setCreateTime(String createTime) {
+		this.createTime = createTime;
+	}
+
+	public String getUpdateTime() {
+		return updateTime;
+	}
+
+	public void setUpdateTime(String updateTime) {
+		this.updateTime = updateTime;
+	}
+	
 	public boolean isDeleted() {
 		return isDeleted;
 	}

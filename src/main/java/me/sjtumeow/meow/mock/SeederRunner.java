@@ -8,6 +8,7 @@ import me.sjtumeow.meow.dao.MediaRepository;
 import me.sjtumeow.meow.dao.MomentRepository;
 import me.sjtumeow.meow.dao.ProfileRepository;
 import me.sjtumeow.meow.dao.UserRepository;
+import me.sjtumeow.meow.model.Article;
 import me.sjtumeow.meow.model.Banner;
 import me.sjtumeow.meow.model.Comment;
 import me.sjtumeow.meow.model.Media;
@@ -77,8 +78,18 @@ public class SeederRunner implements ApplicationRunner {
         	banner.setItem(moment);
         	bannerRepository.save(banner);
         	
-        	if (i == 0)
+        	Article article = new Article();
+        	article.setTitle(String.format("铲屎官必读文章(%d)", i + 1));
+        	article.setContent("<p style=\"color:#63c;\">第一段/p><p>第二段</p>");
+        	article.setCover("http://lorempixel.com/400/200");
+        	article.setProfile(i % 2 == 0 ? profile1 : profile2);
+        	
+        	articleRepository.save(article);
+        	
+        	if (i == 0) {
         		momentRepository.softDelete(moment);
+        		articleRepository.softDelete(article);
+        	}
         		
         }
         
