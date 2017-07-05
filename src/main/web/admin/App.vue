@@ -2,7 +2,7 @@
 <div id="app" class="wrapper" style="height: auto;">
   <nav-bar></nav-bar>
   <side-bar></side-bar>
-  <div class="content-wrapper" style="min-height: 320px;">
+  <div class="content-wrapper" style="min-height: 320px; background-color: #ffffff;">
     <router-view></router-view>
   </div>
 </div>
