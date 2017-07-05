@@ -22,7 +22,7 @@ public class User extends BaseEntity {
     private String password;
 
     @Column(nullable = false)
-    private boolean isAdmin = false;
+    private Boolean isAdmin = false;
     
     @OneToOne(fetch = FetchType.EAGER, mappedBy = "user")
     private Profile profile;
@@ -50,11 +50,11 @@ public class User extends BaseEntity {
         this.password = password;
     }
     
-    public boolean isAdmin() {
+    public Boolean isAdmin() {
         return isAdmin;
     }
 
-    public void setAdmin(boolean isAdmin) {
+    public void setAdmin(Boolean isAdmin) {
         this.isAdmin = isAdmin;
     }
 

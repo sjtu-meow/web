@@ -42,6 +42,11 @@ public class UserServiceImpl implements UserService {
 		}
 	}
 	
+	public boolean isBanned(String phone) {
+		User user = findByPhone(phone, true);
+		return user != null && user.isDeleted();
+	}
+	
 	public boolean checkPassword(UserCredentialsForm cred) {
     	User user = findByPhone(cred.getPhone(), false);
     	// To be modified to BCrypt checking
@@ -61,9 +66,8 @@ public class UserServiceImpl implements UserService {
 	}
 	
 	@Transactional
-    public Long create(String phone, String password, boolean isAdmin) {
+    public Long create(String phone, String password) {
     	User user = new User(phone, password);
-    	user.setAdmin(isAdmin);
         userRepository.save(user);
         Profile profile = new Profile();
         profile.setUser(user);
@@ -104,6 +108,8 @@ public class UserServiceImpl implements UserService {
 		
 		if (auuf.getPassword() != null)
 			user.setPassword(auuf.getPassword());
+		if (auuf.isAdmin() != null)
+			user.setAdmin(auuf.isAdmin());
 		
 		userRepository.save(user);
 		

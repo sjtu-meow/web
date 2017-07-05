@@ -14,13 +14,15 @@ public interface UserService {
 	
 	User findByPhone(String phone, boolean withTrash);
 	
+	boolean isBanned(String phone);
+	
 	boolean checkPassword(UserCredentialsForm cred);
 	
 	Profile getProfile(Long id, boolean isAdmin);
 	
 	void UpdateProfile(User user, ProfileForm pf);
 	
-    Long create(String phone, String password, boolean isAdmin);
+    Long create(String phone, String password);
     
     Long create(String phone, String password, boolean isAdmin, String nickname, String bio, String avatar);
     

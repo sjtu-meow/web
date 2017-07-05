@@ -1,6 +1,7 @@
 package me.sjtumeow.meow.controller.api;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,6 +13,7 @@ import me.sjtumeow.meow.authorization.annotation.Authorization;
 import me.sjtumeow.meow.authorization.annotation.CurrentUser;
 import me.sjtumeow.meow.model.User;
 import me.sjtumeow.meow.model.form.UserCredentialsForm;
+import me.sjtumeow.meow.model.result.FailureMessageResult;
 import me.sjtumeow.meow.service.AuthService;
 import me.sjtumeow.meow.service.UserService;
 
@@ -27,7 +29,10 @@ public class AuthController {
 	
 	@PostMapping(consumes = "application/json")
 	ResponseEntity<?> login(@RequestBody UserCredentialsForm cred) {
-		return userService.checkPassword(cred) ? ResponseEntity.ok(authService.generateUserToken(cred)) : ResponseEntity.notFound().build();
+		if (userService.isBanned(cred.getPhone()))
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new FailureMessageResult("您的账号已被封禁!"));
+		
+		return userService.checkPassword(cred) ? ResponseEntity.ok(authService.generateUserToken(cred)) : ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 	}
 	
 	@DeleteMapping
