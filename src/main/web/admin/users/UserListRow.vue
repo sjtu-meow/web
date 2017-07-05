@@ -90,20 +90,16 @@ export default {
   },
   methods: {
     updateNickname(event) {
-      //TODO: finish this implemetation
-      const self = this;
-      $.ajax({
-        url: '/',
-        type: 'PUT',
-        data: {},
-        success: function(data) {
-          if (data === true) {
-            self.editingNickname = false;
-            self.user.nickname = self.newNickname;
-            self.newNickname = '';
-          }
-        }
-      });
+      //TODO: change url
+      this.$http.patch('http://106.14.156.19/api/admin/users/' + this.user.id, {
+        nickname: this.newNickname
+      }).then(function (response) {
+        user.profile.nickname = newNickname;
+        editingNickname = false;
+      }, function (response) {
+        console.log(response);
+        alert('该用户不存在')
+      })
     },
     updateBio(event) {
       //TODO: finish this implemetation
