@@ -13,9 +13,11 @@
                 <span class="glyphicon glyphicon-plus"/>
               </button>
             </th>
-            <th class="col-md-3">昵称</th>
-            <th class="col-md-3">手机</th>
-            <th class="col-md-4">密码</th>
+            <th class="col-md-1">头像</th>
+            <th class="col-md-2">昵称</th>
+            <th class="col-md-3">签名</th>
+            <th class="col-md-2">手机</th>
+            <th class="col-md-2">密码</th>
             <th class="col-md-1"></th>
           </tr>
         </thead>

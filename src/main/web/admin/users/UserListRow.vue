@@ -3,6 +3,10 @@
   <!-- TODO: update attribute name -->
   <td>{{user.id}} {{user.admin ? '😎' : ''}} {{user.deleted ? '（已删）' : ''}}</td>
   <td>
+    <img class="img-circle" :src="user.profile.avatar ? user.profile.avatar : 'https://pbs.twimg.com/profile_images/625633822235693056/lNGUneLX.jpg'"
+      height="40px" />
+  </td>
+  <td>
     <template v-if="editingNickname">
       <div class="input-group input-group-sm">
         <input type="text" class="form-control" v-model="newNickname">
@@ -21,27 +25,30 @@
     </template>
   </td>
   <td>
-    <template v-if="editingPhone">
+    <template v-if="editingBio">
       <div class="input-group input-group-sm">
-        <input type="text" class="form-control" v-model="newPhone">
+        <input type="text" class="form-control" v-model="newBio">
         <span class="input-group-btn">
-        <button class="btn btn-default" @click="updatePhone">
+        <button class="btn btn-default" @click="updateBio">
             <span class="glyphicon glyphicon-refresh"></span>
         </button>
         </span>
       </div>
     </template>
     <template v-else-if="user.deleted === false">
-      {{user.phone}}
-      <button type="button" class="btn btn-default btn-xs" @click="editingPhone = true">
-          <span class="glyphicon glyphicon-edit"/>
+      {{user.profile.bio}}
+      <button type="button" class="btn btn-default btn-xs" @click="editingBio = true">
+        <span class="glyphicon glyphicon-edit"/>
       </button>
     </template>
   </td>
   <td>
+    {{user.phone}}
+  </td>
+  <td>
     <template v-if="editingPassword">
       <div class="input-group input-group-sm">
-        <input type="text" class="form-control" v-model="newPassword">
+        <input type="password" class="form-control" v-model="newPassword">
         <span class="input-group-btn">
         <button class="btn btn-default" @click="updatePassword">
             <span class="glyphicon glyphicon-refresh"></span>
@@ -74,7 +81,7 @@ export default {
   data: function() {
     return {
       editingNickname: false,
-      editingPhone: false,
+      editingBio: false,
       editingPassword: false,
       newNickname: '',
       newPhone: '',
@@ -98,7 +105,7 @@ export default {
         }
       });
     },
-    updatePhone(event) {
+    updateBio(event) {
       //TODO: finish this implemetation
       const self = this;
       $.ajax({
