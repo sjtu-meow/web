@@ -17,4 +17,6 @@ public interface ItemService {
 	boolean addMoment(AddMomentForm amf, User user);
 	
 	boolean deleteMoment(Long id);
+	
+	boolean recoverMoment(Long id);
 }

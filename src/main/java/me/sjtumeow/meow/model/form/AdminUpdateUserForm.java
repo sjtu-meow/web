@@ -1,21 +1,10 @@
 package me.sjtumeow.meow.model.form;
 
-public class AdminRegisterForm {
-	
-	protected String phone;
+public class AdminUpdateUserForm {
 	protected String password;
-	protected boolean isAdmin;
 	protected String nickname;
 	protected String bio;
 	protected String avatar;
-
-	public String getPhone() {
-		return phone;
-	}
-	
-	public void setPhone(String phone) {
-		this.phone = phone;
-	}
 	
 	public String getPassword() {
 		return password;
@@ -23,14 +12,6 @@ public class AdminRegisterForm {
 	
 	public void setPassword(String password) {
 		this.password = password;
-	}
-
-	public boolean isAdmin() {
-		return isAdmin;
-	}
-
-	public void setAdmin(boolean isAdmin) {
-		this.isAdmin = isAdmin;
 	}
 
 	public String getNickname() {
@@ -56,5 +37,4 @@ public class AdminRegisterForm {
 	public void setAvatar(String avatar) {
 		this.avatar = avatar;
 	}
-	
 }

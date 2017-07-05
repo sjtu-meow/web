@@ -54,8 +54,8 @@ public abstract class BaseEntity implements Serializable {
         this.deletedAt = deletedAt;
     }
     
-    public void markDelete() {
-        deletedAt = LocalDateTime.now();
+    public void recover() {
+        deletedAt = null;
     }
 
 	public boolean isDeleted() {

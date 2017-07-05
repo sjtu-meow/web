@@ -4,6 +4,7 @@ import me.sjtumeow.meow.model.Profile;
 import me.sjtumeow.meow.model.User;
 import me.sjtumeow.meow.model.form.ProfileForm;
 import me.sjtumeow.meow.model.form.UserCredentialsForm;
+import me.sjtumeow.meow.model.form.AdminUpdateUserForm;
 
 public interface UserService {
 	
@@ -11,7 +12,7 @@ public interface UserService {
 	
 	User findById(Long id, boolean isAdmin);
 	
-	User findByPhone(String phone);
+	User findByPhone(String phone, boolean withTrash);
 	
 	boolean checkPassword(UserCredentialsForm cred);
 	
@@ -21,8 +22,14 @@ public interface UserService {
 	
     Long create(String phone, String password, boolean isAdmin);
     
+    Long create(String phone, String password, boolean isAdmin, String nickname, String bio, String avatar);
+    
     boolean changePassword(Long id, String password);
     
-    public boolean delete(Long id);
+    boolean update(Long id, AdminUpdateUserForm auuf);
+    
+    boolean delete(Long id);
+    
+    boolean recover(Long id);
     
 }
