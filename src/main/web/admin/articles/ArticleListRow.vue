@@ -2,7 +2,10 @@
 <tr>
   <td>{{article.id}}</td>
   <td>{{article.profile.nickname}}（{{article.profile.id}}）</td>
-  <td>{{plainContent.substring(0, 200)}}</td>
+  <td>
+    {{plainContent.substring(0, contentPreviewLength)}}
+    <a @click="expandContent">查看详情</a>
+  </td>
   <td>
     <button v-if="article.deleted" type="button" class="btn btn-primary btn-xs" @click="recoverMoment">
       <span class="glyphicon glyphicon-ok"/>
@@ -18,12 +21,20 @@
 export default {
   name: 'ArticleListRow',
   props: ['article'],
+  data() {
+    return {
+      contentPreviewLength: 100
+    }
+  },
   methods: {
     deleteArticle() {
       this.$emit('deleteArticle', this.article)
     },
     recoverArticle() {
       this.$emit('recoverArticle', this.article)
+    },
+    expandContent() {
+      this.$emit('expandContent', this.article)
     }
   },
   computed: {

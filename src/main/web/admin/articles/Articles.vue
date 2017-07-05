@@ -16,7 +16,7 @@
         </thead>
         <tbody>
           <article-list-row v-for="article in articles" :key="article.id" :article="article"
-            @deleteArticle="promptDeleteArticle" @recoverArticle="promptRecoverArticle" />
+            @deleteArticle="promptDeleteArticle" @recoverArticle="promptRecoverArticle" @expandContent="expandContent" />
         </tbody>
       </table>
     </div>
@@ -59,6 +59,23 @@
       </div>
     </div>
   </div>
+
+  <!-- Expand Content Modal -->
+  <div class="modal fade" id="article-content-detail-modal" tabindex="-1" role="dialog" aria-labelledby="article-content-detail-modal-title">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="article-content-detail-modal-title">文章全文</h4>
+        </div>
+        <div class="modal-body">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </section>
 </template>
 
@@ -74,7 +91,7 @@ export default {
     return {
       articles: [{
         id: 1,
-        content: '<p>+1s or not +1s, this is a question.</p><img src="http://lorempixel.com/200/200" /><p>+1s or not +1s, this is a question.</p>',
+        content: '<p>+1s or not +1s, this is a question.</p><p><img src="http://lorempixel.com/200/200" /></p><p>+1s or not +1s, this is a question.</p>',
         profile: {
           id: 1,
           nickname: 'haha'
@@ -84,13 +101,13 @@ export default {
         profile: {
           nickname: 'haha'
         },
-        content: '<p>+1s or not +1s, this is a question.</p><img src="http://lorempixel.com/200/200" /><p>+1s or not +1s, this is a question.</p>',
+        content: '<p>+1s or not +1s, this is a question.</p><p><img src="http://lorempixel.com/200/200" /></p><p>+1s or not +1s, this is a question.</p>',
       },
       articleToRecover: {
         profile: {
           nickname: 'haha'
         },
-        content: '<p>+1s or not +1s, this is a question.</p><img src="http://lorempixel.com/200/200" /><p>+1s or not +1s, this is a question.</p>',
+        content: '<p>+1s or not +1s, this is a question.</p><p><img src="http://lorempixel.com/200/200" /></p><p>+1s or not +1s, this is a question.</p>',
       }
     }
   },
@@ -126,6 +143,10 @@ export default {
     },
     recoverArticle() {
 
+    },
+    expandContent(article) {
+      $('#article-content-detail-modal .modal-body').html(article.content);
+      $('#article-content-detail-modal').modal('show');
     }
   }
 }
