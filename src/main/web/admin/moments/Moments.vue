@@ -9,9 +9,9 @@
         <thead>
           <tr>
             <th class="col-md-1">#</th>
-            <th class="col-md-1">用户</th>
+            <th class="col-md-2">用户</th>
             <th class="col-md-3">文字预览</th>
-            <th class="col-md-6">媒体</th>
+            <th class="col-md-5">媒体</th>
             <th class="col-md-1"></th>
           </tr>
         </thead>

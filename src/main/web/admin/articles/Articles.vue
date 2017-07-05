@@ -9,8 +9,8 @@
         <thead>
           <tr>
             <th class="col-md-1">#</th>
-            <th class="col-md-1">用户</th>
-            <th class="col-md-9">预览</th>
+            <th class="col-md-2">用户</th>
+            <th class="col-md-8">预览</th>
             <th class="col-md-1"></th>
           </tr>
         </thead>
