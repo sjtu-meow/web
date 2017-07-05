@@ -9,13 +9,14 @@
         <thead>
           <tr>
             <th class="col-md-1">#</th>
-            <th class="col-md-1">用户</th>
-            <th class="col-md-9">预览</th>
+            <th class="col-md-2">用户</th>
+            <th class="col-md-8">预览</th>
             <th class="col-md-1"></th>
           </tr>
         </thead>
         <tbody>
-          <article-list-row v-for="article in articles" :key="article.id" :article="article" @deleteArticle="promptDeleteArticle" />
+          <article-list-row v-for="article in articles" :key="article.id" :article="article"
+            @deleteArticle="promptDeleteArticle" @recoverArticle="promptRecoverArticle" @expandContent="expandContent" />
         </tbody>
       </table>
     </div>
@@ -30,11 +31,47 @@
           <h4 class="modal-title" id="delete-article-modal-title">删除文章</h4>
         </div>
         <div class="modal-body">
-          <p class="text-danger">确定删除 <b>{{articleToDelete.profile.nickname}}</b> 的点滴（{{articleToDelete.content.substring(0, 10)}}）吗？</p>
+          <p class="text-danger">确定删除 <b>{{articleToDelete.profile.nickname}}</b> 的文章（{{plainContentToDelete.substring(0, 50)}}）吗？</p>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
           <button type="button" class="btn btn-danger" @click="deleteArticle">删除</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Recover Modal -->
+  <div class="modal fade" id="recover-article-modal" tabindex="-1" role="dialog" aria-labelledby="recover-article-modal-title">
+    <div class="modal-dialog modal-sm" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="recover-article-modal-title">恢复文章</h4>
+        </div>
+        <div class="modal-body">
+          <p class="text-danger">确定恢复 <b>{{articleToRecover.profile.nickname}}</b> 的文章（{{plainContentToRecover.substring(0, 30)}}）吗？</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+          <button type="button" class="btn btn-danger" @click="recoverArticle">恢复</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Expand Content Modal -->
+  <div class="modal fade" id="article-content-detail-modal" tabindex="-1" role="dialog" aria-labelledby="article-content-detail-modal-title">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="article-content-detail-modal-title">文章全文</h4>
+        </div>
+        <div class="modal-body">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
         </div>
       </div>
     </div>
@@ -54,7 +91,7 @@ export default {
     return {
       articles: [{
         id: 1,
-        content: '+1s or not +1s, this is a question.',
+        content: '<p>+1s or not +1s, this is a question.</p><p><img src="http://lorempixel.com/200/200" /></p><p>+1s or not +1s, this is a question.</p>',
         profile: {
           id: 1,
           nickname: 'haha'
@@ -64,17 +101,52 @@ export default {
         profile: {
           nickname: 'haha'
         },
-        content: '+1s or not +1s, this is a question.'
+        content: '<p>+1s or not +1s, this is a question.</p><p><img src="http://lorempixel.com/200/200" /></p><p>+1s or not +1s, this is a question.</p>',
+      },
+      articleToRecover: {
+        profile: {
+          nickname: 'haha'
+        },
+        content: '<p>+1s or not +1s, this is a question.</p><p><img src="http://lorempixel.com/200/200" /></p><p>+1s or not +1s, this is a question.</p>',
       }
     }
   },
+  computed: {
+    plainContentToDelete() {
+      return $(this.articleToDelete.content).text()
+    },
+    plainContentToRecover() {
+      return $(this.articleToRecover.content).text()
+    }
+  },
+  created() {
+    this.fetchArticles();
+  },
   methods: {
+    fetchArticles() {
+      //TODO: finish implementation and change url
+      this.$http.get('http://106.14.156.19/api/admin/articles')
+        .then(function(response) {
+          this.moments = response.body;
+        })
+    },
     promptDeleteArticle(article) {
       this.articleToDelete = article;
       $('#delete-article-modal').modal('show');
     },
     deleteArticle() {
 
+    },
+    promptRecoverArticle(article) {
+      this.articleToDelete = article;
+      $('#recover-article-modal').modal('show');
+    },
+    recoverArticle() {
+
+    },
+    expandContent(article) {
+      $('#article-content-detail-modal .modal-body').html(article.content);
+      $('#article-content-detail-modal').modal('show');
     }
   }
 }

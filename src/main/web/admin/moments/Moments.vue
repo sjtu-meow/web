@@ -9,14 +9,15 @@
         <thead>
           <tr>
             <th class="col-md-1">#</th>
-            <th class="col-md-1">用户</th>
-            <th class="col-md-3">内容</th>
-            <th class="col-md-6">媒体</th>
+            <th class="col-md-2">用户</th>
+            <th class="col-md-3">文字预览</th>
+            <th class="col-md-5">媒体</th>
             <th class="col-md-1"></th>
           </tr>
         </thead>
         <tbody>
-          <moment-list-row v-for="moment in moments" :key="moment.id" :moment="moment" @deleteMoment="promptDeleteMoment" @recoverMoment="promptRecoverMoment" />
+          <moment-list-row v-for="moment in moments" :key="moment.id" :moment="moment"
+            @deleteMoment="promptDeleteMoment" @recoverMoment="promptRecoverMoment" @expandContent="expandContent" />
         </tbody>
       </table>
     </div>
@@ -54,7 +55,25 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-          <button type="button" class="btn btn-primary" @click="recoverMoment">删除</button>
+          <button type="button" class="btn btn-primary" @click="recoverMoment">恢复</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Expand Content Modal -->
+  <div class="modal fade" id="moment-content-detail-modal" tabindex="-1" role="dialog" aria-labelledby="moment-content-detail-modal-title">
+    <div class="modal-dialog modal-sm" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="moment-content-detail-modal-title">点滴全文</h4>
+        </div>
+        <div class="modal-body">
+          <p>{{contentDetailToShow}}</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
         </div>
       </div>
     </div>
@@ -84,7 +103,8 @@ export default {
           nickname: 'haha'
         },
         content: '+1s now'
-      }
+      },
+      contentDetailToShow: ''
     }
   },
   created() {
@@ -121,6 +141,10 @@ export default {
           $('#recover-moment-modal').modal('hide');
           this.fetchMoments();
         })
+    },
+    expandContent(moment) {
+      this.contentDetailToShow = moment.content;
+      $('#moment-content-detail-modal').modal('show');
     }
   }
 }
