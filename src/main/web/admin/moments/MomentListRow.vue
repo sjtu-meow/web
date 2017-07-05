@@ -4,7 +4,7 @@
     {{moment.id}} {{moment.deleted ? '（已删）' : ''}}
   </td>
   <td>{{moment.profile.nickname}}（{{moment.profile.id}}）</td>
-  <td>{{moment.content.substring(0, 240)}}</td>
+  <td>{{moment.content.substring(0, 100)}}</td>
   <td>
     <template v-for="media in moment.medias">
       <img v-if="media.type === 'Image'" class="img-rounded" :src="media.url" style="height: 60px; padding-bottom: 4px">
