@@ -5,6 +5,7 @@ import me.sjtumeow.meow.dao.ProfileRepository;
 import me.sjtumeow.meow.dao.UserRepository;
 import me.sjtumeow.meow.model.Profile;
 import me.sjtumeow.meow.model.User;
+import me.sjtumeow.meow.model.form.AdminUpdateUserForm;
 import me.sjtumeow.meow.model.form.ProfileForm;
 import me.sjtumeow.meow.model.form.UserCredentialsForm;
 import me.sjtumeow.meow.service.UserService;
@@ -32,13 +33,17 @@ public class UserServiceImpl implements UserService {
     	return isAdmin ? userRepository.findOne(id) : userRepository.findOneActive(id);
     }
 	
-	public User findByPhone(String phone) {
-		User user = userRepository.findByPhone(phone);
-		return (user != null && userRepository.existsActive(user.getId())) ? user : null;
+	public User findByPhone(String phone, boolean withTrash) {
+		if (withTrash) {
+			return userRepository.findByPhone(phone);
+		} else {
+			User user = userRepository.findByPhone(phone);
+			return (user != null && userRepository.existsActive(user.getId())) ? user : null;
+		}
 	}
 	
 	public boolean checkPassword(UserCredentialsForm cred) {
-    	User user = findByPhone(cred.getPhone());
+    	User user = findByPhone(cred.getPhone(), false);
     	// To be modified to BCrypt checking
     	return !(user == null || !user.getPassword().equals(cred.getPassword()));
     }
@@ -65,6 +70,20 @@ public class UserServiceImpl implements UserService {
         profileRepository.save(profile);
     	return user.getId();
     }
+	
+	@Transactional
+	public Long create(String phone, String password, boolean isAdmin, String nickname, String bio, String avatar) {
+		User user = new User(phone, password);
+    	user.setAdmin(isAdmin);
+        userRepository.save(user);
+        Profile profile = new Profile();
+        profile.setUser(user);
+        profile.setNickname(nickname);
+        profile.setBio(bio);
+        profile.setAvatar(avatar);
+        profileRepository.save(profile);
+    	return user.getId();
+	}
     
 	@Transactional
     public boolean changePassword(Long id, String password) {
@@ -76,6 +95,30 @@ public class UserServiceImpl implements UserService {
     	userRepository.save(user);
     	return true;
     }
+	
+	@Transactional
+	public boolean update(Long id, AdminUpdateUserForm auuf) {
+		User user = userRepository.findOne(id);
+		if (user == null)
+    		return false;
+		
+		if (auuf.getPassword() != null)
+			user.setPassword(auuf.getPassword());
+		
+		userRepository.save(user);
+		
+		Profile profile = user.getProfile();
+		if (auuf.getNickname() != null)
+			profile.setNickname(auuf.getNickname());
+		if (auuf.getBio() != null)
+			profile.setBio(auuf.getBio());
+		if (auuf.getAvatar() != null)
+			profile.setAvatar(auuf.getAvatar());
+		
+		profileRepository.save(profile);
+		
+		return true;
+	}
     
 	@Transactional
     public boolean delete(Long id) {
@@ -85,5 +128,16 @@ public class UserServiceImpl implements UserService {
     	tokenManager.deleteToken(id);
     	return true;
     }
+	
+	@Transactional
+	public boolean recover(Long id) {
+		User user = userRepository.findOne(id);
+		if (user == null)
+			return false;
+		
+		user.recover();
+		userRepository.save(user);
+		return true;
+	}
 
 }

@@ -48,7 +48,7 @@ public class UserController {
     		return ResponseEntity.badRequest().body(new FailureMessageResult("验证码必须是 6 位数字"));
     	if (!authService.verifySmsCode(phone, code))
     		return ResponseEntity.badRequest().body(new FailureMessageResult("验证码验证失败"));
-    	if (userService.findByPhone(phone) != null)
+    	if (userService.findByPhone(phone, true) != null)
 			return ResponseEntity.badRequest().body(new FailureMessageResult("该手机号已被注册"));
     	
         userService.create(phone, password, false);

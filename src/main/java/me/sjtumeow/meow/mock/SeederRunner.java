@@ -77,10 +77,8 @@ public class SeederRunner implements ApplicationRunner {
         	banner.setItem(moment);
         	bannerRepository.save(banner);
         	
-        	if (i == 0) {
-        		moment.markDelete();
-        		momentRepository.save(moment);
-        	}
+        	if (i == 0)
+        		momentRepository.softDelete(moment);
         		
         }
         

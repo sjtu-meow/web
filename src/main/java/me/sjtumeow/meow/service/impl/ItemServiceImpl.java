@@ -78,4 +78,15 @@ public class ItemServiceImpl implements ItemService {
     	momentRepository.softDelete(id);
     	return true;
 	}
+	
+	@Transactional
+	public boolean recoverMoment(Long id) {
+		Moment moment = momentRepository.findOne(id);
+		if (moment == null)
+			return false;
+		
+		moment.recover();
+		momentRepository.save(moment);
+		return true;
+	}
 }
