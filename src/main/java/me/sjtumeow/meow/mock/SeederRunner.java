@@ -16,6 +16,8 @@ import me.sjtumeow.meow.model.Media.MediaType;
 import me.sjtumeow.meow.model.Moment;
 import me.sjtumeow.meow.model.Profile;
 import me.sjtumeow.meow.model.User;
+
+import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -41,8 +43,8 @@ public class SeederRunner implements ApplicationRunner {
             articleRepository.save(new Article());
         }*/
         
-    	User user1 = new User("12312312312", "meow233");
-    	User user2 = new User("12132132132", "test123");
+    	User user1 = new User("12312312312", BCrypt.hashpw("meow233", BCrypt.gensalt()));
+    	User user2 = new User("12132132132", BCrypt.hashpw("test123", BCrypt.gensalt()));
     	user1.setAdmin(true);
     	userRepository.save(user1);
         userRepository.save(user2);

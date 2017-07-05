@@ -9,6 +9,8 @@ import me.sjtumeow.meow.model.form.AdminUpdateUserForm;
 import me.sjtumeow.meow.model.form.ProfileForm;
 import me.sjtumeow.meow.model.form.UserCredentialsForm;
 import me.sjtumeow.meow.service.UserService;
+
+import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -49,8 +51,7 @@ public class UserServiceImpl implements UserService {
 	
 	public boolean checkPassword(UserCredentialsForm cred) {
     	User user = findByPhone(cred.getPhone(), false);
-    	// To be modified to BCrypt checking
-    	return !(user == null || !user.getPassword().equals(cred.getPassword()));
+    	return user != null && BCrypt.checkpw(cred.getPassword(), user.getPassword());
     }
 	
 	public Profile getProfile(Long id, boolean isAdmin) {
@@ -67,7 +68,7 @@ public class UserServiceImpl implements UserService {
 	
 	@Transactional
     public Long create(String phone, String password) {
-    	User user = new User(phone, password);
+    	User user = new User(phone, BCrypt.hashpw(password, BCrypt.gensalt()));
         userRepository.save(user);
         Profile profile = new Profile();
         profile.setUser(user);
@@ -77,7 +78,7 @@ public class UserServiceImpl implements UserService {
 	
 	@Transactional
 	public Long create(String phone, String password, boolean isAdmin, String nickname, String bio, String avatar) {
-		User user = new User(phone, password);
+		User user = new User(phone, BCrypt.hashpw(password, BCrypt.gensalt()));
     	user.setAdmin(isAdmin);
         userRepository.save(user);
         Profile profile = new Profile();
@@ -95,7 +96,7 @@ public class UserServiceImpl implements UserService {
     	if (user == null)
     		return false;
     	
-    	user.setPassword(password);
+    	user.setPassword(BCrypt.hashpw(password, BCrypt.gensalt()));
     	userRepository.save(user);
     	return true;
     }
@@ -107,7 +108,7 @@ public class UserServiceImpl implements UserService {
     		return false;
 		
 		if (auuf.getPassword() != null)
-			user.setPassword(auuf.getPassword());
+			user.setPassword(BCrypt.hashpw(auuf.getPassword(), BCrypt.gensalt()));
 		if (auuf.isAdmin() != null)
 			user.setAdmin(auuf.isAdmin());
 		

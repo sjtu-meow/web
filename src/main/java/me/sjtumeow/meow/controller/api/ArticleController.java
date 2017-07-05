@@ -27,7 +27,7 @@ public class ArticleController {
 	}
 	
 	@GetMapping("/{id}")
-	ResponseEntity<?> getMoment(@PathVariable("id") Long id) {
+	ResponseEntity<?> getArticle(@PathVariable("id") Long id) {
 		Article article = itemService.findArticleById(id, false);
         return article == null ? ResponseEntity.notFound().build() : ResponseEntity.ok(article);
 	}
