@@ -2,7 +2,7 @@
 <tr>
   <td>{{article.id}}</td>
   <td>{{article.profile.nickname}}（{{article.profile.id}}）</td>
-  <td>{{article.content.substring(0, 200)}}</td>
+  <td>{{plainContent.substring(0, 200)}}</td>
   <td>
     <button v-if="article.deleted" type="button" class="btn btn-primary btn-xs" @click="recoverMoment">
       <span class="glyphicon glyphicon-ok"/>
@@ -24,6 +24,11 @@ export default {
     },
     recoverArticle() {
       this.$emit('recoverArticle', this.article)
+    }
+  },
+  computed: {
+    plainContent() {
+      return $(this.article.content).text()
     }
   }
 }

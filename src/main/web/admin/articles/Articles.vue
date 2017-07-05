@@ -31,7 +31,7 @@
           <h4 class="modal-title" id="delete-article-modal-title">删除文章</h4>
         </div>
         <div class="modal-body">
-          <p class="text-danger">确定删除 <b>{{articleToDelete.profile.nickname}}</b> 的文章（{{articleToDelete.content.substring(0, 50)}}）吗？</p>
+          <p class="text-danger">确定删除 <b>{{articleToDelete.profile.nickname}}</b> 的文章（{{plainContentToDelete.substring(0, 50)}}）吗？</p>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
@@ -50,7 +50,7 @@
           <h4 class="modal-title" id="recover-article-modal-title">恢复文章</h4>
         </div>
         <div class="modal-body">
-          <p class="text-danger">确定恢复 <b>{{articleToRecover.profile.nickname}}</b> 的文章（{{articleToRecover.content.substring(0, 30)}}）吗？</p>
+          <p class="text-danger">确定恢复 <b>{{articleToRecover.profile.nickname}}</b> 的文章（{{plainContentToRecover.substring(0, 30)}}）吗？</p>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
@@ -74,7 +74,7 @@ export default {
     return {
       articles: [{
         id: 1,
-        content: '+1s or not +1s, this is a question.',
+        content: '<p>+1s or not +1s, this is a question.</p><img src="http://lorempixel.com/200/200" /><p>+1s or not +1s, this is a question.</p>',
         profile: {
           id: 1,
           nickname: 'haha'
@@ -84,17 +84,35 @@ export default {
         profile: {
           nickname: 'haha'
         },
-        content: '+1s or not +1s, this is a question.'
+        content: '<p>+1s or not +1s, this is a question.</p><img src="http://lorempixel.com/200/200" /><p>+1s or not +1s, this is a question.</p>',
       },
       articleToRecover: {
         profile: {
           nickname: 'haha'
         },
-        content: '+1s or not +1s, this is a question.'
+        content: '<p>+1s or not +1s, this is a question.</p><img src="http://lorempixel.com/200/200" /><p>+1s or not +1s, this is a question.</p>',
       }
     }
   },
+  computed: {
+    plainContentToDelete() {
+      return $(this.articleToDelete.content).text()
+    },
+    plainContentToRecover() {
+      return $(this.articleToRecover.content).text()
+    }
+  },
+  created() {
+    this.fetchArticles();
+  },
   methods: {
+    fetchArticles() {
+      //TODO: finish implementation and change url
+      this.$http.get('http://106.14.156.19/api/admin/articles')
+        .then(function(response) {
+          this.moments = response.body;
+        })
+    },
     promptDeleteArticle(article) {
       this.articleToDelete = article;
       $('#delete-article-modal').modal('show');
