@@ -10,7 +10,7 @@
           <tr>
             <th class="col-md-1">#</th>
             <th class="col-md-1">用户</th>
-            <th class="col-md-3">内容</th>
+            <th class="col-md-3">文字预览</th>
             <th class="col-md-6">媒体</th>
             <th class="col-md-1"></th>
           </tr>

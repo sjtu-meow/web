@@ -15,7 +15,8 @@
           </tr>
         </thead>
         <tbody>
-          <article-list-row v-for="article in articles" :key="article.id" :article="article" @deleteArticle="promptDeleteArticle" />
+          <article-list-row v-for="article in articles" :key="article.id" :article="article"
+            @deleteArticle="promptDeleteArticle" @recoverArticle="promptRecoverArticle" />
         </tbody>
       </table>
     </div>
@@ -30,11 +31,30 @@
           <h4 class="modal-title" id="delete-article-modal-title">删除文章</h4>
         </div>
         <div class="modal-body">
-          <p class="text-danger">确定删除 <b>{{articleToDelete.profile.nickname}}</b> 的点滴（{{articleToDelete.content.substring(0, 10)}}）吗？</p>
+          <p class="text-danger">确定删除 <b>{{articleToDelete.profile.nickname}}</b> 的文章（{{articleToDelete.content.substring(0, 50)}}）吗？</p>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
           <button type="button" class="btn btn-danger" @click="deleteArticle">删除</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Recover Modal -->
+  <div class="modal fade" id="recover-article-modal" tabindex="-1" role="dialog" aria-labelledby="recover-article-modal-title">
+    <div class="modal-dialog modal-sm" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="recover-article-modal-title">恢复文章</h4>
+        </div>
+        <div class="modal-body">
+          <p class="text-danger">确定恢复 <b>{{articleToRecover.profile.nickname}}</b> 的文章（{{articleToRecover.content.substring(0, 30)}}）吗？</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+          <button type="button" class="btn btn-danger" @click="recoverArticle">恢复</button>
         </div>
       </div>
     </div>
@@ -65,6 +85,12 @@ export default {
           nickname: 'haha'
         },
         content: '+1s or not +1s, this is a question.'
+      },
+      articleToRecover: {
+        profile: {
+          nickname: 'haha'
+        },
+        content: '+1s or not +1s, this is a question.'
       }
     }
   },
@@ -74,6 +100,13 @@ export default {
       $('#delete-article-modal').modal('show');
     },
     deleteArticle() {
+
+    },
+    promptRecoverArticle(article) {
+      this.articleToDelete = article;
+      $('#recover-article-modal').modal('show');
+    },
+    recoverArticle() {
 
     }
   }
