@@ -12,6 +12,10 @@
       "node_modules/admin-lte/dist/js/app.js"
     ]
   },
+  "public": {
+    "styles": [],
+    "scripts": []
+  },
   "fonts": [
     {
       "dest": "fonts",
