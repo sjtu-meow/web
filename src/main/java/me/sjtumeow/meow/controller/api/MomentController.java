@@ -17,7 +17,9 @@ import me.sjtumeow.meow.authorization.annotation.CurrentUser;
 import me.sjtumeow.meow.model.Moment;
 import me.sjtumeow.meow.model.User;
 import me.sjtumeow.meow.model.form.AddMomentForm;
+import me.sjtumeow.meow.model.result.CreateResult;
 import me.sjtumeow.meow.model.result.FailureMessageResult;
+import me.sjtumeow.meow.model.result.NewEntityIdResult;
 import me.sjtumeow.meow.service.ItemService;
 import me.sjtumeow.meow.util.FormatValidator;
 
@@ -42,7 +44,8 @@ public class MomentController {
 	@PostMapping(consumes = "application/json")
 	@Authorization
 	ResponseEntity<?> addMoment(@RequestBody AddMomentForm amf, @CurrentUser User user) {
-		return itemService.addMoment(amf, user) ? ResponseEntity.status(HttpStatus.CREATED).build() : ResponseEntity.badRequest().body(new FailureMessageResult("点滴格式不正确"));
+		CreateResult cr = itemService.addMoment(amf, user);
+		return cr.isResult() ? ResponseEntity.status(HttpStatus.CREATED).body(new NewEntityIdResult(cr.getId())) : ResponseEntity.badRequest().body(new FailureMessageResult("点滴格式不正确"));
 	}
 	
 	@DeleteMapping("/{id}")

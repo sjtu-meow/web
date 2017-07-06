@@ -8,6 +8,7 @@ import me.sjtumeow.meow.model.form.ChangePasswordForm;
 import me.sjtumeow.meow.model.form.ProfileForm;
 import me.sjtumeow.meow.model.form.RegisterForm;
 import me.sjtumeow.meow.model.result.FailureMessageResult;
+import me.sjtumeow.meow.model.result.NewEntityIdResult;
 import me.sjtumeow.meow.service.AuthService;
 import me.sjtumeow.meow.service.UserService;
 import me.sjtumeow.meow.util.FormatValidator;
@@ -51,8 +52,7 @@ public class UserController {
     	if (userService.findByPhone(phone, true) != null)
 			return ResponseEntity.badRequest().body(new FailureMessageResult("该手机号已被注册"));
     	
-        userService.create(phone, password);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+        return ResponseEntity.status(HttpStatus.CREATED).body(new NewEntityIdResult(userService.create(phone, password)));
     }
     
     @Authorization
@@ -70,7 +70,7 @@ public class UserController {
     	if (!authService.verifySmsCode(phone, code))
     		return ResponseEntity.badRequest().body(new FailureMessageResult("验证码验证失败"));
     	
-    	return userService.changePassword(user.getId(), password) ? ResponseEntity.status(HttpStatus.CREATED).build() : ResponseEntity.notFound().build();
+    	return userService.changePassword(user.getId(), password) ? ResponseEntity.noContent().build() : ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     	
     }
     
@@ -84,7 +84,7 @@ public class UserController {
     @Authorization
     ResponseEntity<?> updateProfile(@CurrentUser User user, @RequestBody ProfileForm pf) {
     	userService.UpdateProfile(user, pf);
-    	return ResponseEntity.status(HttpStatus.CREATED).build();
+    	return ResponseEntity.noContent().build();
     }
     
     @GetMapping("/users/{id}/profile")

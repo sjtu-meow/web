@@ -32,6 +32,4 @@ public interface UserService {
     
     boolean delete(Long id);
     
-    boolean recover(Long id);
-    
 }

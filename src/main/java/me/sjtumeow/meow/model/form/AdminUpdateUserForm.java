@@ -3,6 +3,7 @@ package me.sjtumeow.meow.model.form;
 public class AdminUpdateUserForm {
 	protected String password;
 	protected Boolean isAdmin;
+	protected Boolean isDeleted;
 	protected String nickname;
 	protected String bio;
 	protected String avatar;
@@ -15,12 +16,20 @@ public class AdminUpdateUserForm {
 		this.password = password;
 	}
 
-	public Boolean isAdmin() {
+	public Boolean getIsAdmin() {
 		return isAdmin;
 	}
 
-	public void setAdmin(Boolean isAdmin) {
+	public void setIsAdmin(Boolean isAdmin) {
 		this.isAdmin = isAdmin;
+	}
+	
+	public Boolean getIsDeleted() {
+		return isDeleted;
+	}
+
+	public void setIsDeleted(Boolean isDeleted) {
+		this.isDeleted = isDeleted;
 	}
 
 	public String getNickname() {

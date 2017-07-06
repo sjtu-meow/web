@@ -9,7 +9,9 @@ import me.sjtumeow.meow.model.Moment;
 import me.sjtumeow.meow.model.User;
 import me.sjtumeow.meow.model.form.AddMomentForm;
 import me.sjtumeow.meow.model.form.MediaForm;
+import me.sjtumeow.meow.model.form.UpdateMomentForm;
 import me.sjtumeow.meow.model.result.ArticleSummaryResult;
+import me.sjtumeow.meow.model.result.CreateResult;
 import me.sjtumeow.meow.service.ItemService;
 
 import java.util.ArrayList;
@@ -56,10 +58,10 @@ public class ItemServiceImpl implements ItemService {
 	}
 	
 	@Transactional
-	public boolean addMoment(AddMomentForm amf, User user) {
+	public CreateResult addMoment(AddMomentForm amf, User user) {
 		String content = amf.getContent();
 		if ((content == null || content.trim().isEmpty()) && (amf.getMedias() == null || amf.getMedias().isEmpty()))
-			return false;
+			return new CreateResult();
 		
 		Moment moment = new Moment();
 		moment.setProfile(user.getProfile());
@@ -72,11 +74,23 @@ public class ItemServiceImpl implements ItemService {
 		if (amf.getMedias() != null) {
 			for (MediaForm mf: amf.getMedias()) {
 				if (mf.getType() == null || mf.getUrl() == null)
-					return false;
+					return new CreateResult();
 				mediaRepository.save(new Media(mf.getType(), mf.getUrl(), moment));
 			}
 		}
 		
+		return new CreateResult(moment.getId());
+	}
+	
+	@Transactional
+	public boolean updateMoment(Long id, UpdateMomentForm umf) {
+		Moment moment = momentRepository.findOne(id);
+		if (moment == null)
+			return false;
+		
+		if (umf.getIsDeleted() != null)
+			moment.setDeleted(umf.getIsDeleted());
+		momentRepository.save(moment);
 		return true;
 	}
 	
@@ -86,17 +100,6 @@ public class ItemServiceImpl implements ItemService {
     		return false;
     	momentRepository.softDelete(id);
     	return true;
-	}
-	
-	@Transactional
-	public boolean recoverMoment(Long id) {
-		Moment moment = momentRepository.findOne(id);
-		if (moment == null)
-			return false;
-		
-		moment.recover();
-		momentRepository.save(moment);
-		return true;
 	}
 	
 	public Iterable<ArticleSummaryResult> findAllArticles(boolean isAdmin) {

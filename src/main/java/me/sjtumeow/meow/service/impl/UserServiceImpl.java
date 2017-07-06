@@ -109,8 +109,10 @@ public class UserServiceImpl implements UserService {
 		
 		if (auuf.getPassword() != null)
 			user.setPassword(BCrypt.hashpw(auuf.getPassword(), BCrypt.gensalt()));
-		if (auuf.isAdmin() != null)
-			user.setAdmin(auuf.isAdmin());
+		if (auuf.getIsAdmin() != null)
+			user.setAdmin(auuf.getIsAdmin());
+		if (auuf.getIsDeleted() != null)
+			user.setDeleted(auuf.getIsDeleted());
 		
 		userRepository.save(user);
 		
@@ -135,16 +137,5 @@ public class UserServiceImpl implements UserService {
     	tokenManager.deleteToken(id);
     	return true;
     }
-	
-	@Transactional
-	public boolean recover(Long id) {
-		User user = userRepository.findOne(id);
-		if (user == null)
-			return false;
-		
-		user.recover();
-		userRepository.save(user);
-		return true;
-	}
 
 }
