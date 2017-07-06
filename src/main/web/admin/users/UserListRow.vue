@@ -135,24 +135,10 @@ export default {
       this.$emit('recoverUser', this.user)
     },
     setAdmin(event) {
-      //TODO: change url
-      this.$http.patch('http://106.14.156.19/api/admin/users/' + this.user.id, {
-        admin: true
-      }).then(function (response) {
-        this.user.admin = true;
-      }, function (response) {
-        alert(response.body.message || '修改失败')
-      })
+      this.$emit('setAdminUser', this.user)
     },
     unsetAdmin(event) {
-      //TODO: change url
-      this.$http.patch('http://106.14.156.19/api/admin/users/' + this.user.id, {
-        admin: false
-      }).then(function (response) {
-        this.user.admin = false;
-      }, function (response) {
-        alert(response.body.message || '修改失败')
-      })
+      this.$emit('unsetAdminUser', this.user)
     }
   }
 }

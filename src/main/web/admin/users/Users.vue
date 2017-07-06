@@ -22,7 +22,9 @@
           </tr>
         </thead>
         <tbody>
-          <user-list-row v-for="user in users" :key="user.id" :user="user" @deleteUser="promptDeleteUser" />
+          <user-list-row v-for="user in users" :key="user.id" :user="user"
+            @deleteUser="promptDeleteUser" @recoverUser="promptRecoverUser"
+            @setAdminUser="promptSetAdminUser" @unsetAdminUser="promptUnsetAdminUser" />
         </tbody>
       </table>
     </div>
@@ -120,6 +122,44 @@
       </div>
     </div>
   </div>
+
+  <!-- Set Admin Modal -->
+  <div class="modal fade" id="set-admin-user-modal" tabindex="-1" role="dialog" aria-labelledby="set-admin-user-modal-title">
+    <div class="modal-dialog modal-sm" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="set-admin-user-modal-title">设置管理员</h4>
+        </div>
+        <div class="modal-body">
+          <p>确定设置此用户 <b>{{userToSetAdmin.profile.nickname}}（{{userToSetAdmin.phone}}）</b> 为管理员吗？</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+          <button type="button" class="btn btn-primary" @click="setAdminUser">设置</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unset Admin Modal -->
+  <div class="modal fade" id="unset-admin-user-modal" tabindex="-1" role="dialog" aria-labelledby="unset-admin-user-modal-title">
+    <div class="modal-dialog modal-sm" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="unset-admin-user-modal-title">撤销管理员</h4>
+        </div>
+        <div class="modal-body">
+          <p>确定撤销此用户 <b>{{userToUnsetAdmin.profile.nickname}}（{{userToUnsetAdmin.phone}}）</b> 管理员权限吗？</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+          <button type="button" class="btn btn-primary" @click="unsetAdminUser">撤销</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </section>
 </template>
 
@@ -146,6 +186,20 @@ export default {
         }
       },
       userToRecover: {
+        id: 1,
+        phone: '13512341234',
+        profile: {
+          nickname: 'haha'
+        }
+      },
+      userToSetAdmin: {
+        id: 1,
+        phone: '13512341234',
+        profile: {
+          nickname: 'haha'
+        }
+      },
+      userToUnsetAdmin: {
         id: 1,
         phone: '13512341234',
         profile: {
@@ -192,7 +246,7 @@ export default {
       //TODO: change url and test this function call
       this.$http.delete('http://106.14.156.19/api/admin/users/' + this.userToDelete.id)
         .then(function(response) {
-          this.fetchUsers();
+          this.userToDelete.deleted = true;
           $('#delete-user-modal').modal('hide');
         }, function(response) {
           alert(response.body.message || '修改失败');
@@ -204,13 +258,43 @@ export default {
     },
     recoverUser() {
       //TODO: change url and test implementation
-      this.$http.put('http://106.14.156.19/api/admin/users/' + this.momentToDelete.id + '/recover')
+      this.$http.put('http://106.14.156.19/api/admin/users/' + this.userToRecover.id + '/recover')
         .then(function(response) {
+          this.userToRecover.deleted = false;
           $('#recover-user-modal').modal('hide');
-          this.fetchUsers();
         }, function(response) {
           alert(response.body.message || '修改失败');
         })
+    },
+    promptSetAdminUser(user) {
+      this.userToSetAdmin = user;
+      $('#set-admin-user-modal').modal('show');
+    },
+    setAdminUser() {
+      //TODO: change url
+      this.$http.patch('http://106.14.156.19/api/admin/users/' + this.userToSetAdmin.id, {
+        admin: true
+      }).then(function (response) {
+        this.userToSetAdmin.admin = true;
+        $('#set-admin-user-modal').modal('hide');
+      }, function (response) {
+        alert(response.body.message || '修改失败')
+      })
+    },
+    promptUnsetAdminUser(user) {
+      this.userToUnsetAdmin = user;
+      $('#unset-admin-user-modal').modal('show');
+    },
+    unsetAdminUser() {
+      //TODO: change url
+      this.$http.patch('http://106.14.156.19/api/admin/users/' + this.userToUnsetAdmin.id, {
+        admin: false
+      }).then(function (response) {
+        this.userToUnsetAdmin.admin = false;
+        $('#unset-admin-user-modal').modal('hide');
+      }, function (response) {
+        alert(response.body.message || '修改失败')
+      })
     },
     triggerAvatarInputClick: function() {
       $('#avatarInput').click();
