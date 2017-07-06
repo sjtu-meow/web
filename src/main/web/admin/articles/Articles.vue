@@ -11,7 +11,7 @@
             <th class="col-md-1">#</th>
             <th class="col-md-2">用户</th>
             <th class="col-md-2">标题</th>
-            <th class="col-md-6">预览</th>
+            <th class="col-md-6">文章内容预览</th>
             <th class="col-md-1"></th>
           </tr>
         </thead>

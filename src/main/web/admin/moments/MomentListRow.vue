@@ -5,7 +5,7 @@
   </td>
   <td>{{moment.profile.nickname}}（{{moment.profile.id}}）</td>
   <td>
-    {{moment.content.substring(0, contentPreviewLength)}}
+    {{moment.content.substring(0, contentPreviewLength)}}{{moment.content.length > contentPreviewLength ? '…' : ''}}
     <a v-if="moment.content.length > contentPreviewLength" @click="expandContent">展开</a>
   </td>
   <td>
