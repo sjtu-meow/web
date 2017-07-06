@@ -54,6 +54,31 @@ gulp.task('admin-script', ['clean'], function () {
 
 });
 
+gulp.task('public-style', ['clean'], function () {
+  // Prefix, compress and concat the CSS assets
+  // Afterwards add the MD5 hash to the filename
+  return gulp.src(assets.admin.styles)
+      .pipe(gulpif(options.env === 'production', concat('public.min.css')))
+      .pipe(gulpif(options.env === 'production', cssnano()))
+      .pipe(rev())
+      .pipe(rename({dirname: ''}))
+      .pipe(filenames('public-style'))
+      .pipe(gulp.dest('../resources/static/styles'));
+})
+
+gulp.task('public-script', ['clean'], function () {
+  // Concat and uglify the JavaScript assets
+  // Afterwards add the MD5 hash to the filename
+  return gulp.src(assets.admin.scripts)
+      .pipe(gulpif(options.env === 'production', concat('public.min.js')))
+      .pipe(gulpif(options.env === 'production', uglify({preserveComments: 'license'})))
+      .pipe(rev())
+      .pipe(rename({dirname: ''}))
+      .pipe(filenames('public-script'))
+      .pipe(gulp.dest('../resources/static/scripts'));
+
+});
+
 gulp.task('webpack', ['clean'], function () {
 
   webpack(webpackConfig, function (err, stats) {
@@ -65,9 +90,12 @@ gulp.task('webpack', ['clean'], function () {
 });
 
 
-gulp.task('write-property', ['admin-style', 'admin-script'], function () {
+gulp.task('write-property', ['admin-style', 'admin-script', 'public-style', 'public-script'], function () {
   let prop = 'meow.admin-styles=' + filenames.get('admin-style').join() + '\n'
   prop += 'meow.admin-scripts=' + filenames.get('admin-script').join() + '\n'
+  prop += 'meow.public-styles=' + filenames.get('admin-style').join() + '\n'
+  prop += 'meow.public-scripts=' + filenames.get('admin-script').join() + '\n'
+
   fs.writeFile('../resources/asset.properties', prop)
 })
 
@@ -119,7 +147,7 @@ gulp.task("dev", ['build-without-webpack'], function () {
 });
 
 // Build tasks
-gulp.task('build-without-webpack', ['admin-style', 'admin-script', 'fonts', 'write-property']);
+gulp.task('build-without-webpack', ['admin-style', 'admin-script', 'public-style', 'public-script', 'fonts', 'write-property']);
 gulp.task('build', ['build-without-webpack', 'webpack']);
 
 

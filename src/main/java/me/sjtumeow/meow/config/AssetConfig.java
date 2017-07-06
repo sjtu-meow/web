@@ -10,12 +10,14 @@ import org.springframework.web.bind.annotation.ModelAttribute;
  */
 @ControllerAdvice
 public class AssetConfig {
-    private AssetProperties.Asset admin;
+    private AssetProperties.Asset admin, publik;
 
     @Autowired
     public AssetConfig(AssetProperties assetProperties) {
         admin = assetProperties.getAdmin();
+        publik = assetProperties.getPublic();
         addAssetPrefix(admin);
+        addAssetPrefix(publik);
     }
 
     private void addAssetPrefix(AssetProperties.Asset asset) {
@@ -26,6 +28,11 @@ public class AssetConfig {
     @ModelAttribute("adminAsset")
     public AssetProperties.Asset getAdminAsset() {
         return admin;
+    }
+
+    @ModelAttribute("publicAsset")
+    public AssetProperties.Asset getPublicAsset() {
+        return publik;
     }
 
 }

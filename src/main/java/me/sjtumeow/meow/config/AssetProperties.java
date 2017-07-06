@@ -9,14 +9,18 @@ import org.springframework.context.annotation.PropertySource;
  * Created by Vincent on 2017/3/29.
  */
 @Configuration
-@ConfigurationProperties(prefix = "meow",ignoreInvalidFields = false,ignoreUnknownFields = false)
+@ConfigurationProperties(prefix = "meow", ignoreInvalidFields = false, ignoreUnknownFields = false)
 @PropertySource("classpath:asset.properties")
 public class AssetProperties {
 
-    private final Asset admin = new Asset();
+    private final Asset admin = new Asset(), publik = new Asset();
 
     public Asset getAdmin() {
         return admin;
+    }
+
+    public Asset getPublic() {
+        return publik;
     }
 
     public static class Asset {
