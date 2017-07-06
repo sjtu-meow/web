@@ -111,8 +111,8 @@ public class UserServiceImpl implements UserService {
 			user.setPassword(BCrypt.hashpw(auuf.getPassword(), BCrypt.gensalt()));
 		if (auuf.getIsAdmin() != null)
 			user.setAdmin(auuf.getIsAdmin());
-		if (auuf.getIsDeleted() != null)
-			user.setDeleted(auuf.getIsDeleted());
+		if (auuf.getIsDeleted() != null && !auuf.getIsDeleted())
+			user.recover();
 		
 		userRepository.save(user);
 		

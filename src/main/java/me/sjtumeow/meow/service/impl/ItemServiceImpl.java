@@ -88,8 +88,8 @@ public class ItemServiceImpl implements ItemService {
 		if (moment == null)
 			return false;
 		
-		if (umf.getIsDeleted() != null)
-			moment.setDeleted(umf.getIsDeleted());
+		if (umf.getIsDeleted() != null && !umf.getIsDeleted())
+			moment.recover();
 		momentRepository.save(moment);
 		return true;
 	}
