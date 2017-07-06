@@ -2,6 +2,7 @@
 <tr>
   <td>{{article.id}}</td>
   <td>{{article.profile.nickname}}（{{article.profile.id}}）</td>
+  <td>{{article.title}}</td>
   <td>
     {{plainContent.substring(0, contentPreviewLength)}}
     <a @click="expandContent">查看详情</a>
