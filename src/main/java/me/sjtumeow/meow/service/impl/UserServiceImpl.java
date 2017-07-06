@@ -12,6 +12,7 @@ import me.sjtumeow.meow.service.UserService;
 
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,6 +30,10 @@ public class UserServiceImpl implements UserService {
     
     public Iterable<User> findAll(boolean isAdmin) {
         return isAdmin ? userRepository.findAll() : userRepository.findAllActive();
+    }
+    
+    public Iterable<User> findAllPageable(Integer page, Integer size, boolean isAdmin) {
+    	return isAdmin ? userRepository.findAll(new PageRequest(page, size)) : userRepository.findAllActive(new PageRequest(page, size));
     }
     
     public User findById(Long id, boolean isAdmin) {

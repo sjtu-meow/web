@@ -10,6 +10,8 @@ public interface UserService {
 	
 	Iterable<User> findAll(boolean isAdmin);
 	
+	Iterable<User> findAllPageable(Integer page, Integer size, boolean isAdmin);
+	
 	User findById(Long id, boolean isAdmin);
 	
 	User findByPhone(String phone, boolean withTrash);
