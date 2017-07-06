@@ -14,7 +14,9 @@
     "jquery": "^3.1.1",
     "vue-router": "^2.3.1",
     "vue-toast": "^3.0.0",
-    "vuex": "^2.2.1"
+    "vuex": "^2.2.1",
+    "summernote": "^0.8.1",
+    "codemirror": "^5.11.0"
   },
   "devDependencies": {
     "babel-core": "^6.24.0",

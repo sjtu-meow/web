@@ -13,8 +13,17 @@
     ]
   },
   "public": {
-    "styles": [],
-    "scripts": []
+    "styles": [
+      "node_modules/bootstrap/dist/css/bootstrap.css",
+      "node_modules/font-awesome/css/font-awesome.css",
+      "node_modules/summernote/dist/summernote.css"
+    ],
+    "scripts": [
+      "node_modules/jquery/dist/jquery.js",
+      "node_modules/bootstrap/dist/js/bootstrap.js",
+      "node_modules/summernote/dist/summernote.js",
+      "node_modules/summernote/dist/lang/summernote-zh-CN.js"
+    ]
   },
   "fonts": [
     {
