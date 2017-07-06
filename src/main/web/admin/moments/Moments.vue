@@ -10,7 +10,7 @@
           <tr>
             <th class="col-md-1">#</th>
             <th class="col-md-2">用户</th>
-            <th class="col-md-3">文字预览</th>
+            <th class="col-md-3">点滴文字预览</th>
             <th class="col-md-5">媒体</th>
             <th class="col-md-1"></th>
           </tr>
@@ -32,7 +32,7 @@
           <h4 class="modal-title" id="delete-moment-modal-title">删除点滴</h4>
         </div>
         <div class="modal-body">
-          <p class="text-danger">确定删除 <b>{{momentToDelete.profile.nickname}}</b> 的点滴（{{momentToDelete.content.substring(0, 30)}}）吗？</p>
+          <p class="text-danger">确定删除 <b>{{momentToDelete.profile.nickname}}</b> 的点滴<b>「{{momentToDelete.content.substring(0, 30)}}{{momentToDelete.content.length > 30 ? '…' : ''}}」</b>吗？</p>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
@@ -51,7 +51,7 @@
           <h4 class="modal-title" id="recover-moment-modal-title">删除点滴</h4>
         </div>
         <div class="modal-body">
-          <p>确定恢复 <b>{{momentToRecover.profile.nickname}}</b> 的点滴（{{momentToRecover.content.substring(0, 30)}}）吗？</p>
+          <p>确定恢复 <b>{{momentToRecover.profile.nickname}}</b> 的点滴<b>「{{momentToRecover.content.substring(0, 30)}}{{momentToRecover.content.length > 30 ? '…' : ''}}」</b>吗？</p>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
@@ -70,7 +70,9 @@
           <h4 class="modal-title" id="moment-content-detail-modal-title">点滴全文</h4>
         </div>
         <div class="modal-body">
-          <p>{{contentDetailToShow}}</p>
+          <p v-for="line in momentToShow.content.split('\n')">
+            {{line}}
+          </p>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
@@ -104,7 +106,12 @@ export default {
         },
         content: '+1s now'
       },
-      contentDetailToShow: ''
+      momentToShow: {
+        profile: {
+          nickname: 'haha'
+        },
+        content: '+1s now'
+      }
     }
   },
   created() {
@@ -149,7 +156,7 @@ export default {
         })
     },
     expandContent(moment) {
-      this.contentDetailToShow = moment.content;
+      this.momentToShow = moment;
       $('#moment-content-detail-modal').modal('show');
     }
   }

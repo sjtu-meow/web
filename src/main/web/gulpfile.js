@@ -57,7 +57,7 @@ gulp.task('admin-script', ['clean'], function () {
 gulp.task('public-style', ['clean'], function () {
   // Prefix, compress and concat the CSS assets
   // Afterwards add the MD5 hash to the filename
-  return gulp.src(assets.admin.styles)
+  return gulp.src(assets.public.styles)
       .pipe(gulpif(options.env === 'production', concat('public.min.css')))
       .pipe(gulpif(options.env === 'production', cssnano()))
       .pipe(rev())
@@ -69,7 +69,7 @@ gulp.task('public-style', ['clean'], function () {
 gulp.task('public-script', ['clean'], function () {
   // Concat and uglify the JavaScript assets
   // Afterwards add the MD5 hash to the filename
-  return gulp.src(assets.admin.scripts)
+  return gulp.src(assets.public.scripts)
       .pipe(gulpif(options.env === 'production', concat('public.min.js')))
       .pipe(gulpif(options.env === 'production', uglify({preserveComments: 'license'})))
       .pipe(rev())

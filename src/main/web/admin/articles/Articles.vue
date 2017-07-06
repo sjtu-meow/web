@@ -10,7 +10,8 @@
           <tr>
             <th class="col-md-1">#</th>
             <th class="col-md-2">用户</th>
-            <th class="col-md-8">预览</th>
+            <th class="col-md-2">标题</th>
+            <th class="col-md-6">文章内容预览</th>
             <th class="col-md-1"></th>
           </tr>
         </thead>
@@ -31,7 +32,7 @@
           <h4 class="modal-title" id="delete-article-modal-title">删除文章</h4>
         </div>
         <div class="modal-body">
-          <p class="text-danger">确定删除 <b>{{articleToDelete.profile.nickname}}</b> 的文章（{{plainContentToDelete.substring(0, 50)}}）吗？</p>
+          <p class="text-danger">确定删除 <b>{{articleToDelete.profile.nickname}}</b> 的文章<b>「{{plainContentToDelete.substring(0, 30)}}{{plainContentToRecover.length > 30 ? '…' : ''}}」</b>吗？</p>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
@@ -50,7 +51,7 @@
           <h4 class="modal-title" id="recover-article-modal-title">恢复文章</h4>
         </div>
         <div class="modal-body">
-          <p class="text-danger">确定恢复 <b>{{articleToRecover.profile.nickname}}</b> 的文章（{{plainContentToRecover.substring(0, 30)}}）吗？</p>
+          <p class="text-danger">确定恢复 <b>{{articleToRecover.profile.nickname}}</b> 的文章<b>「{{plainContentToRecover.substring(0, 30)}}{{plainContentToRecover.length > 30 ? '…' : ''}}」</b>吗？</p>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
@@ -66,7 +67,7 @@
       <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <h4 class="modal-title" id="article-content-detail-modal-title">文章全文</h4>
+          <h4 class="modal-title" id="article-content-detail-modal-title">{{articleToShow.title}}</h4>
         </div>
         <div class="modal-body">
         </div>
@@ -92,6 +93,7 @@ export default {
       articles: [{
         id: 1,
         content: '<p>+1s or not +1s, this is a question.</p><p><img src="http://lorempixel.com/200/200" /></p><p>+1s or not +1s, this is a question.</p>',
+        title: '如何续命',
         profile: {
           id: 1,
           nickname: 'haha'
@@ -102,12 +104,21 @@ export default {
           nickname: 'haha'
         },
         content: '<p>+1s or not +1s, this is a question.</p><p><img src="http://lorempixel.com/200/200" /></p><p>+1s or not +1s, this is a question.</p>',
+        title: '如何续命'
       },
       articleToRecover: {
         profile: {
           nickname: 'haha'
         },
         content: '<p>+1s or not +1s, this is a question.</p><p><img src="http://lorempixel.com/200/200" /></p><p>+1s or not +1s, this is a question.</p>',
+        title: '如何续命'
+      },
+      articleToShow: {
+        profile: {
+          nickname: 'haha'
+        },
+        content: '<p>+1s or not +1s, this is a question.</p><p><img src="http://lorempixel.com/200/200" /></p><p>+1s or not +1s, this is a question.</p>',
+        title: '如何续命'
       }
     }
   },
@@ -145,6 +156,7 @@ export default {
 
     },
     expandContent(article) {
+      this.articleToShow = article;
       $('#article-content-detail-modal .modal-body').html(article.content);
       $('#article-content-detail-modal').modal('show');
     }
