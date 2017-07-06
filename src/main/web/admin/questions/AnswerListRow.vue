@@ -1,9 +1,9 @@
 <template>
 <tr>
-  <td>{{answer.id}}</td>
+  <td>{{answer.id}}{{answer.deleted ? '（已删）' : ''}}</td>
   <td>{{answer.profile.nickname}}（{{answer.profile.id}}）</td>
   <td>
-    {{plainContent.substring(0, contentPreviewLength)}}
+    {{plainContent.substring(0, contentPreviewLength)}}{{plainContent.length > contentPreviewLength ? '…' : ''}}
     <a @click="expandAnswerContent">查看详情</a>
   </td>
   <td>
