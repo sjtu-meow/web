@@ -7,7 +7,7 @@ public class Article extends Item {
     
 	private static final long serialVersionUID = 1L;
 	
-	String title, content, cover;
+	String title, summary, content, cover;
 	
 	public Article() {
         type = Item.ITEM_TYPE_ARTICLE;
@@ -19,6 +19,14 @@ public class Article extends Item {
 
 	public void setTitle(String title) {
 		this.title = title;
+	}
+	
+	public String getSummary() {
+		return summary;
+	}
+
+	public void setSummary(String summary) {
+		this.summary = summary;
 	}
 
 	public String getContent() {

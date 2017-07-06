@@ -110,6 +110,7 @@ public class ItemServiceImpl implements ItemService {
 			ArticleSummaryResult asr = new ArticleSummaryResult();
 			asr.setId(article.getId());
 			asr.setTitle(article.getTitle());
+			asr.setSummary(article.getSummary());
 			asr.setCover(article.getCover());
 			asr.setProfile(article.getProfile());
 			asr.setLikeCount(article.getLikeCount());
@@ -133,6 +134,7 @@ public class ItemServiceImpl implements ItemService {
 			ArticleSummaryResult asr = new ArticleSummaryResult();
 			asr.setId(article.getId());
 			asr.setTitle(article.getTitle());
+			asr.setSummary(article.getSummary());
 			asr.setCover(article.getCover());
 			asr.setProfile(article.getProfile());
 			asr.setLikeCount(article.getLikeCount());

@@ -5,6 +5,7 @@ import me.sjtumeow.meow.model.Profile;
 public class ArticleSummaryResult {
 	protected Long id;
 	protected String title;
+	protected String summary;
 	protected String cover;
 	protected Profile profile;
 	protected Integer likeCount;
@@ -29,6 +30,14 @@ public class ArticleSummaryResult {
 		this.title = title;
 	}
 	
+	public String getSummary() {
+		return summary;
+	}
+
+	public void setSummary(String summary) {
+		this.summary = summary;
+	}
+
 	public String getCover() {
 		return cover;
 	}
