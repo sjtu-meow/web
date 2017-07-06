@@ -50,7 +50,7 @@ public class UserServiceImpl implements UserService {
 	}
 	
 	public boolean checkPassword(UserCredentialsForm cred) {
-    	User user = findByPhone(cred.getPhone(), false);
+    	User user = findByPhone(cred.getPhone(), true);
     	return user != null && BCrypt.checkpw(cred.getPassword(), user.getPassword());
     }
 	
