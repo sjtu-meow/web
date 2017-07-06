@@ -29,10 +29,13 @@ public class AuthController {
 	
 	@PostMapping(consumes = "application/json")
 	ResponseEntity<?> login(@RequestBody UserCredentialsForm cred) {
-		if (userService.isBanned(cred.getPhone()))
-			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new FailureMessageResult("您的账号已被封禁!"));
-		
-		return userService.checkPassword(cred) ? ResponseEntity.ok(authService.generateUserToken(cred)) : ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+		if (userService.checkPassword(cred)) {
+			return userService.isBanned(cred.getPhone()) ?
+					ResponseEntity.status(HttpStatus.FORBIDDEN).body(new FailureMessageResult("您的账号已被封禁!"))
+					: ResponseEntity.status(HttpStatus.CREATED).body(authService.generateUserToken(cred));
+		} else {
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new FailureMessageResult("手机号或密码错误"));
+		}
 	}
 	
 	@DeleteMapping

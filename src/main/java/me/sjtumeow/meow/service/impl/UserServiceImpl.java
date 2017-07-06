@@ -12,6 +12,7 @@ import me.sjtumeow.meow.service.UserService;
 
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,6 +30,10 @@ public class UserServiceImpl implements UserService {
     
     public Iterable<User> findAll(boolean isAdmin) {
         return isAdmin ? userRepository.findAll() : userRepository.findAllActive();
+    }
+    
+    public Iterable<User> findAllPageable(Integer page, Integer size, boolean isAdmin) {
+    	return isAdmin ? userRepository.findAll(new PageRequest(page, size)) : userRepository.findAllActive(new PageRequest(page, size));
     }
     
     public User findById(Long id, boolean isAdmin) {
@@ -50,7 +55,7 @@ public class UserServiceImpl implements UserService {
 	}
 	
 	public boolean checkPassword(UserCredentialsForm cred) {
-    	User user = findByPhone(cred.getPhone(), false);
+    	User user = findByPhone(cred.getPhone(), true);
     	return user != null && BCrypt.checkpw(cred.getPassword(), user.getPassword());
     }
 	
@@ -109,8 +114,10 @@ public class UserServiceImpl implements UserService {
 		
 		if (auuf.getPassword() != null)
 			user.setPassword(BCrypt.hashpw(auuf.getPassword(), BCrypt.gensalt()));
-		if (auuf.isAdmin() != null)
-			user.setAdmin(auuf.isAdmin());
+		if (auuf.getIsAdmin() != null)
+			user.setAdmin(auuf.getIsAdmin());
+		if (auuf.getIsDeleted() != null && !auuf.getIsDeleted())
+			user.recover();
 		
 		userRepository.save(user);
 		
@@ -135,16 +142,5 @@ public class UserServiceImpl implements UserService {
     	tokenManager.deleteToken(id);
     	return true;
     }
-	
-	@Transactional
-	public boolean recover(Long id) {
-		User user = userRepository.findOne(id);
-		if (user == null)
-			return false;
-		
-		user.recover();
-		userRepository.save(user);
-		return true;
-	}
 
 }

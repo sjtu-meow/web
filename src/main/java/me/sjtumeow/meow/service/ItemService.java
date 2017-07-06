@@ -4,7 +4,9 @@ import me.sjtumeow.meow.model.Article;
 import me.sjtumeow.meow.model.Moment;
 import me.sjtumeow.meow.model.User;
 import me.sjtumeow.meow.model.form.AddMomentForm;
+import me.sjtumeow.meow.model.form.UpdateMomentForm;
 import me.sjtumeow.meow.model.result.ArticleSummaryResult;
+import me.sjtumeow.meow.model.result.CreateResult;
 
 public interface ItemService {
 	
@@ -18,12 +20,12 @@ public interface ItemService {
 	
 	User getMomentCreator(Long id);
 	
-	boolean addMoment(AddMomentForm amf, User user);
+	CreateResult addMoment(AddMomentForm amf, User user);
+	
+	boolean updateMoment(Long id, UpdateMomentForm umf);
 	
 	boolean deleteMoment(Long id);
-	
-	boolean recoverMoment(Long id);
-	
+
 	
 	// Article
 	

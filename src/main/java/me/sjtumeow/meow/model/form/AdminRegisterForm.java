@@ -4,7 +4,7 @@ public class AdminRegisterForm {
 	
 	protected String phone;
 	protected String password;
-	protected boolean isAdmin;
+	protected boolean isAdmin; // ATTENTION: Field name in JSON request body should be "admin"!
 	protected String nickname;
 	protected String bio;
 	protected String avatar;
