@@ -58,20 +58,19 @@
               </div>
               <div class="checkbox">
                 <label>
-                    <input type="checkbox" v-model="newUserisAdmin"/> 管理员权限
-                  </label>
+                  <input type="checkbox" v-model="newUserisAdmin"/> 管理员权限
+                </label>
               </div>
             </form>
             <div class="col-md-4">
               <form action="/image/avatar" method="post" enctype="multipart/form-data">
                 <div class="form-group">
-                  <label class="control-label" for="new-user-avatar">头像</label>
+                  <label class="control-label" for="new-user-avatar">头像</label><span class="text-muted">（点击图片上传）</span>
                   <a class="thumbnail" @click="triggerAvatarInputClick">
                     <!-- TODO: add default image url -->
                     <img src="https://i.ytimg.com/vi/prALrHUJ8Ns/hqdefault.jpg">
                   </a>
                   <input type="file" name="file" id="avatarInput" style="display: none;" @change="uploadPicture" />
-                  <span class="help-block">点击图片上传</span>
                 </div>
               </form>
             </div>
