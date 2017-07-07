@@ -1,6 +1,7 @@
 package me.sjtumeow.meow.model;
 
-import java.util.Collection;
+import java.util.Set;
+
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
@@ -17,7 +18,7 @@ public class Moment extends Item {
     String content;
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "moment")
-    Collection<Media> medias;
+    Set<Media> medias;
 
     public String getContent() {
         return content;
@@ -27,11 +28,11 @@ public class Moment extends Item {
         this.content = content;
     }
 
-    public Collection<Media> getMedias() {
+    public Set<Media> getMedias() {
         return medias;
     }
 
-    public void setMedias(Collection<Media> medias) {
+    public void setMedias(Set<Media> medias) {
         this.medias = medias;
     }
 }

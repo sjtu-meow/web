@@ -2,11 +2,13 @@ package me.sjtumeow.meow.service;
 
 import me.sjtumeow.meow.model.Article;
 import me.sjtumeow.meow.model.Moment;
+import me.sjtumeow.meow.model.Question;
 import me.sjtumeow.meow.model.User;
 import me.sjtumeow.meow.model.form.AddMomentForm;
 import me.sjtumeow.meow.model.form.UpdateMomentForm;
 import me.sjtumeow.meow.model.result.ArticleSummaryResult;
 import me.sjtumeow.meow.model.result.CreateResult;
+import me.sjtumeow.meow.model.result.QuestionSummaryResult;
 
 public interface ItemService {
 	
@@ -36,5 +38,14 @@ public interface ItemService {
 	Article findArticleById(Long id, boolean isAdmin);
 	
 	User getArticleCreator(Long id);
+	
+	
+	// Question
+	
+	Iterable<QuestionSummaryResult> findAllQuestions(boolean isAdmin);
+	
+	Iterable<QuestionSummaryResult> findAllQuestionsPageable(Integer page, Integer size, boolean isAdmin);
+	
+	Question findQuestionById(Long id, boolean isAdmin);
 	
 }

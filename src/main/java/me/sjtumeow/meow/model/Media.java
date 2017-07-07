@@ -24,7 +24,7 @@ public class Media extends BaseEntity {
     
     @JsonBackReference
     @ManyToOne
-    @JoinColumn(name = "moment_id", referencedColumnName = "id", nullable = false)
+    @JoinColumn(nullable = false)
     Moment moment;
     
     public Media() {}

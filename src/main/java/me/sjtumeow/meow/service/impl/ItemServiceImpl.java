@@ -3,15 +3,18 @@ package me.sjtumeow.meow.service.impl;
 import me.sjtumeow.meow.dao.ArticleRepository;
 import me.sjtumeow.meow.dao.MediaRepository;
 import me.sjtumeow.meow.dao.MomentRepository;
+import me.sjtumeow.meow.dao.QuestionRepository;
 import me.sjtumeow.meow.model.Article;
 import me.sjtumeow.meow.model.Media;
 import me.sjtumeow.meow.model.Moment;
+import me.sjtumeow.meow.model.Question;
 import me.sjtumeow.meow.model.User;
 import me.sjtumeow.meow.model.form.AddMomentForm;
 import me.sjtumeow.meow.model.form.MediaForm;
 import me.sjtumeow.meow.model.form.UpdateMomentForm;
 import me.sjtumeow.meow.model.result.ArticleSummaryResult;
 import me.sjtumeow.meow.model.result.CreateResult;
+import me.sjtumeow.meow.model.result.QuestionSummaryResult;
 import me.sjtumeow.meow.service.ItemService;
 
 import java.util.ArrayList;
@@ -34,6 +37,9 @@ public class ItemServiceImpl implements ItemService {
 	
 	@Autowired
     private ArticleRepository articleRepository;
+	
+	@Autowired
+    private QuestionRepository questionRepository;
 	
 	
 	public Iterable<Moment> findAllMoments(boolean isAdmin) {
@@ -157,5 +163,49 @@ public class ItemServiceImpl implements ItemService {
 		if (article == null)
 			return null;
 		return article.getProfile().getUser();
+	}
+	
+	public Iterable<QuestionSummaryResult> findAllQuestions(boolean isAdmin) {
+		Iterable<Question> questions = isAdmin ? questionRepository.findAll() : questionRepository.findAllActive();
+		List<QuestionSummaryResult> result = new ArrayList<QuestionSummaryResult>();
+		
+		for (Question question: questions) {
+			QuestionSummaryResult qsr = new QuestionSummaryResult();
+			qsr.setId(question.getId());
+			qsr.setTitle(question.getTitle());
+			qsr.setContent(question.getContent());
+			qsr.setProfile(question.getProfile());
+			qsr.setCreateTime(question.getCreateTime());
+			qsr.setUpdateTime(question.getUpdateTime());
+		    qsr.setDeleted(question.isDeleted());
+		    result.add(qsr);
+		}
+		
+		return result;
+	}
+	
+	public Iterable<QuestionSummaryResult> findAllQuestionsPageable(Integer page, Integer size, boolean isAdmin) {
+		Iterable<Question> questions = isAdmin ?
+				questionRepository.findAll(new PageRequest(page, size, Direction.DESC, "createdAt")) 
+				: questionRepository.findAllActive(new PageRequest(page, size, Direction.DESC, "createdAt"));
+		List<QuestionSummaryResult> result = new ArrayList<QuestionSummaryResult>();
+		
+		for (Question question: questions) {
+			QuestionSummaryResult qsr = new QuestionSummaryResult();
+			qsr.setId(question.getId());
+			qsr.setTitle(question.getTitle());
+			qsr.setContent(question.getContent());
+			qsr.setProfile(question.getProfile());
+			qsr.setCreateTime(question.getCreateTime());
+			qsr.setUpdateTime(question.getUpdateTime());
+		    qsr.setDeleted(question.isDeleted());
+		    result.add(qsr);
+		}
+		
+		return result;
+	}
+	
+	public Question findQuestionById(Long id, boolean isAdmin) {
+		return isAdmin ? questionRepository.findOne(id) : questionRepository.findOneActive(id);
 	}
 }

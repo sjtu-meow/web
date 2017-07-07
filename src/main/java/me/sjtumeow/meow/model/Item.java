@@ -1,8 +1,10 @@
 package me.sjtumeow.meow.model;
 
-import java.util.Collection;
+import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -37,13 +39,13 @@ public abstract class Item extends BaseEntity {
     @JoinColumn
     Profile profile;
     
-    @OneToMany(/*fetch = FetchType.EAGER,*/ mappedBy = "item")
-    private Collection<Comment> comments;
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "item")
+    private Set<Comment> comments;
     
     @Formula("0") // TODO: edit this query
     Integer likeCount;
     
-    @Formula("0") // TODO: edit this query
+    @Formula("(SELECT COUNT(*) FROM comment c WHERE c.item_id = id)")
     Integer commentCount;
 
     public Long getId() {
@@ -70,11 +72,11 @@ public abstract class Item extends BaseEntity {
         this.profile = profile;
     }
 
-	public Collection<Comment> getComments() {
+	public Set<Comment> getComments() {
 		return comments;
 	}
 
-	public void setComments(Collection<Comment> comments) {
+	public void setComments(Set<Comment> comments) {
 		this.comments = comments;
 	}
 
