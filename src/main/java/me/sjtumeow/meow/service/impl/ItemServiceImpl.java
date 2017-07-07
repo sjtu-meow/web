@@ -1,9 +1,11 @@
 package me.sjtumeow.meow.service.impl;
 
+import me.sjtumeow.meow.dao.AnswerRepository;
 import me.sjtumeow.meow.dao.ArticleRepository;
 import me.sjtumeow.meow.dao.MediaRepository;
 import me.sjtumeow.meow.dao.MomentRepository;
 import me.sjtumeow.meow.dao.QuestionRepository;
+import me.sjtumeow.meow.model.Answer;
 import me.sjtumeow.meow.model.Article;
 import me.sjtumeow.meow.model.Media;
 import me.sjtumeow.meow.model.Moment;
@@ -16,7 +18,7 @@ import me.sjtumeow.meow.model.form.MediaForm;
 import me.sjtumeow.meow.model.form.UpdateMomentForm;
 import me.sjtumeow.meow.model.result.ArticleSummaryResult;
 import me.sjtumeow.meow.model.result.CreateResult;
-import me.sjtumeow.meow.model.result.QuestionSummaryResult;
+import me.sjtumeow.meow.model.result.AnswerSummaryResult;
 import me.sjtumeow.meow.service.ItemService;
 
 import java.util.ArrayList;
@@ -42,6 +44,9 @@ public class ItemServiceImpl implements ItemService {
 	
 	@Autowired
     private QuestionRepository questionRepository;
+	
+	@Autowired
+    private AnswerRepository answerRepository;
 	
 	
 	public Iterable<Moment> findAllMoments(boolean isAdmin) {
@@ -115,18 +120,7 @@ public class ItemServiceImpl implements ItemService {
 		List<ArticleSummaryResult> result = new ArrayList<ArticleSummaryResult>();
 		
 		for (Article article: articles) {
-			ArticleSummaryResult asr = new ArticleSummaryResult();
-			asr.setId(article.getId());
-			asr.setTitle(article.getTitle());
-			asr.setSummary(article.getSummary());
-			asr.setCover(article.getCover());
-			asr.setProfile(article.getProfile());
-			asr.setLikeCount(article.getLikeCount());
-			asr.setCommentCount(article.getCommentCount());
-			asr.setCreateTime(article.getCreateTime());
-			asr.setUpdateTime(article.getUpdateTime());
-			asr.setDeleted(article.isDeleted());
-			result.add(asr);
+			result.add(new ArticleSummaryResult(article));
 		}
 		
 		return result;
@@ -139,18 +133,7 @@ public class ItemServiceImpl implements ItemService {
 		List<ArticleSummaryResult> result = new ArrayList<ArticleSummaryResult>();
 		
 		for (Article article: articles) {
-			ArticleSummaryResult asr = new ArticleSummaryResult();
-			asr.setId(article.getId());
-			asr.setTitle(article.getTitle());
-			asr.setSummary(article.getSummary());
-			asr.setCover(article.getCover());
-			asr.setProfile(article.getProfile());
-			asr.setLikeCount(article.getLikeCount());
-			asr.setCommentCount(article.getCommentCount());
-			asr.setCreateTime(article.getCreateTime());
-			asr.setUpdateTime(article.getUpdateTime());
-			asr.setDeleted(article.isDeleted());
-			result.add(asr);
+			result.add(new ArticleSummaryResult(article));
 		}
 		
 		return result;
@@ -183,7 +166,7 @@ public class ItemServiceImpl implements ItemService {
     	return true;
 	}
 	
-	public Iterable<QuestionSummaryResult> findAllQuestions(boolean isAdmin) {
+	/*public Iterable<QuestionSummaryResult> findAllQuestions(boolean isAdmin) {
 		Iterable<Question> questions = isAdmin ? questionRepository.findAll() : questionRepository.findAllActive();
 		List<QuestionSummaryResult> result = new ArrayList<QuestionSummaryResult>();
 		
@@ -221,7 +204,7 @@ public class ItemServiceImpl implements ItemService {
 		}
 		
 		return result;
-	}
+	}*/
 	
 	public Question findQuestionById(Long id, boolean isAdmin) {
 		return isAdmin ? questionRepository.findOne(id) : questionRepository.findOneActive(id);
@@ -248,5 +231,29 @@ public class ItemServiceImpl implements ItemService {
     		return false;
 		questionRepository.softDelete(id);
     	return true;
+	}
+	
+	public Iterable<AnswerSummaryResult> findAllAnswers(boolean isAdmin) {
+		Iterable<Answer> answers = isAdmin ? answerRepository.findAll() : answerRepository.findAllActive();
+		List<AnswerSummaryResult> result = new ArrayList<AnswerSummaryResult>();
+		
+		for (Answer answer: answers) {
+			result.add(new AnswerSummaryResult(answer));
+		}
+		
+		return result;
+	}
+	
+	public Iterable<AnswerSummaryResult> findAllAnswersPageable(Integer page, Integer size, boolean isAdmin) {
+		Iterable<Answer> answers = isAdmin ?
+				answerRepository.findAll(new PageRequest(page, size, Direction.DESC, "createdAt")) 
+				: answerRepository.findAllActive(new PageRequest(page, size, Direction.DESC, "createdAt"));
+		List<AnswerSummaryResult> result = new ArrayList<AnswerSummaryResult>();
+		
+		for (Answer answer: answers) {
+			result.add(new AnswerSummaryResult(answer));
+		}
+		
+		return result;
 	}
 }

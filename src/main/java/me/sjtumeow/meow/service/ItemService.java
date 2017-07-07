@@ -8,9 +8,9 @@ import me.sjtumeow.meow.model.form.AddArticleForm;
 import me.sjtumeow.meow.model.form.AddMomentForm;
 import me.sjtumeow.meow.model.form.AddQuestionForm;
 import me.sjtumeow.meow.model.form.UpdateMomentForm;
+import me.sjtumeow.meow.model.result.AnswerSummaryResult;
 import me.sjtumeow.meow.model.result.ArticleSummaryResult;
 import me.sjtumeow.meow.model.result.CreateResult;
-import me.sjtumeow.meow.model.result.QuestionSummaryResult;
 
 public interface ItemService {
 	
@@ -48,9 +48,9 @@ public interface ItemService {
 	
 	// Question
 	
-	Iterable<QuestionSummaryResult> findAllQuestions(boolean isAdmin);
+	/*Iterable<QuestionSummaryResult> findAllQuestions(boolean isAdmin);
 	
-	Iterable<QuestionSummaryResult> findAllQuestionsPageable(Integer page, Integer size, boolean isAdmin);
+	Iterable<QuestionSummaryResult> findAllQuestionsPageable(Integer page, Integer size, boolean isAdmin);*/
 	
 	Question findQuestionById(Long id, boolean isAdmin);
 	
@@ -59,5 +59,12 @@ public interface ItemService {
 	Long addQuestion(AddQuestionForm aqf, User user);
 	
 	boolean deleteQuestion(Long id);
+	
+	
+	// Answer
+	
+	Iterable<AnswerSummaryResult> findAllAnswers(boolean isAdmin);
+	
+	Iterable<AnswerSummaryResult> findAllAnswersPageable(Integer page, Integer size, boolean isAdmin);
 	
 }

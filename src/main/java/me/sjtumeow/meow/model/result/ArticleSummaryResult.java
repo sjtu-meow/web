@@ -1,18 +1,29 @@
 package me.sjtumeow.meow.model.result;
 
-import me.sjtumeow.meow.model.Profile;
+import me.sjtumeow.meow.model.Article;
 
 public class ArticleSummaryResult {
 	protected Long id;
 	protected String title;
 	protected String summary;
 	protected String cover;
-	protected Profile profile;
 	protected Integer likeCount;
     protected Integer commentCount;
     protected String createTime;
     protected String updateTime;
     protected boolean isDeleted;
+    
+    public ArticleSummaryResult(Article article) {
+    	id = article.getId();
+    	title = article.getTitle();
+    	summary = article.getSummary();
+    	cover = article.getCover();
+    	likeCount = article.getLikeCount();
+        commentCount = article.getCommentCount();
+        createTime = article.getCreateTime();
+        updateTime = article.getUpdateTime();
+        isDeleted = article.isDeleted();
+    }
     
 	public Long getId() {
 		return id;
@@ -44,14 +55,6 @@ public class ArticleSummaryResult {
 	
 	public void setCover(String cover) {
 		this.cover = cover;
-	}
-	
-	public Profile getProfile() {
-		return profile;
-	}
-	
-	public void setProfile(Profile profile) {
-		this.profile = profile;
 	}
 	
 	public Integer getLikeCount() {
