@@ -8,6 +8,8 @@ import me.sjtumeow.meow.authorization.annotation.Authorization;
 import me.sjtumeow.meow.authorization.manager.TokenManager;
 import me.sjtumeow.meow.authorization.model.TokenModel;
 import me.sjtumeow.meow.config.Constants;
+import me.sjtumeow.meow.dao.UserRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
@@ -22,6 +24,9 @@ public class AuthorizationInterceptor extends HandlerInterceptorAdapter {
 
     @Autowired
     private TokenManager manager;
+    
+    @Autowired
+    private UserRepository userRepository;
 
     public boolean preHandle(HttpServletRequest request,
                              HttpServletResponse response, Object handler) throws Exception {
@@ -35,7 +40,7 @@ public class AuthorizationInterceptor extends HandlerInterceptorAdapter {
         String authorization = request.getHeader(Constants.AUTHORIZATION);
         //验证token
         TokenModel model = manager.getToken(authorization);
-        if (manager.checkToken(model)) {
+        if (manager.checkToken(model) && userRepository.existsActive(model.getUserId())) {
             //如果token验证成功，将token对应的用户id存在request中，便于之后注入
             request.setAttribute(Constants.CURRENT_USER_ID, model.getUserId());
             return true;

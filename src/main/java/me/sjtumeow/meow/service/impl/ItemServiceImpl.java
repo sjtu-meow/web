@@ -165,6 +165,13 @@ public class ItemServiceImpl implements ItemService {
 		return article.getProfile().getUser();
 	}
 	
+	public boolean deleteArticle(Long id) {
+		if (!articleRepository.existsActive(id))
+    		return false;
+		articleRepository.softDelete(id);
+    	return true;
+	}
+	
 	public Iterable<QuestionSummaryResult> findAllQuestions(boolean isAdmin) {
 		Iterable<Question> questions = isAdmin ? questionRepository.findAll() : questionRepository.findAllActive();
 		List<QuestionSummaryResult> result = new ArrayList<QuestionSummaryResult>();
@@ -207,5 +214,20 @@ public class ItemServiceImpl implements ItemService {
 	
 	public Question findQuestionById(Long id, boolean isAdmin) {
 		return isAdmin ? questionRepository.findOne(id) : questionRepository.findOneActive(id);
+	}
+	
+	public User getQuestionCreator(Long id) {
+		Question question = questionRepository.findOneActive(id);
+		if (question == null)
+			return null;
+		return question.getProfile().getUser();
+	}
+	
+	@Transactional
+	public boolean deleteQuestion(Long id) {
+		if (!questionRepository.existsActive(id))
+    		return false;
+		questionRepository.softDelete(id);
+    	return true;
 	}
 }

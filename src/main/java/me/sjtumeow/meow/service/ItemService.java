@@ -39,6 +39,8 @@ public interface ItemService {
 	
 	User getArticleCreator(Long id);
 	
+	boolean deleteArticle(Long id);
+	
 	
 	// Question
 	
@@ -47,5 +49,9 @@ public interface ItemService {
 	Iterable<QuestionSummaryResult> findAllQuestionsPageable(Integer page, Integer size, boolean isAdmin);
 	
 	Question findQuestionById(Long id, boolean isAdmin);
+	
+	User getQuestionCreator(Long id);
+	
+	boolean deleteQuestion(Long id);
 	
 }
