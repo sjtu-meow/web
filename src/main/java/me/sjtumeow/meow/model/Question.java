@@ -21,6 +21,12 @@ public class Question extends Item {
     public Question() {
     	type = Item.ITEM_TYPE_QUESTION;
     }
+    
+    public Question(String title, String content) {
+    	type = Item.ITEM_TYPE_QUESTION;
+    	this.title = title;
+    	this.content = content;
+    }
 
     public String getTitle() {
         return title;

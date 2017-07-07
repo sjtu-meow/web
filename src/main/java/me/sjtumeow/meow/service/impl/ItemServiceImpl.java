@@ -9,7 +9,9 @@ import me.sjtumeow.meow.model.Media;
 import me.sjtumeow.meow.model.Moment;
 import me.sjtumeow.meow.model.Question;
 import me.sjtumeow.meow.model.User;
+import me.sjtumeow.meow.model.form.AddArticleForm;
 import me.sjtumeow.meow.model.form.AddMomentForm;
+import me.sjtumeow.meow.model.form.AddQuestionForm;
 import me.sjtumeow.meow.model.form.MediaForm;
 import me.sjtumeow.meow.model.form.UpdateMomentForm;
 import me.sjtumeow.meow.model.result.ArticleSummaryResult;
@@ -165,6 +167,15 @@ public class ItemServiceImpl implements ItemService {
 		return article.getProfile().getUser();
 	}
 	
+	@Transactional
+	public Long addArticle(AddArticleForm aaf, User user) {
+		Article article = new Article(aaf.getTitle(), aaf.getSummary(), aaf.getContent(), aaf.getCover());
+		article.setProfile(user.getProfile());
+		articleRepository.save(article);
+		return article.getId();
+	}
+	
+	@Transactional
 	public boolean deleteArticle(Long id) {
 		if (!articleRepository.existsActive(id))
     		return false;
@@ -221,6 +232,14 @@ public class ItemServiceImpl implements ItemService {
 		if (question == null)
 			return null;
 		return question.getProfile().getUser();
+	}
+	
+	@Transactional
+	public Long addQuestion(AddQuestionForm aqf, User user) {
+		Question question = new Question(aqf.getTitle(), aqf.getContent());
+		question.setProfile(user.getProfile());
+		questionRepository.save(question);
+		return question.getId();
 	}
 	
 	@Transactional

@@ -4,7 +4,9 @@ import me.sjtumeow.meow.model.Article;
 import me.sjtumeow.meow.model.Moment;
 import me.sjtumeow.meow.model.Question;
 import me.sjtumeow.meow.model.User;
+import me.sjtumeow.meow.model.form.AddArticleForm;
 import me.sjtumeow.meow.model.form.AddMomentForm;
+import me.sjtumeow.meow.model.form.AddQuestionForm;
 import me.sjtumeow.meow.model.form.UpdateMomentForm;
 import me.sjtumeow.meow.model.result.ArticleSummaryResult;
 import me.sjtumeow.meow.model.result.CreateResult;
@@ -39,6 +41,8 @@ public interface ItemService {
 	
 	User getArticleCreator(Long id);
 	
+	Long addArticle(AddArticleForm aaf, User user);
+	
 	boolean deleteArticle(Long id);
 	
 	
@@ -51,6 +55,8 @@ public interface ItemService {
 	Question findQuestionById(Long id, boolean isAdmin);
 	
 	User getQuestionCreator(Long id);
+	
+	Long addQuestion(AddQuestionForm aqf, User user);
 	
 	boolean deleteQuestion(Long id);
 	
