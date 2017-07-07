@@ -4,6 +4,8 @@
     <div class="header clearfix">
       <nav>
         <ul class="nav nav-pills pull-right">
+          <li role="presentation"><a href="#" @click="saveArticle">保存</a></li>
+          <li role="presentation"><a href="#" @click="postArticle">发布</a></li>
           <li role="presentation"><a href="/logout">退出</a></li>
         </ul>
       </nav>
@@ -12,26 +14,31 @@
 
     <div class="row">
       <div class="col-md-4">
-        <a href="#" class="thumbnail">
-          <img width="100%" src="https://pbs.twimg.com/profile_images/625633822235693056/lNGUneLX.jpg">
-        </a>
-        <p class="text-muted">点击修改封面</p>
+        <form action="/image/avatar" method="post" enctype="multipart/form-data">
+          <div class="form-group">
+            <label class="control-label" for="article-title">封面</label><span class="text-muted">（点击修改）</span>
+            <a href="#" class="thumbnail" @click="triggerCoverInputClick">
+              <img width="100%" src="https://i.ytimg.com/vi/prALrHUJ8Ns/hqdefault.jpg">
+            </a>
+            <input type="file" name="file" id="cover-input" style="display: none;" @change="uploadPicture" />
+          </div>
+        </form>
       </div>
       <div class="col-md-8">
         <form>
           <div class="form-group">
-            <label for="articleTitle">文章标题</label>
-            <input type="text" class="form-control" id="articleTitle" placeholder="在这里写下文章标题">
+            <label for="article-title">文章标题</label>
+            <input type="text" class="form-control" id="article-title" placeholder="在这里写下文章标题" v-model="title">
           </div>
           <div class="form-group">
-            <label for="articleSummary">文章简介</label>
-            <textarea class="form-control" id="articleSummary" placeholder="在这里写下文章简介" rows="4"/>
+            <label for="article-summary">文章简介</label>
+            <textarea class="form-control" id="article-summary" placeholder="在这里写下文章简介" rows="4" v-model="summary" />
           </div>
         </form>
       </div>
     </div>
 
-    <div class="summernote"></div>
+    <div id="summernote"></div>
 
     <footer class="footer">
       <p>&copy; 2017 SJTU-Meow.</p>
@@ -42,10 +49,20 @@
 </template>
 
 <script>
+import Vue from 'vue'
+
 export default {
+  name: 'app',
+  data() {
+    return {
+      title: '',
+      summary: ''
+    }
+  },
   created() {
     $(function() {
-      $('.summernote').summernote({
+      // initialize editor
+      $('#summernote').summernote({
         lang: 'zh-CN',
         minHeight: 200,
         focus: true,
@@ -56,9 +73,39 @@ export default {
           ['color', ['color']],
           ['para', ['ul', 'ol', 'paragraph']],
           ['Insert', ['link', 'picture', 'video']]
-        ]
+        ],
+        callbacks: {
+          // upload image to Qiniu
+          onImageUpload: function(files) {
+            var imgNode = document.createElement('img');
+            imgNode.setAttribute('src', 'https://i.ytimg.com/vi/prALrHUJ8Ns/hqdefault.jpg')
+
+            // upload image to server and create imgNode...
+            $('#summernote').summernote('insertNode', imgNode);
+          },
+        }
+
       });
     });
+  },
+  methods: {
+    getArticleHtml() {
+      return $('#summernote').summernote('code');
+    },
+    saveArticle() {
+      alert('还没实现呢');
+    },
+    postArticle() {
+      alert('还没实现呢');
+    },
+    triggerCoverInputClick() {
+      $('#cover-input').click();
+    },
+    uploadPicture: function(event) {
+      let data = new FormData();
+      data.append('file', event.target.files[0])
+      //TODO: change the way of uploading avatar image
+    }
   }
 }
 </script>
@@ -70,9 +117,6 @@ body {
   padding-top: 20px;
   padding-bottom: 20px;
 }
-
-
-
 
 
 
@@ -90,18 +134,12 @@ body {
 
 
 
-
-
-
 /* Custom page header */
 
 .header {
   padding-bottom: 20px;
   border-bottom: 1px solid #e5e5e5;
 }
-
-
-
 
 
 
@@ -119,9 +157,6 @@ body {
 
 
 
-
-
-
 /* Custom page footer */
 
 .footer {
@@ -129,9 +164,6 @@ body {
   color: #777;
   border-top: 1px solid #e5e5e5;
 }
-
-
-
 
 
 
@@ -148,9 +180,6 @@ body {
 .container-narrow>hr {
   margin: 30px 0;
 }
-
-
-
 
 
 

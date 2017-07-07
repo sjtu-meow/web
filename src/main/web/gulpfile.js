@@ -93,8 +93,8 @@ gulp.task('webpack', ['clean'], function () {
 gulp.task('write-property', ['admin-style', 'admin-script', 'public-style', 'public-script'], function () {
   let prop = 'meow.admin-styles=' + filenames.get('admin-style').join() + '\n'
   prop += 'meow.admin-scripts=' + filenames.get('admin-script').join() + '\n'
-  prop += 'meow.public-styles=' + filenames.get('admin-style').join() + '\n'
-  prop += 'meow.public-scripts=' + filenames.get('admin-script').join() + '\n'
+  prop += 'meow.public-styles=' + filenames.get('public-style').join() + '\n'
+  prop += 'meow.public-scripts=' + filenames.get('public-script').join() + '\n'
 
   fs.writeFile('../resources/asset.properties', prop)
 })
@@ -156,6 +156,8 @@ gulp.task('watch', function () {
   gulp.watch([
     assets.admin.styles,
     assets.admin.scripts,
+    assets.public.styles,
+    assets.public.scripts,
     assets.fonts
   ], ['write-property']);
 });
