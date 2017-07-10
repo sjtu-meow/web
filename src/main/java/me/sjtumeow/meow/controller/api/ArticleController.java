@@ -60,6 +60,8 @@ public class ArticleController {
 		return ResponseEntity.status(HttpStatus.CREATED).body(new NewEntityIdResult(itemService.addArticle(aaf, user)));
 	}
 	
+	// TODO: Web article editor add article API
+	
 	@DeleteMapping("/{id}")
 	@Authorization
 	ResponseEntity<?> deleteArticle(@CurrentUser User user, @PathVariable("id") Long id) {
