@@ -22,11 +22,12 @@
           </tr>
         </thead>
         <tbody>
-          <user-list-row v-for="user in users" :key="user.id" :user="user"
-            @deleteUser="promptDeleteUser" @recoverUser="promptRecoverUser"
-            @setAdminUser="promptSetAdminUser" @unsetAdminUser="promptUnsetAdminUser" />
+          <user-list-row v-for="user in users" :key="user.id" :user="user" @deleteUser="promptDeleteUser" @recoverUser="promptRecoverUser" @setAdminUser="promptSetAdminUser" @unsetAdminUser="promptUnsetAdminUser" />
         </tbody>
       </table>
+    </div>
+    <div class="text-center">
+      <pagination :pagination="pagination" @changePage="fetchUsers"/>
     </div>
   </section>
 
@@ -65,12 +66,10 @@
             <div class="col-md-4">
               <form action="/image/avatar" method="post" enctype="multipart/form-data">
                 <div class="form-group">
-                  <label class="control-label" for="new-user-avatar">头像</label><span class="text-muted">（点击图片上传）</span>
-                  <a class="thumbnail" @click="triggerAvatarInputClick">
-                    <!-- TODO: add default image url -->
-                    <img src="https://i.ytimg.com/vi/prALrHUJ8Ns/hqdefault.jpg">
+                  <label class="control-label" for="new-user-avatar">默认头像</label><span class="text-muted">（不让你改）</span>
+                  <a class="thumbnail">
+                    <img :src="newUserAvatarUrl">
                   </a>
-                  <input type="file" name="file" id="avatarInput" style="display: none;" @change="uploadPicture" />
                 </div>
               </form>
             </div>
@@ -112,11 +111,11 @@
           <h4 class="modal-title" id="recover-user-modal-title">删除用户</h4>
         </div>
         <div class="modal-body">
-          <p class="text-danger">确定删除此用户 <b>{{userToRecover.profile.nickname}}（{{userToRecover.phone}}）</b> 吗？</p>
+          <p>确定恢复此用户 <b>{{userToRecover.profile.nickname}}（{{userToRecover.phone}}）</b> 吗？</p>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-          <button type="button" class="btn btn-danger" @click="recoverUser">恢复</button>
+          <button type="button" class="btn btn-primary" @click="recoverUser">恢复</button>
         </div>
       </div>
     </div>
@@ -164,18 +163,26 @@
 
 <script>
 import UserListRow from './UserListRow.vue'
+import Pagination from '../Pagination.vue'
 
 export default {
   name: 'Users',
   components: {
-    UserListRow
+    UserListRow,
+    Pagination
   },
   data: function() {
     return {
       users: [],
+      pagination: {
+        currentPage: 0,
+        totalPages: 1
+      },
+      pageSize: 2,
       newUserNickname: '',
       newUserPassword: '',
       newUserPhone: '',
+      newUserAvatarUrl: 'http://osg5c99b1.bkt.clouddn.com/defaultAvatar.png',
       newUserisAdmin: false,
       userToDelete: {
         id: 1,
@@ -208,15 +215,17 @@ export default {
     }
   },
   created: function() {
-    this.fetchUsers()
+    this.fetchUsers(0)
   },
   methods: {
-    fetchUsers: function() {
+    fetchUsers: function(page) {
       //TODO: change url
-      this.$http.get('http://106.14.156.19/api/admin/users')
+      this.$http.get('http://106.14.156.19/api/admin/users?' + 'page=' + page + '&size=' + this.pageSize)
         .then(function(response) {
-          this.users = response.body;
-        }, function (response) {
+          this.users = response.body.content;
+          this.pagination.currentPage = response.body.number;
+          this.pagination.totalPages = response.body.totalPages;
+        }, function(response) {
           alert(response.body.message || '获取用户失败');
         })
     },
@@ -229,9 +238,10 @@ export default {
         phone: this.newUserPhone,
         password: this.newUserPassword,
         nickname: this.newUserNickname,
-        admin: this.newUserisAdmin
+        admin: this.newUserisAdmin,
+        avatar: this.newUserAvatarUrl
       }).then(function(response) {
-        this.fetchUsers();
+        this.fetchUsers(this.pagination.totalPages - 1);
         $('#add-user-modal').modal('hide');
       }, function(response) {
         alert(response.body.message)
@@ -257,13 +267,14 @@ export default {
     },
     recoverUser() {
       //TODO: change url and test implementation
-      this.$http.put('http://106.14.156.19/api/admin/users/' + this.userToRecover.id + '/recover')
-        .then(function(response) {
-          this.userToRecover.deleted = false;
-          $('#recover-user-modal').modal('hide');
-        }, function(response) {
-          alert(response.body.message || '修改失败');
-        })
+      this.$http.patch('http://106.14.156.19/api/admin/users/' + this.userToRecover.id, {
+        isDeleted: false
+      }).then(function(response) {
+        this.userToRecover.deleted = false;
+        $('#recover-user-modal').modal('hide');
+      }, function(response) {
+        alert(response.body.message || '修改失败');
+      });
     },
     promptSetAdminUser(user) {
       this.userToSetAdmin = user;
@@ -273,10 +284,10 @@ export default {
       //TODO: change url
       this.$http.patch('http://106.14.156.19/api/admin/users/' + this.userToSetAdmin.id, {
         admin: true
-      }).then(function (response) {
+      }).then(function(response) {
         this.userToSetAdmin.admin = true;
         $('#set-admin-user-modal').modal('hide');
-      }, function (response) {
+      }, function(response) {
         alert(response.body.message || '修改失败')
       })
     },
@@ -288,20 +299,12 @@ export default {
       //TODO: change url
       this.$http.patch('http://106.14.156.19/api/admin/users/' + this.userToUnsetAdmin.id, {
         admin: false
-      }).then(function (response) {
+      }).then(function(response) {
         this.userToUnsetAdmin.admin = false;
         $('#unset-admin-user-modal').modal('hide');
-      }, function (response) {
+      }, function(response) {
         alert(response.body.message || '修改失败')
       })
-    },
-    triggerAvatarInputClick: function() {
-      $('#avatarInput').click();
-    },
-    uploadPicture: function(event) {
-      let data = new FormData();
-      data.append('file', event.target.files[0])
-      //TODO: change the way of uploading avatar image
     }
   }
 }

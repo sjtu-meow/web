@@ -17,7 +17,7 @@
         </span>
       </div>
     </template>
-    <template v-else-if="user.deleted === false">
+    <template v-else>
       {{user.profile.nickname}}
       <button type="button" class="btn btn-default btn-xs" @click="editingNickname = true">
         <span class="glyphicon glyphicon-edit"/>
@@ -35,7 +35,7 @@
         </span>
       </div>
     </template>
-    <template v-else-if="user.deleted === false">
+    <template v-else>
       {{user.profile.bio}}
       <button type="button" class="btn btn-default btn-xs" @click="editingBio = true">
         <span class="glyphicon glyphicon-edit"/>
@@ -56,7 +56,7 @@
         </span>
       </div>
     </template>
-    <template v-else-if="user.deleted === false">
+    <template v-else>
       ****
       <button type="button" class="btn btn-default btn-xs" @click="editingPassword = true">
         <span class="glyphicon glyphicon-edit"/>

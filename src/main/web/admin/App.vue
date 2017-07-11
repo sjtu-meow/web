@@ -1,7 +1,6 @@
 <template>
 <div id="app" class="wrapper" style="height: auto;">
   <nav-bar></nav-bar>
-  <p>{{test}}</p>
   <side-bar></side-bar>
   <div class="content-wrapper" style="min-height: 320px; background-color: #ffffff;">
     <router-view></router-view>
@@ -21,9 +20,9 @@ import Moments from './moments/Moments.vue'
 import Articles from './articles/Articles.vue'
 import Questions from './questions/Questions.vue'
 
-Vue.use(VueRouter)
+Vue.use(VueRouter);
 Vue.use(VueResource);
-Vue.use(Vue2Filters)
+Vue.use(Vue2Filters);
 
 const router = new VueRouter({
   routes: [{
@@ -47,11 +46,6 @@ const router = new VueRouter({
 
 export default {
   name: 'app',
-  data() {
-    return {
-      test: 'hahaha'
-    }
-  },
   router,
   components: {
     NavBar,

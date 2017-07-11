@@ -1,29 +1,35 @@
 <template>
 <div id="app">
   <div class="container">
+    <!-- nav bar header -->
     <div class="header clearfix">
       <nav>
         <ul class="nav nav-pills pull-right">
           <li role="presentation"><a href="#" @click="saveArticle">保存</a></li>
           <li role="presentation"><a href="#" @click="postArticle">发布</a></li>
-          <li role="presentation"><a href="/logout">退出</a></li>
+          <li role="presentation">
+            <a v-show="loggedIn" @click="logout">退出</a>
+            <a v-show="!loggedIn" data-toggle="modal" data-target="#loginModal">登录</a>
+          </li>
         </ul>
       </nav>
-      <h3 class="text-muted">喵喵喵的文章编辑器</h3>
+      <h3 class="text-muted">喵喵喵的文章编辑器🐱</h3>
     </div>
 
+    <!-- article meta data -->
     <div class="row">
       <div class="col-md-4">
         <form action="/image/avatar" method="post" enctype="multipart/form-data">
           <div class="form-group">
             <label class="control-label" for="article-title">封面</label><span class="text-muted">（点击修改）</span>
             <a href="#" class="thumbnail" @click="triggerCoverInputClick">
-              <img width="100%" src="https://i.ytimg.com/vi/prALrHUJ8Ns/hqdefault.jpg">
+              <img width="100%" :src="coverUrl">
             </a>
-            <input type="file" name="file" id="cover-input" style="display: none;" @change="uploadPicture" />
+            <input type="file" name="file" id="coverInput" style="display: none;" @change="uploadPicture" />
           </div>
         </form>
       </div>
+
       <div class="col-md-8">
         <form>
           <div class="form-group">
@@ -38,7 +44,41 @@
       </div>
     </div>
 
+    <!-- summernote entry point -->
     <div id="summernote"></div>
+
+    <!-- login modal -->
+    <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalTitle">
+      <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+          <!-- title -->
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="loginModalTitle">登录</h4>
+          </div>
+
+          <!-- form body -->
+          <div class="modal-body">
+            <form>
+              <div class="form-group">
+                <label for="phone">手机号</label>
+                <input type="text" class="form-control" id="phone" placeholder="手机号" v-model="phone">
+              </div>
+              <div class="form-group">
+                <label for="password">密码</label>
+                <input type="password" class="form-control" id="password" placeholder="密码" v-model="password">
+              </div>
+            </form>
+          </div>
+
+          <!-- footer button -->
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+            <button type="button" class="btn btn-primary" @click="login">登录</button>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <footer class="footer">
       <p>&copy; 2017 SJTU-Meow.</p>
@@ -50,17 +90,28 @@
 
 <script>
 import Vue from 'vue'
+import VueResource from 'vue-resource'
+
+Vue.use(VueResource);
 
 export default {
   name: 'app',
   data() {
     return {
+      loggedIn: false,
+      phone: '',
+      password: '',
       title: '',
-      summary: ''
+      summary: '',
+      coverUrl: 'https://i.ytimg.com/vi/prALrHUJ8Ns/hqdefault.jpg'
     }
   },
   created() {
+    const vueModule = this;
     $(function() {
+      // initialize login popover
+      $('[data-toggle="popover"]').popover()
+
       // initialize editor
       $('#summernote').summernote({
         lang: 'zh-CN',
@@ -72,23 +123,72 @@ export default {
           ['style', ['bold', 'italic', 'clear']],
           ['color', ['color']],
           ['para', ['ul', 'ol', 'paragraph']],
-          ['Insert', ['link', 'picture', 'video']]
+          ['insert', ['link', 'picture', 'video']],
+          ['code', ['codeview']]
         ],
         callbacks: {
           // upload image to Qiniu
           onImageUpload: function(files) {
-            var imgNode = document.createElement('img');
-            imgNode.setAttribute('src', 'https://i.ytimg.com/vi/prALrHUJ8Ns/hqdefault.jpg')
+            // get token
+            vueModule.$http.get('http://106.14.156.19/api/web/upload/token')
+              .then(function(response) {
+                const token = response.body.token
 
-            // upload image to server and create imgNode...
-            $('#summernote').summernote('insertNode', imgNode);
+                for (var i = 0; i < files.length; i++) {
+                  let file = files[i]
+
+                  // send form data
+                  let data = new FormData();
+                  data.append('file', file)
+                  data.append('token', token)
+                  vueModule.$http.post('http://upload.qiniu.com/', data)
+                    .then(function(response) {
+                      const key = response.body.key;
+                      let imageUrl = 'http://osg5c99b1.bkt.clouddn.com/' + key
+                      let imgNode = document.createElement('img');
+                      imgNode.setAttribute('src', imageUrl)
+
+                      $('#summernote').summernote('insertNode', imgNode);
+                    }, function(response) {
+                      alert(response.body.error || '上传图片失败');
+                    })
+                }
+              }, function(response) {
+                alert(response.body.message || '获取token失败');
+              })
           },
         }
 
       });
     });
+
+    this.$http.get('http://106.14.156.19/api/web/auth')
+      .then(function (response) {
+        if (response.body.loggedIn) {
+          this.loggedIn = true;
+        }
+      })
   },
   methods: {
+    login() {
+      this.$http.post('http://106.14.156.19/api/web/auth', {
+        phone: this.phone,
+        password: this.password
+      }).then(function(response) {
+        this.loggedIn = true;
+      }, function(response) {
+        alert(response.body.message || '登录失败');
+      })
+      $('#loginModal').modal('hide')
+    },
+    logout() {
+      this.$http.delete('http://106.14.156.19/api/web/auth')
+        .then(function(response) {
+          this.loggedIn = false;
+        }, function(response) {
+          alert(response.body.message || '登录失败');
+        })
+    },
     getArticleHtml() {
       return $('#summernote').summernote('code');
     },
@@ -98,13 +198,30 @@ export default {
     postArticle() {
       alert('还没实现呢');
     },
-    triggerCoverInputClick() {
-      $('#cover-input').click();
+    triggerCoverInputClick: function() {
+      $('#coverInput').click();
     },
     uploadPicture: function(event) {
-      let data = new FormData();
-      data.append('file', event.target.files[0])
-      //TODO: change the way of uploading avatar image
+      // get token
+      this.$http.get('http://106.14.156.19/api/web/upload/token')
+        .then(function(response) {
+          const token = response.body.token
+
+          // send form data
+          let data = new FormData();
+          data.append('file', event.target.files[0])
+          data.append('token', token)
+          this.$http.post('http://upload.qiniu.com/', data)
+            .then(function(response) {
+              console.log(response);
+              const key = response.body.key;
+              this.coverUrl = 'http://osg5c99b1.bkt.clouddn.com/' + key
+            }, function(response) {
+              alert(response.body.error || '上传图片失败');
+            })
+        }, function(response) {
+          alert(response.body.message || '获取token失败');
+        })
     }
   }
 }
@@ -118,10 +235,6 @@ body {
   padding-bottom: 20px;
 }
 
-
-
-
-
 /* Everything but the jumbotron gets side spacing for mobile first views */
 
 .header,
@@ -130,20 +243,12 @@ body {
   padding-left: 15px;
 }
 
-
-
-
-
 /* Custom page header */
 
 .header {
   padding-bottom: 20px;
   border-bottom: 1px solid #e5e5e5;
 }
-
-
-
-
 
 /* Make the masthead heading the same height as the navigation */
 
@@ -153,10 +258,6 @@ body {
   line-height: 40px;
 }
 
-
-
-
-
 /* Custom page footer */
 
 .footer {
@@ -164,10 +265,6 @@ body {
   color: #777;
   border-top: 1px solid #e5e5e5;
 }
-
-
-
-
 
 /* Customize container */
 
@@ -180,10 +277,6 @@ body {
 .container-narrow>hr {
   margin: 30px 0;
 }
-
-
-
-
 
 /* Responsive: Portrait tablets and up */
 
