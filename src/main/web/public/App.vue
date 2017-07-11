@@ -1,17 +1,22 @@
 <template>
 <div id="app">
   <div class="container">
+    <!-- nav bar header -->
     <div class="header clearfix">
       <nav>
         <ul class="nav nav-pills pull-right">
           <li role="presentation"><a href="#" @click="saveArticle">保存</a></li>
           <li role="presentation"><a href="#" @click="postArticle">发布</a></li>
-          <li role="presentation"><a href="/logout">退出</a></li>
+          <li role="presentation">
+            <a v-show="loggedIn" @click="logout">退出</a>
+            <a v-show="!loggedIn" data-toggle="modal" data-target="#loginModal">登录</a>
+          </li>
         </ul>
       </nav>
-      <h3 class="text-muted">喵喵喵的文章编辑器</h3>
+      <h3 class="text-muted">喵喵喵的文章编辑器🐱</h3>
     </div>
 
+    <!-- article meta data -->
     <div class="row">
       <div class="col-md-4">
         <form action="/image/avatar" method="post" enctype="multipart/form-data">
@@ -24,6 +29,7 @@
           </div>
         </form>
       </div>
+
       <div class="col-md-8">
         <form>
           <div class="form-group">
@@ -38,7 +44,41 @@
       </div>
     </div>
 
+    <!-- summernote entry point -->
     <div id="summernote"></div>
+
+    <!-- login modal -->
+    <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalTitle">
+      <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+          <!-- title -->
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="loginModalTitle">登录</h4>
+          </div>
+
+          <!-- form body -->
+          <div class="modal-body">
+            <form>
+              <div class="form-group">
+                <label for="phone">手机号</label>
+                <input type="text" class="form-control" id="phone" placeholder="手机号">
+              </div>
+              <div class="form-group">
+                <label for="password">密码</label>
+                <input type="password" class="form-control" id="password" placeholder="密码">
+              </div>
+            </form>
+          </div>
+
+          <!-- footer button -->
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+            <button type="button" class="btn btn-primary" @click="login">登录</button>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <footer class="footer">
       <p>&copy; 2017 SJTU-Meow.</p>
@@ -55,12 +95,18 @@ export default {
   name: 'app',
   data() {
     return {
+      loggedIn: false,
+      phone: '',
+      password: '',
       title: '',
       summary: ''
     }
   },
   created() {
     $(function() {
+      // initialize login popover
+      $('[data-toggle="popover"]').popover()
+
       // initialize editor
       $('#summernote').summernote({
         lang: 'zh-CN',
@@ -89,6 +135,15 @@ export default {
     });
   },
   methods: {
+    login() {
+      alert('还没实现呢，假装登录了');
+      $('#loginModal').modal('hide')
+      this.loggedIn = true;
+    },
+    logout() {
+      alert('还没实现呢，假装退出了');
+      this.loggedIn = false;
+    },
     getArticleHtml() {
       return $('#summernote').summernote('code');
     },
@@ -122,6 +177,10 @@ body {
 
 
 
+
+
+
+
 /* Everything but the jumbotron gets side spacing for mobile first views */
 
 .header,
@@ -134,12 +193,20 @@ body {
 
 
 
+
+
+
+
 /* Custom page header */
 
 .header {
   padding-bottom: 20px;
   border-bottom: 1px solid #e5e5e5;
 }
+
+
+
+
 
 
 
@@ -157,6 +224,10 @@ body {
 
 
 
+
+
+
+
 /* Custom page footer */
 
 .footer {
@@ -164,6 +235,10 @@ body {
   color: #777;
   border-top: 1px solid #e5e5e5;
 }
+
+
+
+
 
 
 
@@ -180,6 +255,10 @@ body {
 .container-narrow>hr {
   margin: 30px 0;
 }
+
+
+
+
 
 
 
