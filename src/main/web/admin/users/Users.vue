@@ -26,6 +26,9 @@
         </tbody>
       </table>
     </div>
+    <div class="text-center">
+      <pagination :pagination="pagination" @changePage="fetchUsers"/>
+    </div>
   </section>
 
   <!-- Add Modal -->
@@ -160,15 +163,22 @@
 
 <script>
 import UserListRow from './UserListRow.vue'
+import Pagination from '../Pagination.vue'
 
 export default {
   name: 'Users',
   components: {
-    UserListRow
+    UserListRow,
+    Pagination
   },
   data: function() {
     return {
       users: [],
+      pagination: {
+        currentPage: 0,
+        totalPages: 1
+      },
+      pageSize: 2,
       newUserNickname: '',
       newUserPassword: '',
       newUserPhone: '',
@@ -205,14 +215,16 @@ export default {
     }
   },
   created: function() {
-    this.fetchUsers()
+    this.fetchUsers(0)
   },
   methods: {
-    fetchUsers: function() {
+    fetchUsers: function(page) {
       //TODO: change url
-      this.$http.get('http://106.14.156.19/api/admin/users')
+      this.$http.get('http://106.14.156.19/api/admin/users?' + 'page=' + page + '&size=' + this.pageSize)
         .then(function(response) {
-          this.users = response.body;
+          this.users = response.body.content;
+          this.pagination.currentPage = response.body.number;
+          this.pagination.totalPages = response.body.totalPages;
         }, function(response) {
           alert(response.body.message || '获取用户失败');
         })

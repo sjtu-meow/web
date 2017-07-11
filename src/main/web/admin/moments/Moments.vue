@@ -21,6 +21,10 @@
         </tbody>
       </table>
     </div>
+
+    <div class="text-center">
+      <pagination :pagination="pagination" @changePage="fetchMoments"/>
+    </div>
   </section>
 
   <!-- Delete Modal -->
@@ -85,15 +89,22 @@
 
 <script>
 import MomentListRow from './MomentListRow.vue'
+import Pagination from '../Pagination.vue'
 
 export default {
   name: 'Moments',
   components: {
-    MomentListRow
+    MomentListRow,
+    Pagination
   },
   data() {
     return {
       moments: [],
+      pagination: {
+        currentPage: 0,
+        totalPages: 1
+      },
+      pageSize: 2,
       momentToDelete: {
         profile: {
           nickname: 'haha'
@@ -115,14 +126,16 @@ export default {
     }
   },
   created() {
-    this.fetchMoments()
+    this.fetchMoments(0)
   },
   methods: {
-    fetchMoments() {
+    fetchMoments(page) {
       //TODO: change url
-      this.$http.get('http://106.14.156.19/api/admin/moments')
+      this.$http.get('http://106.14.156.19/api/admin/moments?' + 'page=' + page + '&size=' + this.pageSize)
         .then(function(response) {
-          this.moments = response.body;
+          this.moments = response.body.content;
+          this.pagination.currentPage = response.body.number;
+          this.pagination.totalPages = response.body.totalPages;
         }, function (response) {
           alert(response.body.message || '获取点滴失败');
         })
