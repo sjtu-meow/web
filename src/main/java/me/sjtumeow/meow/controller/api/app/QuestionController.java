@@ -27,12 +27,6 @@ public class QuestionController {
 	@Autowired
     private ItemService itemService;
 	
-	/*@GetMapping
-	Iterable<AnswerSummaryResult> getQuestions(@RequestParam(required = false) Integer page, @RequestParam(required = false) Integer size) {
-		return (!FormatValidator.checkNonNegativeInt(page) || !FormatValidator.checkPositiveInt(size)) ? 
-				itemService.findAllQuestions(false) : itemService.findAllQuestionsPageable(page, size, false);
-	}*/
-	
 	@GetMapping("/{id}")
 	ResponseEntity<?> getQuestion(@PathVariable("id") Long id) {
 		Question question = itemService.findQuestionById(id, false);

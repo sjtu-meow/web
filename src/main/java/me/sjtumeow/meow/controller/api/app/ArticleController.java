@@ -17,7 +17,6 @@ import me.sjtumeow.meow.authorization.annotation.CurrentUser;
 import me.sjtumeow.meow.model.Article;
 import me.sjtumeow.meow.model.User;
 import me.sjtumeow.meow.model.form.AddArticleForm;
-import me.sjtumeow.meow.model.result.ArticleSummaryResult;
 import me.sjtumeow.meow.model.result.FailureMessageResult;
 import me.sjtumeow.meow.model.result.NewEntityIdResult;
 import me.sjtumeow.meow.service.ItemService;
@@ -31,7 +30,7 @@ public class ArticleController {
     private ItemService itemService;
 	
 	@GetMapping
-	Iterable<ArticleSummaryResult> getArticles(@RequestParam(required = false) Integer page, @RequestParam(required = false) Integer size) {
+	Iterable<?> getArticles(@RequestParam(required = false) Integer page, @RequestParam(required = false) Integer size) {
 		return (!FormatValidator.checkNonNegativeInt(page) || !FormatValidator.checkPositiveInt(size)) ? 
 				itemService.findAllArticles(false) : itemService.findAllArticlesPageable(page, size, false);
 	}
@@ -61,8 +60,6 @@ public class ArticleController {
 	}
 	
 	// TODO: PUT article?
-	
-	// TODO: Web article editor add article API, store/update(?) article
 	
 	@DeleteMapping("/{id}")
 	@Authorization

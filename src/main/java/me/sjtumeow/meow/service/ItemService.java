@@ -7,9 +7,9 @@ import me.sjtumeow.meow.model.User;
 import me.sjtumeow.meow.model.form.AddArticleForm;
 import me.sjtumeow.meow.model.form.AddMomentForm;
 import me.sjtumeow.meow.model.form.AddQuestionForm;
+import me.sjtumeow.meow.model.form.UpdateArticleForm;
 import me.sjtumeow.meow.model.form.UpdateMomentForm;
 import me.sjtumeow.meow.model.result.AnswerSummaryResult;
-import me.sjtumeow.meow.model.result.ArticleSummaryResult;
 import me.sjtumeow.meow.model.result.CreateResult;
 
 public interface ItemService {
@@ -33,9 +33,9 @@ public interface ItemService {
 	
 	// Article
 	
-	Iterable<ArticleSummaryResult> findAllArticles(boolean isAdmin);
+	Iterable<?> findAllArticles(boolean isAdmin);
 	
-	Iterable<ArticleSummaryResult> findAllArticlesPageable(Integer page, Integer size, boolean isAdmin);
+	Iterable<?> findAllArticlesPageable(Integer page, Integer size, boolean isAdmin);
 	
 	Article findArticleById(Long id, boolean isAdmin);
 	
@@ -43,14 +43,16 @@ public interface ItemService {
 	
 	Long addArticle(AddArticleForm aaf, User user);
 	
+	boolean updateArticle(Long id, UpdateArticleForm uaf);
+	
 	boolean deleteArticle(Long id);
 	
 	
 	// Question
 	
-	/*Iterable<QuestionSummaryResult> findAllQuestions(boolean isAdmin);
+	Iterable<Question> findAllQuestions(boolean isAdmin);
 	
-	Iterable<QuestionSummaryResult> findAllQuestionsPageable(Integer page, Integer size, boolean isAdmin);*/
+	Iterable<Question> findAllQuestionsPageable(Integer page, Integer size, boolean isAdmin);
 	
 	Question findQuestionById(Long id, boolean isAdmin);
 	

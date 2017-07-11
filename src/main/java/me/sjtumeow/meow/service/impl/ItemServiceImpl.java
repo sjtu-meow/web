@@ -15,6 +15,7 @@ import me.sjtumeow.meow.model.form.AddArticleForm;
 import me.sjtumeow.meow.model.form.AddMomentForm;
 import me.sjtumeow.meow.model.form.AddQuestionForm;
 import me.sjtumeow.meow.model.form.MediaForm;
+import me.sjtumeow.meow.model.form.UpdateArticleForm;
 import me.sjtumeow.meow.model.form.UpdateMomentForm;
 import me.sjtumeow.meow.model.result.ArticleSummaryResult;
 import me.sjtumeow.meow.model.result.CreateResult;
@@ -26,6 +27,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -50,12 +52,12 @@ public class ItemServiceImpl implements ItemService {
 	
 	
 	public Iterable<Moment> findAllMoments(boolean isAdmin) {
-		return isAdmin ? momentRepository.findAll() : momentRepository.findAllActive();
+		return isAdmin ? momentRepository.findAll() : momentRepository.findAllActive(new Sort(Direction.DESC, "createdAt"));
 	}
 	
 	public Iterable<Moment> findAllMomentsPageable(Integer page, Integer size, boolean isAdmin) {
 		return isAdmin ?
-			momentRepository.findAll(new PageRequest(page, size, Direction.DESC, "createdAt")) 
+			momentRepository.findAll(new PageRequest(page, size))
 			: momentRepository.findAllActive(new PageRequest(page, size, Direction.DESC, "createdAt"));
 	}
     
@@ -115,8 +117,11 @@ public class ItemServiceImpl implements ItemService {
     	return true;
 	}
 	
-	public Iterable<ArticleSummaryResult> findAllArticles(boolean isAdmin) {
-		Iterable<Article> articles = isAdmin ? articleRepository.findAll() : articleRepository.findAllActive();
+	public Iterable<?> findAllArticles(boolean isAdmin) {
+		if (isAdmin)
+			return articleRepository.findAll();
+		
+		Iterable<Article> articles = articleRepository.findAllActive(new Sort(Direction.DESC, "createdAt"));
 		List<ArticleSummaryResult> result = new ArrayList<ArticleSummaryResult>();
 		
 		for (Article article: articles) {
@@ -126,10 +131,10 @@ public class ItemServiceImpl implements ItemService {
 		return result;
 	}
 	
-	public Iterable<ArticleSummaryResult> findAllArticlesPageable(Integer page, Integer size, boolean isAdmin) {
-		Iterable<Article> articles = isAdmin ?
-				articleRepository.findAll(new PageRequest(page, size, Direction.DESC, "createdAt")) 
-				: articleRepository.findAllActive(new PageRequest(page, size, Direction.DESC, "createdAt"));
+	public Iterable<?> findAllArticlesPageable(Integer page, Integer size, boolean isAdmin) {
+		if (isAdmin)
+			return articleRepository.findAll(new PageRequest(page, size));
+		Iterable<Article> articles = articleRepository.findAllActive(new PageRequest(page, size, Direction.DESC, "createdAt"));
 		List<ArticleSummaryResult> result = new ArrayList<ArticleSummaryResult>();
 		
 		for (Article article: articles) {
@@ -159,6 +164,18 @@ public class ItemServiceImpl implements ItemService {
 	}
 	
 	@Transactional
+	public boolean updateArticle(Long id, UpdateArticleForm uaf) {
+		Article article = articleRepository.findOne(id);
+		if (article == null)
+			return false;
+		
+		if (uaf.getIsDeleted() != null && !uaf.getIsDeleted())
+			article.recover();
+		articleRepository.save(article);
+		return true;
+	}
+	
+	@Transactional
 	public boolean deleteArticle(Long id) {
 		if (!articleRepository.existsActive(id))
     		return false;
@@ -166,45 +183,15 @@ public class ItemServiceImpl implements ItemService {
     	return true;
 	}
 	
-	/*public Iterable<QuestionSummaryResult> findAllQuestions(boolean isAdmin) {
-		Iterable<Question> questions = isAdmin ? questionRepository.findAll() : questionRepository.findAllActive();
-		List<QuestionSummaryResult> result = new ArrayList<QuestionSummaryResult>();
-		
-		for (Question question: questions) {
-			QuestionSummaryResult qsr = new QuestionSummaryResult();
-			qsr.setId(question.getId());
-			qsr.setTitle(question.getTitle());
-			qsr.setContent(question.getContent());
-			qsr.setProfile(question.getProfile());
-			qsr.setCreateTime(question.getCreateTime());
-			qsr.setUpdateTime(question.getUpdateTime());
-		    qsr.setDeleted(question.isDeleted());
-		    result.add(qsr);
-		}
-		
-		return result;
+	public Iterable<Question> findAllQuestions(boolean isAdmin) {
+		return isAdmin ? questionRepository.findAll() : questionRepository.findAllActive();
 	}
 	
-	public Iterable<QuestionSummaryResult> findAllQuestionsPageable(Integer page, Integer size, boolean isAdmin) {
-		Iterable<Question> questions = isAdmin ?
-				questionRepository.findAll(new PageRequest(page, size, Direction.DESC, "createdAt")) 
-				: questionRepository.findAllActive(new PageRequest(page, size, Direction.DESC, "createdAt"));
-		List<QuestionSummaryResult> result = new ArrayList<QuestionSummaryResult>();
-		
-		for (Question question: questions) {
-			QuestionSummaryResult qsr = new QuestionSummaryResult();
-			qsr.setId(question.getId());
-			qsr.setTitle(question.getTitle());
-			qsr.setContent(question.getContent());
-			qsr.setProfile(question.getProfile());
-			qsr.setCreateTime(question.getCreateTime());
-			qsr.setUpdateTime(question.getUpdateTime());
-		    qsr.setDeleted(question.isDeleted());
-		    result.add(qsr);
-		}
-		
-		return result;
-	}*/
+	public Iterable<Question> findAllQuestionsPageable(Integer page, Integer size, boolean isAdmin) {
+		return isAdmin ?
+			questionRepository.findAll(new PageRequest(page, size))
+			: questionRepository.findAllActive(new PageRequest(page, size, Direction.DESC, "createdAt"));
+	}
 	
 	public Question findQuestionById(Long id, boolean isAdmin) {
 		return isAdmin ? questionRepository.findOne(id) : questionRepository.findOneActive(id);

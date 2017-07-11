@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import me.sjtumeow.meow.authorization.web.WebAuthUtility;
 import me.sjtumeow.meow.service.UploadService;
 
 @RestController
@@ -18,9 +19,13 @@ public class WebUploadController {
 	@Autowired
     private UploadService uploadService;
 	
+	@Autowired
+	private WebAuthUtility webAuthUtility;
+	
 	@GetMapping
 	ResponseEntity<?> getUploadToken(HttpSession session) {
-		return session.getAttribute("user") != null ? ResponseEntity.ok(uploadService.getUploadToken()) 
-				: ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+		if (!webAuthUtility.checkAuth(session))
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+		return ResponseEntity.ok(uploadService.getUploadToken());
 	}
 }
