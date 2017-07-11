@@ -67,7 +67,6 @@
                   <a class="thumbnail">
                     <img :src="newUserAvatarUrl">
                   </a>
-                  <input type="file" name="file" id="avatarInput" style="display: none;" @change="uploadPicture" />
                 </div>
               </form>
             </div>
@@ -113,7 +112,7 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-          <button type="button" class="btn btn-danger" @click="recoverUser">恢复</button>
+          <button type="button" class="btn btn-primary" @click="recoverUser">恢复</button>
         </div>
       </div>
     </div>
@@ -257,13 +256,13 @@ export default {
     recoverUser() {
       //TODO: change url and test implementation
       this.$http.patch('http://106.14.156.19/api/admin/users/' + this.userToRecover.id, {
-        deleted: false
+        isDeleted: false
       }).then(function(response) {
         this.userToRecover.deleted = false;
-        $('#recover-user-modal').modal('hide');
       }, function(response) {
         alert(response.body.message || '修改失败');
-      })
+      });
+      $('#recover-user-modal').modal('hide');
     },
     promptSetAdminUser(user) {
       this.userToSetAdmin = user;
@@ -294,14 +293,6 @@ export default {
       }, function(response) {
         alert(response.body.message || '修改失败')
       })
-    },
-    triggerAvatarInputClick: function() {
-      $('#avatarInput').click();
-    },
-    uploadPicture: function(event) {
-      let data = new FormData();
-      data.append('file', event.target.files[0])
-      //TODO: change the way of uploading avatar image
     }
   }
 }

@@ -20,9 +20,9 @@ import Moments from './moments/Moments.vue'
 import Articles from './articles/Articles.vue'
 import Questions from './questions/Questions.vue'
 
-Vue.use(VueRouter)
+Vue.use(VueRouter);
 Vue.use(VueResource);
-Vue.use(Vue2Filters)
+Vue.use(Vue2Filters);
 
 const router = new VueRouter({
   routes: [{
