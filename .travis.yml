@@ -1,16 +1,22 @@
 language: java
 jdk:
     - oraclejdk8
+env:
+    - TRAVIS_NODE_VERSION="8"
 services:
     - mysql
     - redis-server
 before_install:
     - openssl aes-256-cbc -K $encrypted_58aadde3b7da_key -iv $encrypted_58aadde3b7da_iv -in src/main/resources/application.yml.enc -out src/main/resources/application.yml -d
     - mysql -e 'CREATE DATABASE meow;'
+    - rm -rf ~/.nvm && git clone https://github.com/creationix/nvm.git ~/.nvm && (cd ~/.nvm && git checkout `git describe --abbrev=0 --tags`) && source ~/.nvm/nvm.sh && nvm install $TRAVIS_NODE_VERSION
+    - curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
+    - echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
 install:
-    - curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
-    - sudo apt-get install -y nodejs
+    - sudo apt-get update && sudo apt-get install yarn
     - cd src/main/web
-    - npm install
-    - npm run build
+    - yarn && yarn run build
+    - cd -
+script:
+    - ./gradlew check
 sudo: required
