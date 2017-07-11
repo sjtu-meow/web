@@ -1,4 +1,4 @@
-package me.sjtumeow.meow.controller.api;
+package me.sjtumeow.meow.controller.api.app;
 
 import me.sjtumeow.meow.authorization.annotation.Authorization;
 import me.sjtumeow.meow.authorization.annotation.CurrentUser;

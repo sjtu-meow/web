@@ -1,4 +1,4 @@
-package me.sjtumeow.meow.controller.api;
+package me.sjtumeow.meow.controller.api.app;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -60,7 +60,9 @@ public class ArticleController {
 		return ResponseEntity.status(HttpStatus.CREATED).body(new NewEntityIdResult(itemService.addArticle(aaf, user)));
 	}
 	
-	// TODO: Web article editor add article API
+	// TODO: PUT article?
+	
+	// TODO: Web article editor add article API, store/update(?) article
 	
 	@DeleteMapping("/{id}")
 	@Authorization

@@ -1,4 +1,4 @@
-package me.sjtumeow.meow.controller.api.admin;
+package me.sjtumeow.meow.controller.api.web;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

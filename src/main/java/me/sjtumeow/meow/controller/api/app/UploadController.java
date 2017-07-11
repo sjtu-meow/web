@@ -1,4 +1,4 @@
-package me.sjtumeow.meow.controller.api;
+package me.sjtumeow.meow.controller.api.app;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
