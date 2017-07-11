@@ -108,10 +108,7 @@ export default {
   },
   created() {
     const vueModule = this;
-
     $(function() {
-      //TODO: check login state
-
       // initialize login popover
       $('[data-toggle="popover"]').popover()
 
@@ -164,6 +161,13 @@ export default {
 
       });
     });
+
+    this.$http.get('http://106.14.156.19/api/web/auth')
+      .then(function (response) {
+        if (response.body.loggedIn) {
+          this.loggedIn = true;
+        }
+      })
   },
   methods: {
     login() {
@@ -231,31 +235,6 @@ body {
   padding-bottom: 20px;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /* Everything but the jumbotron gets side spacing for mobile first views */
 
 .header,
@@ -264,62 +243,12 @@ body {
   padding-left: 15px;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /* Custom page header */
 
 .header {
   padding-bottom: 20px;
   border-bottom: 1px solid #e5e5e5;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 /* Make the masthead heading the same height as the navigation */
 
@@ -329,31 +258,6 @@ body {
   line-height: 40px;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /* Custom page footer */
 
 .footer {
@@ -361,31 +265,6 @@ body {
   color: #777;
   border-top: 1px solid #e5e5e5;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 /* Customize container */
 
@@ -398,31 +277,6 @@ body {
 .container-narrow>hr {
   margin: 30px 0;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 /* Responsive: Portrait tablets and up */
 
