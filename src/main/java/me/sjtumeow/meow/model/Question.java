@@ -1,17 +1,32 @@
 package me.sjtumeow.meow.model;
 
-import java.util.List;
+import java.util.Set;
+
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 
 @Entity
 public class Question extends Item {
-    private String title;
+    
+	private static final long serialVersionUID = 1L;
+
+	private String title;
 
     private String content;
 
-    @OneToMany(mappedBy = "question")
-    private List<Answer> answers;
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "question")
+    private Set<Answer> answers;
+    
+    public Question() {
+    	type = Item.ITEM_TYPE_QUESTION;
+    }
+    
+    public Question(String title, String content) {
+    	type = Item.ITEM_TYPE_QUESTION;
+    	this.title = title;
+    	this.content = content;
+    }
 
     public String getTitle() {
         return title;
@@ -29,11 +44,11 @@ public class Question extends Item {
         this.content = content;
     }
 
-    public List<Answer> getAnswers() {
+    public Set<Answer> getAnswers() {
         return answers;
     }
 
-    public void setAnswers(List<Answer> answers) {
+    public void setAnswers(Set<Answer> answers) {
         this.answers = answers;
     }
 }

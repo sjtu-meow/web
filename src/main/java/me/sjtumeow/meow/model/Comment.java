@@ -33,6 +33,8 @@ public class Comment extends BaseEntity {
     @Column(nullable = false)
     private String content;
     
+    public Comment() {}
+    
     public Comment(Item item, Profile profile, String content) {
     	this.item = item;
     	this.profile = profile;

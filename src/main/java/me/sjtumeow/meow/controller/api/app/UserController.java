@@ -1,4 +1,4 @@
-package me.sjtumeow.meow.controller.api;
+package me.sjtumeow.meow.controller.api.app;
 
 import me.sjtumeow.meow.authorization.annotation.Authorization;
 import me.sjtumeow.meow.authorization.annotation.CurrentUser;
@@ -35,11 +35,11 @@ public class UserController {
     
 
     @PostMapping(path = "/users", consumes = "application/json")
-    ResponseEntity<?> createUser(@RequestBody RegisterForm rp) {
+    ResponseEntity<?> createUser(@RequestBody RegisterForm rf) {
     	
-    	String phone = rp.getPhone();
-    	String password = rp.getPassword();
-    	String code = rp.getCode();
+    	String phone = rf.getPhone();
+    	String password = rf.getPassword();
+    	String code = rf.getCode();
     	
     	if (!FormatValidator.checkPhone(phone))
     		return ResponseEntity.badRequest().body(new FailureMessageResult("手机号格式不正确"));

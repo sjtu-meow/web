@@ -1,13 +1,17 @@
 package me.sjtumeow.meow.mock;
 
 import com.github.javafaker.Faker;
+
+import me.sjtumeow.meow.dao.AnswerRepository;
 import me.sjtumeow.meow.dao.ArticleRepository;
 import me.sjtumeow.meow.dao.BannerRepository;
 import me.sjtumeow.meow.dao.CommentRepository;
 import me.sjtumeow.meow.dao.MediaRepository;
 import me.sjtumeow.meow.dao.MomentRepository;
 import me.sjtumeow.meow.dao.ProfileRepository;
+import me.sjtumeow.meow.dao.QuestionRepository;
 import me.sjtumeow.meow.dao.UserRepository;
+import me.sjtumeow.meow.model.Answer;
 import me.sjtumeow.meow.model.Article;
 import me.sjtumeow.meow.model.Banner;
 import me.sjtumeow.meow.model.Comment;
@@ -15,6 +19,7 @@ import me.sjtumeow.meow.model.Media;
 import me.sjtumeow.meow.model.Media.MediaType;
 import me.sjtumeow.meow.model.Moment;
 import me.sjtumeow.meow.model.Profile;
+import me.sjtumeow.meow.model.Question;
 import me.sjtumeow.meow.model.User;
 
 import org.mindrot.jbcrypt.BCrypt;
@@ -32,16 +37,14 @@ public class SeederRunner implements ApplicationRunner {
     @Autowired MediaRepository mediaRepository;
     @Autowired CommentRepository commentRepository;
     @Autowired BannerRepository bannerRepository;
+    @Autowired QuestionRepository questionRepository;
+    @Autowired AnswerRepository answerRepository;
 
     Faker faker = new Faker();
 
     @Override
     public void run(ApplicationArguments args) {
         // Put some initializing code here
-        /*for(int i = 0; i < 10; i++) {
-            momentRepository.save(new Moment());
-            articleRepository.save(new Article());
-        }*/
         
     	User user1 = new User("12312312312", BCrypt.hashpw("meow233", BCrypt.gensalt()));
     	User user2 = new User("12132132132", BCrypt.hashpw("test123", BCrypt.gensalt()));
@@ -57,7 +60,7 @@ public class SeederRunner implements ApplicationRunner {
         
         Profile profile2 = new Profile();
         profile2.setNickname("啦啦啦");
-        profile2.setBio("lalala lababa");
+        profile2.setBio("<script>alert('xss!')</script>");
         profile2.setUser(user2);
         profileRepository.save(profile2);
         
@@ -67,9 +70,14 @@ public class SeederRunner implements ApplicationRunner {
             moment.setContent(faker.shakespeare().hamletQuote());
             momentRepository.save(moment);
             
-            for (int j = 0; j <= i; ++j) {
-            	Media media = new Media(MediaType.Image, "http://lorempixel.com/200/200", moment);
+            if (i == 0) {
+            	Media media = new Media(MediaType.Video, "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4", moment);
                 mediaRepository.save(media);
+            } else {
+            	for (int j = 0; j <= i; ++j) {
+                	Media media = new Media(MediaType.Image, "http://lorempixel.com/200/200", moment);
+                    mediaRepository.save(media);
+                }
             }
             
             Comment comment = new Comment(moment, profile1, String.format("神奇评论%d", i));
@@ -86,12 +94,40 @@ public class SeederRunner implements ApplicationRunner {
         	article.setContent("<p style=\"color:#63c;\">第一段/p><p>第二段</p>");
         	article.setCover("http://lorempixel.com/400/200");
         	article.setProfile(i % 2 == 0 ? profile1 : profile2);
-        	
         	articleRepository.save(article);
         	
-        	if (i == 0) {
+        	Question question = new Question();
+        	question.setTitle("四川的猫吃辣吗？");
+        	question.setContent("如题");
+        	question.setProfile(i % 2 == 0 ? profile1 : profile2);
+        	questionRepository.save(question);
+        	
+        	Answer answer = new Answer();
+        	answer.setContent("吃的！吃的！");
+        	answer.setQuestion(question);
+        	answer.setProfile(profile1);
+        	answerRepository.save(answer);
+        	
+        	if (i == 0) { // Soft delete test
         		momentRepository.softDelete(moment);
         		articleRepository.softDelete(article);
+        		questionRepository.softDelete(question);
+        		answerRepository.softDelete(answer);
+        	}
+        	
+        	if (i == 2) { // XSS test
+        		moment.setContent("<script>alert('xss!')</script>");
+        		comment.setContent("<script>alert('xss!')</script>");
+        		article.setTitle("<script>alert('xss!')</script>");
+        		article.setSummary("<script>alert('xss!')</script>");
+        		question.setTitle("<script>alert('xss!')</script>");
+            	question.setContent("<script>alert('xss!')</script>");
+            	answer.setContent("<script>alert('xss!')</script>");
+        		momentRepository.save(moment);
+        		commentRepository.save(comment);
+        		articleRepository.save(article);
+        		questionRepository.save(question);
+        		answerRepository.save(answer);
         	}
         		
         }

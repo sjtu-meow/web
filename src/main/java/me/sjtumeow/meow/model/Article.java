@@ -12,6 +12,14 @@ public class Article extends Item {
 	public Article() {
         type = Item.ITEM_TYPE_ARTICLE;
     }
+	
+	public Article(String title, String summary, String content, String cover) {
+        type = Item.ITEM_TYPE_ARTICLE;
+        this.title = title;
+        this.summary = summary;
+        this.content = content;
+        this.cover = cover;
+    }
 
 	public String getTitle() {
 		return title;
