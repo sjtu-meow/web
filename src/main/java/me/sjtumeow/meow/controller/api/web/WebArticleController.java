@@ -29,7 +29,7 @@ public class WebArticleController {
 	@PostMapping(consumes = "application/json")
 	ResponseEntity<?> addArticle(HttpSession session, @RequestBody AddArticleForm aaf) {
 		if (!webAuthUtility.checkAuth(session))
-			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new FailureMessageResult("请先登录"));
 		
 		String title = aaf.getTitle();
 		if (title == null || title.trim().isEmpty())

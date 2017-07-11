@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import me.sjtumeow.meow.authorization.web.WebAuthUtility;
+import me.sjtumeow.meow.model.result.FailureMessageResult;
 import me.sjtumeow.meow.service.UploadService;
 
 @RestController
@@ -25,7 +26,7 @@ public class WebUploadController {
 	@GetMapping
 	ResponseEntity<?> getUploadToken(HttpSession session) {
 		if (!webAuthUtility.checkAuth(session))
-			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new FailureMessageResult("请先登录"));
 		return ResponseEntity.ok(uploadService.getUploadToken());
 	}
 }
