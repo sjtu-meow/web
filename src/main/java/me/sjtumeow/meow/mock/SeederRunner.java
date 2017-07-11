@@ -74,7 +74,7 @@ public class SeederRunner implements ApplicationRunner {
             	Media media = new Media(MediaType.Video, "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4", moment);
                 mediaRepository.save(media);
             } else {
-            	for (int j = 0; j <= i; ++j) {
+            	for (int j = 0; j < i; ++j) {
                 	Media media = new Media(MediaType.Image, "http://lorempixel.com/200/200", moment);
                     mediaRepository.save(media);
                 }

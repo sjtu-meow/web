@@ -20,6 +20,11 @@ public class Answer extends Item {
 	public Answer() {
 		type = Item.ITEM_TYPE_ANSWER;
 	}
+	
+	public Answer(String content) {
+		type = Item.ITEM_TYPE_ANSWER;
+		this.content = content;
+	}
 
 	public String getContent() {
 		return content;

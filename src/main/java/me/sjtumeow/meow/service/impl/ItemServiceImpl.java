@@ -15,8 +15,10 @@ import me.sjtumeow.meow.model.form.AddArticleForm;
 import me.sjtumeow.meow.model.form.AddMomentForm;
 import me.sjtumeow.meow.model.form.AddQuestionForm;
 import me.sjtumeow.meow.model.form.MediaForm;
+import me.sjtumeow.meow.model.form.UpdateAnswerForm;
 import me.sjtumeow.meow.model.form.UpdateArticleForm;
 import me.sjtumeow.meow.model.form.UpdateMomentForm;
+import me.sjtumeow.meow.model.form.UpdateQuestionForm;
 import me.sjtumeow.meow.model.result.ArticleSummaryResult;
 import me.sjtumeow.meow.model.result.CreateResult;
 import me.sjtumeow.meow.model.result.AnswerSummaryResult;
@@ -50,6 +52,8 @@ public class ItemServiceImpl implements ItemService {
 	@Autowired
     private AnswerRepository answerRepository;
 	
+	
+	// Moment
 	
 	public Iterable<Moment> findAllMoments(boolean isAdmin) {
 		return isAdmin ? momentRepository.findAll() : momentRepository.findAllActive(new Sort(Direction.DESC, "createdAt"));
@@ -117,6 +121,9 @@ public class ItemServiceImpl implements ItemService {
     	return true;
 	}
 	
+	
+	// Article
+	
 	public Iterable<?> findAllArticles(boolean isAdmin) {
 		if (isAdmin)
 			return articleRepository.findAll();
@@ -183,8 +190,11 @@ public class ItemServiceImpl implements ItemService {
     	return true;
 	}
 	
+	
+	// Question
+	
 	public Iterable<Question> findAllQuestions(boolean isAdmin) {
-		return isAdmin ? questionRepository.findAll() : questionRepository.findAllActive();
+		return isAdmin ? questionRepository.findAll() : questionRepository.findAllActive(new Sort(Direction.DESC, "createdAt"));
 	}
 	
 	public Iterable<Question> findAllQuestionsPageable(Integer page, Integer size, boolean isAdmin) {
@@ -213,15 +223,36 @@ public class ItemServiceImpl implements ItemService {
 	}
 	
 	@Transactional
+	public boolean updateQuestion(Long id, UpdateQuestionForm uqf) {
+		Question question = questionRepository.findOne(id);
+		if (question == null)
+			return false;
+		
+		if (uqf.getIsDeleted() != null && !uqf.getIsDeleted())
+			question.recover();
+		questionRepository.save(question);
+		return true;
+	}
+	
+	@Transactional
 	public boolean deleteQuestion(Long id) {
-		if (!questionRepository.existsActive(id))
-    		return false;
+		Question question = questionRepository.findOneActive(id);
+		if (question == null)
+			return false;
+		
+		for (Answer answer: question.getAnswers()) {
+			answerRepository.softDelete(answer);
+		}
+		
 		questionRepository.softDelete(id);
     	return true;
 	}
 	
+	
+	// Answer
+	
 	public Iterable<AnswerSummaryResult> findAllAnswers(boolean isAdmin) {
-		Iterable<Answer> answers = isAdmin ? answerRepository.findAll() : answerRepository.findAllActive();
+		Iterable<Answer> answers = isAdmin ? answerRepository.findAll() : answerRepository.findAllActive(new Sort(Direction.DESC, "createdAt"));
 		List<AnswerSummaryResult> result = new ArrayList<AnswerSummaryResult>();
 		
 		for (Answer answer: answers) {
@@ -233,7 +264,7 @@ public class ItemServiceImpl implements ItemService {
 	
 	public Iterable<AnswerSummaryResult> findAllAnswersPageable(Integer page, Integer size, boolean isAdmin) {
 		Iterable<Answer> answers = isAdmin ?
-				answerRepository.findAll(new PageRequest(page, size, Direction.DESC, "createdAt")) 
+				answerRepository.findAll(new PageRequest(page, size))
 				: answerRepository.findAllActive(new PageRequest(page, size, Direction.DESC, "createdAt"));
 		List<AnswerSummaryResult> result = new ArrayList<AnswerSummaryResult>();
 		
@@ -242,5 +273,44 @@ public class ItemServiceImpl implements ItemService {
 		}
 		
 		return result;
+	}
+	
+	public User getAnswerCreator(Long id) {
+		Answer answer = answerRepository.findOneActive(id);
+		if (answer == null)
+			return null;
+		return answer.getProfile().getUser();
+	}
+	
+	@Transactional
+	public Long addAnswer(String content, Question question, User user) {
+		Answer answer = new Answer(content);
+		answer.setQuestion(question);
+		answer.setProfile(user.getProfile());
+		answerRepository.save(answer);
+		return answer.getId();
+	}
+	
+	@Transactional
+	public boolean updateAnswer(Long id, UpdateAnswerForm uaf) {
+		Answer answer = answerRepository.findOne(id);
+		if (answer == null)
+			return false;
+		
+		if (uaf.getIsDeleted() != null && !uaf.getIsDeleted()) {
+			answer.recover();
+			answer.getQuestion().recover();
+		}
+		
+		answerRepository.save(answer);
+		return true;
+	}
+	
+	@Transactional
+	public boolean deleteAnswer(Long id) {
+		if (!answerRepository.existsActive(id))
+    		return false;
+		answerRepository.softDelete(id);
+    	return true;
 	}
 }

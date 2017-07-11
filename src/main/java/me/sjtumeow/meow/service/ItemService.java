@@ -7,8 +7,10 @@ import me.sjtumeow.meow.model.User;
 import me.sjtumeow.meow.model.form.AddArticleForm;
 import me.sjtumeow.meow.model.form.AddMomentForm;
 import me.sjtumeow.meow.model.form.AddQuestionForm;
+import me.sjtumeow.meow.model.form.UpdateAnswerForm;
 import me.sjtumeow.meow.model.form.UpdateArticleForm;
 import me.sjtumeow.meow.model.form.UpdateMomentForm;
+import me.sjtumeow.meow.model.form.UpdateQuestionForm;
 import me.sjtumeow.meow.model.result.AnswerSummaryResult;
 import me.sjtumeow.meow.model.result.CreateResult;
 
@@ -60,6 +62,8 @@ public interface ItemService {
 	
 	Long addQuestion(AddQuestionForm aqf, User user);
 	
+	boolean updateQuestion(Long id, UpdateQuestionForm uqf);
+	
 	boolean deleteQuestion(Long id);
 	
 	
@@ -68,5 +72,13 @@ public interface ItemService {
 	Iterable<AnswerSummaryResult> findAllAnswers(boolean isAdmin);
 	
 	Iterable<AnswerSummaryResult> findAllAnswersPageable(Integer page, Integer size, boolean isAdmin);
+	
+	User getAnswerCreator(Long id);
+	
+	Long addAnswer(String content, Question question, User user);
+	
+	boolean updateAnswer(Long id, UpdateAnswerForm uaf);
+	
+	boolean deleteAnswer(Long id);
 	
 }
