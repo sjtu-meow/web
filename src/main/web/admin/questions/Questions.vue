@@ -211,7 +211,14 @@ export default {
     deleteQuestion() {
       this.$http.delete('http://106.14.156.19/api/admin/questions/' + this.questionToDelete.id)
         .then(function(response) {
+          // delete question
           this.questionToDelete.deleted = true;
+
+          // delete related answers
+          for (var i = 0; i < this.questionToDelete.answers.length; i++) {
+            this.questionToDelete.answers[i].deleted = true;
+          }
+          
           $('#delete-question-modal').modal('hide');
         }, function(response) {
           alert(response.body.message || '修改失败');
@@ -225,7 +232,14 @@ export default {
       this.$http.patch('http://106.14.156.19/api/admin/questions/' + this.questionToRecover.id, {
         isDeleted: false
       }).then(function(response) {
+        // recover question
         this.questionToRecover.deleted = false;
+
+        // recover related answers
+        for (var i = 0; i < questionToRecover.answers.length; i++) {
+          questionToRecover.answers[i].deleted = false;
+        }
+
         $('#recover-question-modal').modal('hide');
       }, function(response) {
         alert(response.body.message || '修改失败');
