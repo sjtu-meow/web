@@ -21,6 +21,10 @@
         </tbody>
       </table>
     </div>
+
+    <div class="text-center">
+      <pagination :pagination="pagination" @changePage="fetchArticles"/>
+    </div>
   </section>
 
   <!-- Delete Modal -->
@@ -51,11 +55,11 @@
           <h4 class="modal-title" id="recover-article-modal-title">恢复文章</h4>
         </div>
         <div class="modal-body">
-          <p class="text-danger">确定恢复 <b>{{articleToRecover.profile.nickname}}</b> 的文章<b>「{{plainContentToRecover.substring(0, 30)}}{{plainContentToRecover.length > 30 ? '…' : ''}}」</b>吗？</p>
+          <p>确定恢复 <b>{{articleToRecover.profile.nickname}}</b> 的文章<b>「{{plainContentToRecover.substring(0, 30)}}{{plainContentToRecover.length > 30 ? '…' : ''}}」</b>吗？</p>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-          <button type="button" class="btn btn-danger" @click="recoverArticle">恢复</button>
+          <button type="button" class="btn btn-primary" @click="recoverArticle">恢复</button>
         </div>
       </div>
     </div>
@@ -82,23 +86,22 @@
 
 <script>
 import ArticleListRow from './ArticleListRow.vue'
+import Pagination from '../Pagination.vue'
 
 export default {
   name: 'Articles',
   components: {
-    ArticleListRow
+    ArticleListRow,
+    Pagination
   },
   data() {
     return {
-      articles: [{
-        id: 1,
-        content: '<p>+1s or not +1s, this is a question.</p><p><img src="http://lorempixel.com/200/200" /></p><p>+1s or not +1s, this is a question.</p>',
-        title: '如何续命',
-        profile: {
-          id: 1,
-          nickname: 'haha'
-        }
-      }],
+      articles: [],
+      pagination: {
+        currentPage: 0,
+        totalPages: 1
+      },
+      pageSize: 2,
       articleToDelete: {
         profile: {
           nickname: 'haha'
@@ -131,14 +134,18 @@ export default {
     }
   },
   created() {
-    this.fetchArticles();
+    this.fetchArticles(0);
   },
   methods: {
-    fetchArticles() {
+    fetchArticles(page) {
       //TODO: finish implementation and change url
-      this.$http.get('http://106.14.156.19/api/admin/articles')
+      this.$http.get('http://106.14.156.19/api/admin/articles?' + 'page=' + page + '&size=' + this.pageSize)
         .then(function(response) {
-          this.moments = response.body;
+          this.articles = response.body.content;
+          this.pagination.currentPage = response.body.number;
+          this.pagination.totalPages = response.body.totalPages;
+        }, function(response) {
+          alert(response.body.message || '获取文章失败');
         })
     },
     promptDeleteArticle(article) {
@@ -146,14 +153,27 @@ export default {
       $('#delete-article-modal').modal('show');
     },
     deleteArticle() {
-
+      this.$http.delete('http://106.14.156.19/api/admin/articles/' + this.articleToDelete.id)
+        .then(function(response) {
+          this.articleToDelete.deleted = true;
+          $('#delete-article-modal').modal('hide');
+        }, function(response) {
+          alert(response.body.message || '修改失败');
+        })
     },
     promptRecoverArticle(article) {
-      this.articleToDelete = article;
+      this.articleToRecover = article;
       $('#recover-article-modal').modal('show');
     },
     recoverArticle() {
-
+      this.$http.patch('http://106.14.156.19/api/admin/articles/' + this.articleToRecover.id, {
+        isDeleted: false
+      }).then(function(response) {
+        this.articleToRecover.deleted = false;
+        $('#recover-article-modal').modal('hide');
+      }, function(response) {
+        alert(response.body.message || '修改失败');
+      });
     },
     expandContent(article) {
       this.articleToShow = article;

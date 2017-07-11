@@ -241,7 +241,7 @@ export default {
         admin: this.newUserisAdmin,
         avatar: this.newUserAvatarUrl
       }).then(function(response) {
-        this.fetchUsers();
+        this.fetchUsers(this.pagination.totalPages - 1);
         $('#add-user-modal').modal('hide');
       }, function(response) {
         alert(response.body.message)
