@@ -271,10 +271,10 @@ export default {
         isDeleted: false
       }).then(function(response) {
         this.userToRecover.deleted = false;
+        $('#recover-user-modal').modal('hide');
       }, function(response) {
         alert(response.body.message || '修改失败');
       });
-      $('#recover-user-modal').modal('hide');
     },
     promptSetAdminUser(user) {
       this.userToSetAdmin = user;

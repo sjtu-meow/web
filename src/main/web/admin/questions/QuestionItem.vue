@@ -11,12 +11,10 @@ QuestionquestionQuestionAnswer<template>
   <div class="panel-body">
     <div class="row">
       <div class="col-md-11">
-        <p><b>文字描述：</b></p>
         <p>{{question.content.substring(0, contentPreviewLength)}}</p>
         <a v-if="question.content.length > contentPreviewLength" @click="expandQuestionContent">展开</a>
       </div>
       <div class="col-md-1">
-        <p style="color: #ffffff;">蛤</p>
         <button v-if="question.deleted" type="button" class="btn btn-primary btn-xs" @click="recoverQuestion">
           <span class="glyphicon glyphicon-ok"/>
         </button>

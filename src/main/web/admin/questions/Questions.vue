@@ -9,6 +9,10 @@
       @deleteAnswer="promptDeleteAnswer" @recoverAnswer="promptRecoverAnswer"
       @expandAnswerContent="expandAnswerContent" @expandQuestionContent="expandQuestionContent" />
 
+    <div class="text-center">
+      <pagination :pagination="pagination" @changePage="fetchQuestions"/>
+    </div>
+
     <!-- Delete Question Modal -->
     <div class="modal fade" id="delete-question-modal" tabindex="-1" role="dialog" aria-labelledby="delete-question-modal-title">
       <div class="modal-dialog modal-sm" role="document">
@@ -56,7 +60,7 @@
             <h4 class="modal-title" id="recover-question-modal-title">恢复问题</h4>
           </div>
           <div class="modal-body">
-            <p>确定恢复 <b>{{questionToRecover.profile.nickname}}</b> 的回复<b>「{{questionToRecover.title}}」</b>吗？</p>
+            <p>确定恢复 <b>{{questionToRecover.profile.nickname}}</b> 的问题<b>「{{questionToRecover.title}}」</b>吗？</p>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
@@ -128,32 +132,23 @@
 </template>
 
 <script>
-import QuestionItem from './QuestionItem.vue'
+import QuestionItem from './QuestionItem.vue';
+import Pagination from '../Pagination.vue';
 
 export default {
   name: 'Questions',
   components: {
-    QuestionItem
+    QuestionItem,
+    Pagination
   },
   data() {
     return {
-      questions: [{
-        id: 1,
-        title: '四川的猫吃辣吗？',
-        content: '看了回复，有必要说明下。。\n是这样的，我那天忽然想到万一我在四川领养了一只猫...\n拿秋刀鱼该加辣椒给它嘛...\n就是这个问题....',
-        answers: [{
-          id: 1,
-          content: '<p>+1s or not +1s, this is a question.</p><p><img src="http://lorempixel.com/200/200" /></p><p>+1s or not +1s, this is a question.</p>',
-          profile: {
-            id: 1,
-            nickname: 'haha'
-          }
-        }],
-        profile: {
-          id: 1,
-          nickname: 'haha'
-        }
-      }],
+      questions: [],
+      pagination: {
+        currentPage: 0,
+        totalPages: 1
+      },
+      pageSize: 2,
       questionToDelete: {
         profile: {
           nickname: 'haha'
@@ -194,34 +189,74 @@ export default {
       return $(this.answerToRecover.content).text()
     }
   },
+  created() {
+    this.fetchQuestions(0)
+  },
   methods: {
+    fetchQuestions: function(page) {
+      //TODO: change url
+      this.$http.get('http://106.14.156.19/api/admin/questions?' + 'page=' + page + '&size=' + this.pageSize)
+        .then(function(response) {
+          this.questions = response.body.content;
+          this.pagination.currentPage = response.body.number;
+          this.pagination.totalPages = response.body.totalPages;
+        }, function(response) {
+          alert(response.body.message || '获取问答失败');
+        })
+    },
     promptDeleteQuestion(question) {
       this.questionToDelete = question;
       $('#delete-question-modal').modal('show');
     },
     deleteQuestion() {
-
+      this.$http.delete('http://106.14.156.19/api/admin/questions/' + this.questionToDelete.id)
+        .then(function(response) {
+          this.questionToDelete.deleted = true;
+          $('#delete-question-modal').modal('hide');
+        }, function(response) {
+          alert(response.body.message || '修改失败');
+        })
     },
     promptRecoverQuestion(question) {
-      this.questionToDelete = question;
+      this.questionToRecover = question;
       $('#recover-question-modal').modal('show');
     },
     recoverQuestion() {
-
+      this.$http.patch('http://106.14.156.19/api/admin/questions/' + this.questionToRecover.id, {
+        isDeleted: false
+      }).then(function(response) {
+        this.questionToRecover.deleted = false;
+        $('#recover-question-modal').modal('hide');
+      }, function(response) {
+        alert(response.body.message || '修改失败');
+      });
     },
     promptDeleteAnswer(answer) {
       this.answerToDelete = answer;
       $('#delete-answer-modal').modal('show');
     },
     deleteAnswer() {
-
+      this.$http.delete('http://106.14.156.19/api/admin/answers/' + this.answerToDelete.id)
+        .then(function(response) {
+          this.answerToDelete.deleted = true;
+          $('#delete-answer-modal').modal('hide');
+        }, function(response) {
+          alert(response.body.message || '修改失败');
+        })
     },
     promptRecoverAnswer(answer) {
-      this.answerToDelete = answer;
+      this.answerToRecover = answer;
       $('#recover-answer-modal').modal('show');
     },
     recoverAnswer() {
-
+      this.$http.patch('http://106.14.156.19/api/admin/answers/' + this.answerToRecover.id, {
+        isDeleted: false
+      }).then(function(response) {
+        this.answerToRecover.deleted = false;
+        $('#recover-answer-modal').modal('hide');
+      }, function(response) {
+        alert(response.body.message || '修改失败');
+      });
     },
     expandAnswerContent(answer) {
       $('#answer-content-detail-modal .modal-body').html(answer.content);
