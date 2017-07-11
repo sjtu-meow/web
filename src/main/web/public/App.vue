@@ -62,11 +62,11 @@
             <form>
               <div class="form-group">
                 <label for="phone">手机号</label>
-                <input type="text" class="form-control" id="phone" placeholder="手机号">
+                <input type="text" class="form-control" id="phone" placeholder="手机号" v-model="phone">
               </div>
               <div class="form-group">
                 <label for="password">密码</label>
-                <input type="password" class="form-control" id="password" placeholder="密码">
+                <input type="password" class="form-control" id="password" placeholder="密码" v-model="password">
               </div>
             </form>
           </div>
@@ -90,6 +90,9 @@
 
 <script>
 import Vue from 'vue'
+import VueResource from 'vue-resource'
+
+Vue.use(VueResource);
 
 export default {
   name: 'app',
@@ -136,13 +139,23 @@ export default {
   },
   methods: {
     login() {
-      alert('还没实现呢，假装登录了');
+      this.$http.post('http://106.14.156.19/api/web/auth', {
+        phone: this.phone,
+        password: this.password
+      }).then(function(response) {
+        this.loggedIn = true;
+      }, function(response) {
+        alert(response.body.message || '登录失败');
+      })
       $('#loginModal').modal('hide')
-      this.loggedIn = true;
     },
     logout() {
-      alert('还没实现呢，假装退出了');
-      this.loggedIn = false;
+      this.$http.delete('http://106.14.156.19/api/web/auth')
+        .then(function(response) {
+          this.loggedIn = false;
+        }, function(response) {
+          alert(response.body.message || '登录失败');
+        })
     },
     getArticleHtml() {
       return $('#summernote').summernote('code');
@@ -152,14 +165,6 @@ export default {
     },
     postArticle() {
       alert('还没实现呢');
-    },
-    triggerCoverInputClick() {
-      $('#cover-input').click();
-    },
-    uploadPicture: function(event) {
-      let data = new FormData();
-      data.append('file', event.target.files[0])
-      //TODO: change the way of uploading avatar image
     }
   }
 }
@@ -172,6 +177,7 @@ body {
   padding-top: 20px;
   padding-bottom: 20px;
 }
+
 
 
 
@@ -197,12 +203,14 @@ body {
 
 
 
+
 /* Custom page header */
 
 .header {
   padding-bottom: 20px;
   border-bottom: 1px solid #e5e5e5;
 }
+
 
 
 
@@ -228,6 +236,7 @@ body {
 
 
 
+
 /* Custom page footer */
 
 .footer {
@@ -235,6 +244,7 @@ body {
   color: #777;
   border-top: 1px solid #e5e5e5;
 }
+
 
 
 
@@ -255,6 +265,7 @@ body {
 .container-narrow>hr {
   margin: 30px 0;
 }
+
 
 
 
