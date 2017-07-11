@@ -23,9 +23,9 @@
           <div class="form-group">
             <label class="control-label" for="article-title">封面</label><span class="text-muted">（点击修改）</span>
             <a href="#" class="thumbnail" @click="triggerCoverInputClick">
-              <img width="100%" src="https://i.ytimg.com/vi/prALrHUJ8Ns/hqdefault.jpg">
+              <img width="100%" :src="coverUrl">
             </a>
-            <input type="file" name="file" id="cover-input" style="display: none;" @change="uploadPicture" />
+            <input type="file" name="file" id="coverInput" style="display: none;" @change="uploadPicture" />
           </div>
         </form>
       </div>
@@ -102,11 +102,16 @@ export default {
       phone: '',
       password: '',
       title: '',
-      summary: ''
+      summary: '',
+      coverUrl: 'https://i.ytimg.com/vi/prALrHUJ8Ns/hqdefault.jpg'
     }
   },
   created() {
+    const vueModule = this;
+
     $(function() {
+      //TODO: check login state
+
       // initialize login popover
       $('[data-toggle="popover"]').popover()
 
@@ -121,16 +126,39 @@ export default {
           ['style', ['bold', 'italic', 'clear']],
           ['color', ['color']],
           ['para', ['ul', 'ol', 'paragraph']],
-          ['Insert', ['link', 'picture', 'video']]
+          ['insert', ['link', 'picture', 'video']],
+          ['code', ['codeview']]
         ],
         callbacks: {
           // upload image to Qiniu
           onImageUpload: function(files) {
-            var imgNode = document.createElement('img');
-            imgNode.setAttribute('src', 'https://i.ytimg.com/vi/prALrHUJ8Ns/hqdefault.jpg')
+            // get token
+            vueModule.$http.get('http://106.14.156.19/api/web/upload/token')
+              .then(function(response) {
+                const token = response.body.token
 
-            // upload image to server and create imgNode...
-            $('#summernote').summernote('insertNode', imgNode);
+                for (var i = 0; i < files.length; i++) {
+                  let file = files[i]
+
+                  // send form data
+                  let data = new FormData();
+                  data.append('file', file)
+                  data.append('token', token)
+                  vueModule.$http.post('http://upload.qiniu.com/', data)
+                    .then(function(response) {
+                      const key = response.body.key;
+                      let imageUrl = 'http://osg5c99b1.bkt.clouddn.com/' + key
+                      let imgNode = document.createElement('img');
+                      imgNode.setAttribute('src', imageUrl)
+
+                      $('#summernote').summernote('insertNode', imgNode);
+                    }, function(response) {
+                      alert(response.body.error || '上传图片失败');
+                    })
+                }
+              }, function(response) {
+                alert(response.body.message || '获取token失败');
+              })
           },
         }
 
@@ -165,6 +193,31 @@ export default {
     },
     postArticle() {
       alert('还没实现呢');
+    },
+    triggerCoverInputClick: function() {
+      $('#coverInput').click();
+    },
+    uploadPicture: function(event) {
+      // get token
+      this.$http.get('http://106.14.156.19/api/web/upload/token')
+        .then(function(response) {
+          const token = response.body.token
+
+          // send form data
+          let data = new FormData();
+          data.append('file', event.target.files[0])
+          data.append('token', token)
+          this.$http.post('http://upload.qiniu.com/', data)
+            .then(function(response) {
+              console.log(response);
+              const key = response.body.key;
+              this.coverUrl = 'http://osg5c99b1.bkt.clouddn.com/' + key
+            }, function(response) {
+              alert(response.body.error || '上传图片失败');
+            })
+        }, function(response) {
+          alert(response.body.message || '获取token失败');
+        })
     }
   }
 }
@@ -177,6 +230,22 @@ body {
   padding-top: 20px;
   padding-bottom: 20px;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -204,12 +273,44 @@ body {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /* Custom page header */
 
 .header {
   padding-bottom: 20px;
   border-bottom: 1px solid #e5e5e5;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -237,6 +338,22 @@ body {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /* Custom page footer */
 
 .footer {
@@ -244,6 +361,22 @@ body {
   color: #777;
   border-top: 1px solid #e5e5e5;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -265,6 +398,22 @@ body {
 .container-narrow>hr {
   margin: 30px 0;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
