@@ -141,12 +141,6 @@ export default {
         id: 1,
         title: '四川的猫吃辣吗？',
         content: '看了回复，有必要说明下。。\n是这样的，我那天忽然想到万一我在四川领养了一只猫...\n拿秋刀鱼该加辣椒给它嘛...\n就是这个问题....',
-        medias: [{
-          "id": 3,
-          "type": "Image",
-          "url": "http://lorempixel.com/200/200",
-          "deleted": false
-        }],
         answers: [{
           id: 1,
           content: '<p>+1s or not +1s, this is a question.</p><p><img src="http://lorempixel.com/200/200" /></p><p>+1s or not +1s, this is a question.</p>',

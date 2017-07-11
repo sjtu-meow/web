@@ -10,17 +10,10 @@ QuestionquestionQuestionAnswer<template>
   <!-- Default panel contents -->
   <div class="panel-body">
     <div class="row">
-      <div :class="[question.medias.length === 0 ? 'col-md-11': 'col-md-5']">
+      <div class="col-md-11">
         <p><b>文字描述：</b></p>
         <p>{{question.content.substring(0, contentPreviewLength)}}</p>
         <a v-if="question.content.length > contentPreviewLength" @click="expandQuestionContent">展开</a>
-      </div>
-      <div class="col-md-6" v-if="question.medias.length != 0">
-        <p><b>图片与视频：</b></p>
-        <template v-for="media in question.medias">
-          <img v-if="media.type === 'Image'" class="img-rounded" :src="media.url" style="height: 60px; padding-bottom: 4px">
-          <video v-if="media.type === 'Video'" :src="media.url" style="height: 60px; padding-bottom: 4px" controls/>
-        </template>
       </div>
       <div class="col-md-1">
         <p style="color: #ffffff;">蛤</p>
