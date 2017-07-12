@@ -262,7 +262,7 @@ export default {
         isDeleted: false
       }).then(function(response) {
         this.answerToRecover.deleted = false;
-        this.answerToRecover.
+        this.fetchQuestions(this.pagination.currentPage);
         $('#recover-answer-modal').modal('hide');
       }, function(response) {
         alert(response.body.message || '修改失败');

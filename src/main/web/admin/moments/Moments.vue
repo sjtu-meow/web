@@ -16,14 +16,13 @@
           </tr>
         </thead>
         <tbody>
-          <moment-list-row v-for="moment in moments" :key="moment.id" :moment="moment"
-            @deleteMoment="promptDeleteMoment" @recoverMoment="promptRecoverMoment" @expandContent="expandContent" />
+          <moment-list-row v-for="moment in moments" :key="moment.id" :moment="moment" @deleteMoment="promptDeleteMoment" @recoverMoment="promptRecoverMoment" @expandContent="expandContent" />
         </tbody>
       </table>
     </div>
 
     <div class="text-center">
-      <pagination :pagination="pagination" @changePage="fetchMoments"/>
+      <pagination :pagination="pagination" @changePage="fetchMoments" />
     </div>
   </section>
 
@@ -136,7 +135,7 @@ export default {
           this.moments = response.body.content;
           this.pagination.currentPage = response.body.number;
           this.pagination.totalPages = response.body.totalPages;
-        }, function (response) {
+        }, function(response) {
           alert(response.body.message || '获取点滴失败');
         })
     },
@@ -145,12 +144,11 @@ export default {
       $('#delete-moment-modal').modal('show');
     },
     deleteMoment() {
-      //TODO: change url
       this.$http.delete('http://106.14.156.19/api/admin/moments/' + this.momentToDelete.id)
         .then(function(response) {
           $('#delete-moment-modal').modal('hide');
-          this.fetchMoments();
-        }, function (response) {
+          this.momentToDelete.deleted = true;
+        }, function(response) {
           alert(response.body.message || '修改失败');
         })
     },
@@ -160,13 +158,14 @@ export default {
     },
     recoverMoment() {
       //TODO: change url and test implementation
-      this.$http.put('http://106.14.156.19/api/admin/moments/' + this.momentToDelete.id + '/recover')
-        .then(function(response) {
-          $('#delete-moment-modal').modal('hide');
-          this.fetchMoments();
-        }, function (response) {
-          alert(response.body.message || '修改失败');
-        })
+      this.$http.patch('http://106.14.156.19/api/admin/moments/' + this.momentToRecover.id, {
+        isDeleted: false
+      }).then(function(response) {
+        $('#recover-moment-modal').modal('hide');
+        this.momentToRecover.deleted = false;
+      }, function(response) {
+        alert(response.body.message || '修改失败');
+      })
     },
     expandContent(moment) {
       this.momentToShow = moment;

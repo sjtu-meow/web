@@ -227,7 +227,6 @@ export default {
   },
   methods: {
     fetchUsers: function(page) {
-      //TODO: change url
       this.$http.get('http://106.14.156.19/api/admin/users?' + 'page=' + page + '&size=' + this.pageSize)
         .then(function(response) {
           this.users = response.body.content;
@@ -241,7 +240,6 @@ export default {
       $('#add-user-modal').modal('show');
     },
     addUser() {
-      //TODO: change url
       this.$http.post('http://106.14.156.19/api/admin/users', {
         phone: this.newUser.phone,
         password: this.newUser.password,
@@ -261,7 +259,6 @@ export default {
       $('#delete-user-modal').modal('show');
     },
     deleteUser: function(event) {
-      //TODO: change url and test this function call
       this.$http.delete('http://106.14.156.19/api/admin/users/' + this.userToDelete.id)
         .then(function(response) {
           this.userToDelete.deleted = true;
@@ -275,7 +272,6 @@ export default {
       $('#recover-user-modal').modal('show');
     },
     recoverUser() {
-      //TODO: change url and test implementation
       this.$http.patch('http://106.14.156.19/api/admin/users/' + this.userToRecover.id, {
         isDeleted: false
       }).then(function(response) {
@@ -290,7 +286,6 @@ export default {
       $('#set-admin-user-modal').modal('show');
     },
     setAdminUser() {
-      //TODO: change url
       this.$http.patch('http://106.14.156.19/api/admin/users/' + this.userToSetAdmin.id, {
         admin: true
       }).then(function(response) {
@@ -305,7 +300,6 @@ export default {
       $('#unset-admin-user-modal').modal('show');
     },
     unsetAdminUser() {
-      //TODO: change url
       this.$http.patch('http://106.14.156.19/api/admin/users/' + this.userToUnsetAdmin.id, {
         admin: false
       }).then(function(response) {
