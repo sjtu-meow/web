@@ -1,5 +1,6 @@
 package me.sjtumeow.meow.service;
 
+import me.sjtumeow.meow.model.Answer;
 import me.sjtumeow.meow.model.Article;
 import me.sjtumeow.meow.model.Moment;
 import me.sjtumeow.meow.model.Question;
@@ -18,9 +19,9 @@ public interface ItemService {
 	
 	// Moment
 	
-	Iterable<Moment> findAllMoments(boolean isAdmin);
+	Iterable<Moment> findAllMoments(String keyword, boolean isAdmin);
 	
-	Iterable<Moment> findAllMomentsPageable(Integer page, Integer size, boolean isAdmin);
+	Iterable<Moment> findAllMomentsPageable(Integer page, Integer size, String keyword, boolean isAdmin);
 	
 	Moment findMomentById(Long id, boolean isAdmin);
 	
@@ -35,9 +36,9 @@ public interface ItemService {
 	
 	// Article
 	
-	Iterable<?> findAllArticles(boolean isAdmin);
+	Iterable<?> findAllArticles(String keyword, boolean isAdmin);
 	
-	Iterable<?> findAllArticlesPageable(Integer page, Integer size, boolean isAdmin);
+	Iterable<?> findAllArticlesPageable(Integer page, Integer size, String keyword, boolean isAdmin);
 	
 	Article findArticleById(Long id, boolean isAdmin);
 	
@@ -52,9 +53,9 @@ public interface ItemService {
 	
 	// Question
 	
-	Iterable<Question> findAllQuestions(boolean isAdmin);
+	Iterable<Question> findAllQuestions(String keyword, boolean isAdmin);
 	
-	Iterable<Question> findAllQuestionsPageable(Integer page, Integer size, boolean isAdmin);
+	Iterable<Question> findAllQuestionsPageable(Integer page, Integer size, String keyword, boolean isAdmin);
 	
 	Question findQuestionById(Long id, boolean isAdmin);
 	
@@ -72,6 +73,8 @@ public interface ItemService {
 	Iterable<AnswerSummaryResult> findAllAnswers(boolean isAdmin);
 	
 	Iterable<AnswerSummaryResult> findAllAnswersPageable(Integer page, Integer size, boolean isAdmin);
+	
+	Answer findAnswerById(Long id, boolean isAdmin);
 	
 	User getAnswerCreator(Long id);
 	

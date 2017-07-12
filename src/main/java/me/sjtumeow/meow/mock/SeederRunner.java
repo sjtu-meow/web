@@ -109,20 +109,23 @@ public class SeederRunner implements ApplicationRunner {
         	answerRepository.save(answer);
         	
         	if (i == 0) { // Soft delete test
-        		momentRepository.softDelete(moment);
         		articleRepository.softDelete(article);
         		questionRepository.softDelete(question);
         		answerRepository.softDelete(answer);
         	}
         	
-        	if (i == 2) { // XSS test
-        		moment.setContent("<script>alert('xss!')</script>");
-        		comment.setContent("<script>alert('xss!')</script>");
-        		article.setTitle("<script>alert('xss!')</script>");
-        		article.setSummary("<script>alert('xss!')</script>");
-        		question.setTitle("<script>alert('xss!')</script>");
-            	question.setContent("<script>alert('xss!')</script>");
-            	answer.setContent("<script>alert('xss!')</script>");
+        	if (i == 2) {
+        		momentRepository.softDelete(moment);
+        	}
+        	
+        	if (i == 2) { // XSS test and '%' search test
+        		moment.setContent("<script>alert('xss!')</script>%");
+        		comment.setContent("<script>alert('xss!')</script>%");
+        		article.setTitle("<script>alert('xss!')</script>%");
+        		article.setSummary("<script>alert('xss!')</script>%");
+        		question.setTitle("<script>alert('xss!')</script>%");
+            	question.setContent("<script>alert('xss!')</script>%");
+            	answer.setContent("<script>alert('xss!')</script>%");
         		momentRepository.save(moment);
         		commentRepository.save(comment);
         		articleRepository.save(article);

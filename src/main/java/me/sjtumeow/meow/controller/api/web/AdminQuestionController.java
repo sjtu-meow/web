@@ -15,6 +15,7 @@ import me.sjtumeow.meow.model.Question;
 import me.sjtumeow.meow.model.form.UpdateQuestionForm;
 import me.sjtumeow.meow.service.ItemService;
 import me.sjtumeow.meow.util.FormatValidator;
+import me.sjtumeow.meow.util.StringUtil;
 
 @RestController
 @RequestMapping("/api/admin/questions")
@@ -24,9 +25,9 @@ public class AdminQuestionController {
     private ItemService itemService;
 	
 	@GetMapping
-	Iterable<Question> getQuestions(@RequestParam(required = false) Integer page, @RequestParam(required = false) Integer size) {
+	Iterable<Question> getQuestions(@RequestParam(required = false) Integer page, @RequestParam(required = false) Integer size, @RequestParam(required = false) String keyword) {
 		return (!FormatValidator.checkNonNegativeInt(page) || !FormatValidator.checkPositiveInt(size)) ? 
-				itemService.findAllQuestions(true) : itemService.findAllQuestionsPageable(page, size, true);
+				itemService.findAllQuestions(StringUtil.replaceNull(keyword), true) : itemService.findAllQuestionsPageable(page, size, StringUtil.replaceNull(keyword), true);
 	}
 	
 	@GetMapping("/{id}")

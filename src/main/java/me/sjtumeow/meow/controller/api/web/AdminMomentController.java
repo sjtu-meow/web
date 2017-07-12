@@ -15,6 +15,7 @@ import me.sjtumeow.meow.model.Moment;
 import me.sjtumeow.meow.model.form.UpdateMomentForm;
 import me.sjtumeow.meow.service.ItemService;
 import me.sjtumeow.meow.util.FormatValidator;
+import me.sjtumeow.meow.util.StringUtil;
 
 @RestController
 @RequestMapping("/api/admin/moments")
@@ -24,9 +25,9 @@ public class AdminMomentController {
     private ItemService itemService;
 	
 	@GetMapping
-	Iterable<Moment> getMoments(@RequestParam(required = false) Integer page, @RequestParam(required = false) Integer size) {
+	Iterable<Moment> getMoments(@RequestParam(required = false) Integer page, @RequestParam(required = false) Integer size, @RequestParam(required = false) String keyword) {
 		return (!FormatValidator.checkNonNegativeInt(page) || !FormatValidator.checkPositiveInt(size)) ? 
-				itemService.findAllMoments(true) : itemService.findAllMomentsPageable(page, size, true);
+				itemService.findAllMoments(StringUtil.replaceNull(keyword), true) : itemService.findAllMomentsPageable(page, size, StringUtil.replaceNull(keyword), true);
 	}
 	
 	@GetMapping("/{id}")

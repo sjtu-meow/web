@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import me.sjtumeow.meow.authorization.annotation.Authorization;
 import me.sjtumeow.meow.authorization.annotation.CurrentUser;
+import me.sjtumeow.meow.model.Answer;
 import me.sjtumeow.meow.model.Question;
 import me.sjtumeow.meow.model.User;
 import me.sjtumeow.meow.model.form.AddAnswerForm;
@@ -34,6 +35,12 @@ public class AnswerController {
 	Iterable<AnswerSummaryResult> getAnswers(@RequestParam(required = false) Integer page, @RequestParam(required = false) Integer size) {
 		return (!FormatValidator.checkNonNegativeInt(page) || !FormatValidator.checkPositiveInt(size)) ? 
 				itemService.findAllAnswers(false) : itemService.findAllAnswersPageable(page, size, false);
+	}
+	
+	@GetMapping("/answers/{id}")
+	ResponseEntity<?> getAnswer(@PathVariable("id") Long id) {
+		Answer answer = itemService.findAnswerById(id, false);
+        return answer == null ? ResponseEntity.notFound().build() : ResponseEntity.ok(answer);
 	}
 	
 	@PostMapping("/questions/{id}/answers")

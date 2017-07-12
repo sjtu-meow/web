@@ -55,14 +55,15 @@ public class ItemServiceImpl implements ItemService {
 	
 	// Moment
 	
-	public Iterable<Moment> findAllMoments(boolean isAdmin) {
-		return isAdmin ? momentRepository.findAll() : momentRepository.findAllActive(new Sort(Direction.DESC, "createdAt"));
+	public Iterable<Moment> findAllMoments(String keyword, boolean isAdmin) {
+		return isAdmin ? momentRepository.findByContentContaining(keyword)
+				: momentRepository.findByContentContainingAndDeletedAtIsNull(keyword, new Sort(Direction.DESC, "createdAt"));
 	}
 	
-	public Iterable<Moment> findAllMomentsPageable(Integer page, Integer size, boolean isAdmin) {
+	public Iterable<Moment> findAllMomentsPageable(Integer page, Integer size, String keyword, boolean isAdmin) {
 		return isAdmin ?
-			momentRepository.findAll(new PageRequest(page, size))
-			: momentRepository.findAllActive(new PageRequest(page, size, Direction.DESC, "createdAt"));
+			momentRepository.findByContentContaining(keyword, new PageRequest(page, size))
+			: momentRepository.findByContentContainingAndDeletedAtIsNull(keyword, new PageRequest(page, size, Direction.DESC, "createdAt"));
 	}
     
 	public Moment findMomentById(Long id, boolean isAdmin) {
@@ -124,11 +125,11 @@ public class ItemServiceImpl implements ItemService {
 	
 	// Article
 	
-	public Iterable<?> findAllArticles(boolean isAdmin) {
+	public Iterable<?> findAllArticles(String keyword, boolean isAdmin) {
 		if (isAdmin)
-			return articleRepository.findAll();
+			return articleRepository.findByTitleContaining(keyword);
 		
-		Iterable<Article> articles = articleRepository.findAllActive(new Sort(Direction.DESC, "createdAt"));
+		Iterable<Article> articles = articleRepository.findByTitleContainingAndDeletedAtIsNull(keyword, new Sort(Direction.DESC, "createdAt"));
 		List<ArticleSummaryResult> result = new ArrayList<ArticleSummaryResult>();
 		
 		for (Article article: articles) {
@@ -138,10 +139,10 @@ public class ItemServiceImpl implements ItemService {
 		return result;
 	}
 	
-	public Iterable<?> findAllArticlesPageable(Integer page, Integer size, boolean isAdmin) {
+	public Iterable<?> findAllArticlesPageable(Integer page, Integer size, String keyword, boolean isAdmin) {
 		if (isAdmin)
-			return articleRepository.findAll(new PageRequest(page, size));
-		Iterable<Article> articles = articleRepository.findAllActive(new PageRequest(page, size, Direction.DESC, "createdAt"));
+			return articleRepository.findByTitleContaining(keyword, new PageRequest(page, size));
+		Iterable<Article> articles = articleRepository.findByTitleContainingAndDeletedAtIsNull(keyword, new PageRequest(page, size, Direction.DESC, "createdAt"));
 		List<ArticleSummaryResult> result = new ArrayList<ArticleSummaryResult>();
 		
 		for (Article article: articles) {
@@ -193,14 +194,15 @@ public class ItemServiceImpl implements ItemService {
 	
 	// Question
 	
-	public Iterable<Question> findAllQuestions(boolean isAdmin) {
-		return isAdmin ? questionRepository.findAll() : questionRepository.findAllActive(new Sort(Direction.DESC, "createdAt"));
+	public Iterable<Question> findAllQuestions(String keyword, boolean isAdmin) {
+		return isAdmin ? questionRepository.findByTitleContaining(keyword)
+				: questionRepository.findByTitleContainingAndDeletedAtIsNull(keyword, new Sort(Direction.DESC, "createdAt"));
 	}
 	
-	public Iterable<Question> findAllQuestionsPageable(Integer page, Integer size, boolean isAdmin) {
+	public Iterable<Question> findAllQuestionsPageable(Integer page, Integer size, String keyword, boolean isAdmin) {
 		return isAdmin ?
-			questionRepository.findAll(new PageRequest(page, size))
-			: questionRepository.findAllActive(new PageRequest(page, size, Direction.DESC, "createdAt"));
+			questionRepository.findByTitleContaining(keyword, new PageRequest(page, size))
+			: questionRepository.findByTitleContainingAndDeletedAtIsNull(keyword, new PageRequest(page, size, Direction.DESC, "createdAt"));
 	}
 	
 	public Question findQuestionById(Long id, boolean isAdmin) {
@@ -273,6 +275,10 @@ public class ItemServiceImpl implements ItemService {
 		}
 		
 		return result;
+	}
+	
+	public Answer findAnswerById(Long id, boolean isAdmin) {
+		return isAdmin ? answerRepository.findOne(id) : answerRepository.findOneActive(id);
 	}
 	
 	public User getAnswerCreator(Long id) {

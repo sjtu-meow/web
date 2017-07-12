@@ -15,6 +15,7 @@ import me.sjtumeow.meow.model.Article;
 import me.sjtumeow.meow.model.form.UpdateArticleForm;
 import me.sjtumeow.meow.service.ItemService;
 import me.sjtumeow.meow.util.FormatValidator;
+import me.sjtumeow.meow.util.StringUtil;
 
 @RestController
 @RequestMapping("/api/admin/articles")
@@ -24,9 +25,9 @@ public class AdminArticleController {
     private ItemService itemService;
 	
 	@GetMapping
-	Iterable<?> getArticles(@RequestParam(required = false) Integer page, @RequestParam(required = false) Integer size) {
+	Iterable<?> getArticles(@RequestParam(required = false) Integer page, @RequestParam(required = false) Integer size, @RequestParam(required = false) String keyword) {
 		return (!FormatValidator.checkNonNegativeInt(page) || !FormatValidator.checkPositiveInt(size)) ? 
-				itemService.findAllArticles(true) : itemService.findAllArticlesPageable(page, size, true);
+				itemService.findAllArticles(StringUtil.replaceNull(keyword), true) : itemService.findAllArticlesPageable(page, size, StringUtil.replaceNull(keyword), true);
 	}
 	
 	@GetMapping("/{id}")
