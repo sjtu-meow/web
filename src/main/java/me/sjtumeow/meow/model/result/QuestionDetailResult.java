@@ -44,7 +44,7 @@ public class QuestionDetailResult {
 		Collections.sort(comments, new Comparator<Comment>() {
             @Override
             public int compare(Comment lhs, Comment rhs) {
-                Integer res = lhs.getUpdateTime().compareTo(rhs.getUpdateTime());
+                Integer res = lhs.getCreateTime().compareTo(rhs.getCreateTime());
                 return res == 0 ? 0 : -res / Math.abs(res);
             }
         });
@@ -57,7 +57,7 @@ public class QuestionDetailResult {
 		Collections.sort(answers, new Comparator<Answer>() {
             @Override
             public int compare(Answer lhs, Answer rhs) {
-                Integer res = lhs.getUpdateTime().compareTo(rhs.getUpdateTime());
+                Integer res = lhs.getCreateTime().compareTo(rhs.getCreateTime());
                 return res == 0 ? 0 : -res / Math.abs(res);
             }
         });

@@ -3,30 +3,30 @@ package me.sjtumeow.meow.model.result;
 import me.sjtumeow.meow.model.Answer;
 
 public class AnswerSummaryResult {
-	protected Long id;
-	protected String title;
+	protected Long questionId;
+	protected String questionTitle;
 	protected Answer answer;
     
     public AnswerSummaryResult(Answer answer) {
-    	this.id = answer.getQuestion().getId();
-    	this.title = answer.getQuestion().getTitle();
+    	this.questionId = answer.getQuestion().getId();
+    	this.questionTitle = answer.getQuestion().getTitle();
     	this.answer = answer;
     }
     
-	public Long getId() {
-		return id;
+	public Long getQuestionId() {
+		return questionId;
 	}
 	
-	public String getTitle() {
-		return title;
+	public String getQuestionTitle() {
+		return questionTitle;
 	}
 	
-	public void setId(Long id) {
-		this.id = id;
+	public void setQuestionId(Long questionId) {
+		this.questionId = questionId;
 	}
 	
-	public void setTitle(String title) {
-		this.title = title;
+	public void setQuestionTitle(String questionTitle) {
+		this.questionTitle = questionTitle;
 	}
 
 	public Answer getAnswer() {

@@ -320,4 +320,27 @@ public class ItemServiceImpl implements ItemService {
 		answerRepository.softDelete(id);
     	return true;
 	}
+	
+	
+	// Search
+	
+	public List<Object> comprehensiveSearch(String keyword) {
+		List<Object> result = new ArrayList<Object>();
+		
+		result.addAll(momentRepository.findByContentContainingAndDeletedAtIsNull(keyword));
+		
+		for (Article article: articleRepository.findByTitleContainingAndDeletedAtIsNull(keyword)) {
+			result.add(new ArticleSummaryResult(article));
+		}
+		
+		result.addAll(questionRepository.findByTitleContainingAndDeletedAtIsNull(keyword));
+		
+		for (Answer answer: answerRepository.findByContentContainingAndDeletedAtIsNull(keyword)) {
+			result.add(new AnswerSummaryResult(answer));
+		}
+		
+		// Sort? Difficult to soft by create time.
+		
+		return result;
+	}
 }

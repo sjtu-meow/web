@@ -1,5 +1,7 @@
 package me.sjtumeow.meow.service;
 
+import java.util.List;
+
 import me.sjtumeow.meow.model.Answer;
 import me.sjtumeow.meow.model.Article;
 import me.sjtumeow.meow.model.Moment;
@@ -83,5 +85,10 @@ public interface ItemService {
 	boolean updateAnswer(Long id, UpdateAnswerForm uaf);
 	
 	boolean deleteAnswer(Long id);
+	
+	
+	// Comprehensive
+	
+	List<Object> comprehensiveSearch(String keyword);
 	
 }
