@@ -114,7 +114,7 @@ public class SeederRunner implements ApplicationRunner {
         		answerRepository.softDelete(answer);
         	}
         	
-        	if (i == 2) {
+        	if (i == 3) {
         		momentRepository.softDelete(moment);
         	}
         	
