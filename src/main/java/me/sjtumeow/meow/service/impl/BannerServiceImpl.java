@@ -20,7 +20,7 @@ public class BannerServiceImpl implements BannerService {
     private BannerRepository bannerRepository;
 	
 	public List<BannerResult> findAll() {
-		Iterable<Banner> banners = bannerRepository.findAllActive(new Sort(Direction.ASC, "display_order"));
+		Iterable<Banner> banners = bannerRepository.findAllActive(new Sort(Direction.ASC, "displayOrder"));
 		
 		List<BannerResult> result = new ArrayList<BannerResult>();
 		for (Banner banner: banners) {
