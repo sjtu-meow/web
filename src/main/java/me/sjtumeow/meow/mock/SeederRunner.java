@@ -91,7 +91,7 @@ public class SeederRunner implements ApplicationRunner {
         	Article article = new Article();
         	article.setTitle(String.format("铲屎官必读文章(%d)", i + 1));
         	article.setSummary("简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介");
-        	article.setContent("<p style=\"color:#63c;\">第一段/p><p>第二段</p>");
+        	article.setContent("<p style=\"color:#63c;\">第一段</p><p>第二段</p>");
         	article.setCover("http://lorempixel.com/400/200");
         	article.setProfile(i % 2 == 0 ? profile1 : profile2);
         	articleRepository.save(article);
@@ -103,7 +103,7 @@ public class SeederRunner implements ApplicationRunner {
         	questionRepository.save(question);
         	
         	Answer answer = new Answer();
-        	answer.setContent("吃的！吃的！");
+        	answer.setContent("<p style=\"color:#63c;\">吃的！吃的！</p>");
         	answer.setQuestion(question);
         	answer.setProfile(profile1);
         	answerRepository.save(answer);
