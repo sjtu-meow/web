@@ -44,8 +44,7 @@ public class SeederRunner implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) {
-        // Put some initializing code here
-        
+       
     	User user1 = new User("12312312312", BCrypt.hashpw("meow233", BCrypt.gensalt()));
     	User user2 = new User("12132132132", BCrypt.hashpw("test123", BCrypt.gensalt()));
     	user1.setAdmin(true);
@@ -82,11 +81,6 @@ public class SeederRunner implements ApplicationRunner {
             
             Comment comment = new Comment(moment, profile1, String.format("神奇评论%d", i));
             commentRepository.save(comment);
-            
-            Banner banner = new Banner();
-        	banner.setUrl("http://lorempixel.com/400/200");
-        	banner.setItem(moment);
-        	bannerRepository.save(banner);
         	
         	Article article = new Article();
         	article.setTitle(String.format("铲屎官必读文章(%d)", i + 1));
@@ -108,7 +102,10 @@ public class SeederRunner implements ApplicationRunner {
         	answer.setProfile(profile1);
         	answerRepository.save(answer);
         	
-        	if (i == 0) { // Soft delete test
+        	
+        	// Soft delete test
+        	
+        	if (i == 0) {
         		articleRepository.softDelete(article);
         		questionRepository.softDelete(question);
         		answerRepository.softDelete(answer);
@@ -118,7 +115,10 @@ public class SeederRunner implements ApplicationRunner {
         		momentRepository.softDelete(moment);
         	}
         	
-        	if (i == 2) { // XSS test
+        	
+        	// XSS test
+        	
+        	if (i == 2) {
         		moment.setContent("<script>alert('xss!')</script>");
         		comment.setContent("<script>alert('xss!')</script>");
         		article.setTitle("<script>alert('xss!')</script>");
@@ -132,40 +132,17 @@ public class SeederRunner implements ApplicationRunner {
         		questionRepository.save(question);
         		answerRepository.save(answer);
         	}
-        		
+        	
+        	if (i == 1)
+        		bannerRepository.save(new Banner(3, "http://lorempixel.com/400/200", moment));
+        	else if (i == 2)
+        		bannerRepository.save(new Banner(2, "http://lorempixel.com/400/200", article));
+        	else if (i == 3)
+        		bannerRepository.save(new Banner(1, "http://lorempixel.com/400/200", question));
+        	else if (i == 4)
+        		bannerRepository.save(new Banner(0, "http://lorempixel.com/400/200", answer));        	
         }
         
-  /*
-        for(int i = 0;i<10;i++) {
-            User user = new User();
-            user.setPhone(faker.phoneNumber().phoneNumber());
-            user.setPassword(faker.book().title());
-            userRepository.save(user);
-            Profile profile = new Profile();
-            profile.setUser(user);
-            profile.setNickname(faker.name().firstName());
-            profileRepository.save(profile);
-
-            for(int j = 0; j < 10; j++) {
-                Moment moment = new Moment();
-                Media media = new Media();
-
-                media.setUrl("http://lorempixel.com/400/200");
-                media.setThumbnail("http://lorempixel.com/400/200");
-                mediaRepository.save(media);
-
-
-                moment.setProfile(profile);
-                moment.setContent(faker.shakespeare().hamletQuote());
-                moment.addMedia(media);
-
-                momentRepository.save(new Moment());
-
-
-            }
-        }
-        userRepository.findAllActive();
-*/
     }
-
+    
 }

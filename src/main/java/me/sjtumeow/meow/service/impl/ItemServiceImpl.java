@@ -339,7 +339,7 @@ public class ItemServiceImpl implements ItemService {
 			result.add(new AnswerSummaryResult(answer));
 		}
 		
-		// Sort? Difficult to soft by create time.
+		// Sort? Difficult to sort by create time. Or shuffle it?
 		
 		return result;
 	}

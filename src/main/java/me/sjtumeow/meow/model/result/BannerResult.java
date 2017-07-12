@@ -1,17 +1,21 @@
 package me.sjtumeow.meow.model.result;
 
+import me.sjtumeow.meow.model.Banner;
+
 public class BannerResult {
 	
 	protected Long id;
-	protected String url;
+	protected Integer displayOrder;
+	protected String image;
 	protected Long itemId;
 	protected Integer itemType;
 	
-	public BannerResult(Long id, String url, Long itemId, Integer itemType) {
-		this.id = id;
-		this.url = url;
-		this.itemId = itemId;
-		this.itemType = itemType;
+	public BannerResult(Banner banner) {
+		this.id = banner.getId();
+		this.displayOrder = banner.getDisplayOrder();
+		this.image = banner.getImage();
+		this.itemId = banner.getItem().getId();
+		this.itemType = banner.getItem().getType();
 	}
 	
 	public Long getId() {
@@ -22,12 +26,20 @@ public class BannerResult {
 		this.id = id;
 	}
 	
-	public String getUrl() {
-		return url;
+	public Integer getDisplayOrder() {
+		return displayOrder;
+	}
+
+	public void setDisplayOrder(Integer displayOrder) {
+		this.displayOrder = displayOrder;
 	}
 	
-	public void setUrl(String url) {
-		this.url = url;
+	public String getImage() {
+		return image;
+	}
+	
+	public void setImage(String image) {
+		this.image = image;
 	}
 	
 	public Long getItemId() {
@@ -45,5 +57,5 @@ public class BannerResult {
 	public void setItemType(Integer itemType) {
 		this.itemType = itemType;
 	}
-	
+
 }

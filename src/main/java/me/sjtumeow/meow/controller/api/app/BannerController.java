@@ -18,7 +18,7 @@ public class BannerController {
 	
 	@GetMapping
 	List<BannerResult> getBanners() {
-		return bannerService.findAllBanners();
+		return bannerService.findAll();
 	}
 
 }
