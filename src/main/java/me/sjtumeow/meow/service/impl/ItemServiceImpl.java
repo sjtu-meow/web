@@ -23,6 +23,7 @@ import me.sjtumeow.meow.model.result.ArticleSummaryResult;
 import me.sjtumeow.meow.model.result.CreateResult;
 import me.sjtumeow.meow.model.result.AnswerSummaryResult;
 import me.sjtumeow.meow.service.ItemService;
+import me.sjtumeow.meow.util.StringUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -165,7 +166,7 @@ public class ItemServiceImpl implements ItemService {
 	
 	@Transactional
 	public Long addArticle(AddArticleForm aaf, User user) {
-		Article article = new Article(aaf.getTitle(), aaf.getSummary(), aaf.getContent(), aaf.getCover());
+		Article article = new Article(aaf.getTitle(), aaf.getSummary(), StringUtil.RichTextFilter(aaf.getContent()), aaf.getCover());
 		article.setProfile(user.getProfile());
 		articleRepository.save(article);
 		return article.getId();
@@ -290,7 +291,7 @@ public class ItemServiceImpl implements ItemService {
 	
 	@Transactional
 	public Long addAnswer(String content, Question question, User user) {
-		Answer answer = new Answer(content);
+		Answer answer = new Answer(StringUtil.RichTextFilter(content));
 		answer.setQuestion(question);
 		answer.setProfile(user.getProfile());
 		answerRepository.save(answer);
