@@ -16,12 +16,22 @@ public class Banner extends BaseEntity {
     @GeneratedValue
     @Column(nullable = false)
     Long id;
+	
+	Integer displayOrder;
 
-    String url;
+    String image;
 
     @OneToOne
     @JoinColumn
     Item item;
+    
+    public Banner() {}
+    
+    public Banner(Integer displayOrder, String image, Item item) {
+    	this.displayOrder = displayOrder;
+    	this.image = image;
+    	this.item = item;
+    }
 
     public Long getId() {
         return id;
@@ -30,13 +40,21 @@ public class Banner extends BaseEntity {
     public void setId(Long id) {
         this.id = id;
     }
+    
+    public Integer getDisplayOrder() {
+		return displayOrder;
+	}
 
-    public String getUrl() {
-        return url;
+	public void setDisplayOrder(Integer displayOrder) {
+		this.displayOrder = displayOrder;
+	}
+
+    public String getImage() {
+        return image;
     }
 
-    public void setUrl(String url) {
-        this.url = url;
+    public void setImage(String image) {
+        this.image = image;
     }
 
     public Item getItem() {
@@ -46,4 +64,5 @@ public class Banner extends BaseEntity {
     public void setItem(Item item) {
         this.item = item;
     }
+
 }

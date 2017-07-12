@@ -1,9 +1,11 @@
 package me.sjtumeow.meow.model.result;
 
 import me.sjtumeow.meow.model.Article;
+import me.sjtumeow.meow.model.Item;
 
 public class ArticleSummaryResult {
 	protected Long id;
+	protected Integer type;
 	protected String title;
 	protected String summary;
 	protected String cover;
@@ -15,6 +17,7 @@ public class ArticleSummaryResult {
     
     public ArticleSummaryResult(Article article) {
     	id = article.getId();
+    	type = Item.ITEM_TYPE_ARTICLE;
     	title = article.getTitle();
     	summary = article.getSummary();
     	cover = article.getCover();
@@ -31,6 +34,14 @@ public class ArticleSummaryResult {
 	
 	public void setId(Long id) {
 		this.id = id;
+	}
+	
+	public Integer getType() {
+		return type;
+	}
+
+	public void setType(Integer type) {
+		this.type = type;
 	}
 	
 	public String getTitle() {
@@ -96,4 +107,5 @@ public class ArticleSummaryResult {
 	public void setDeleted(boolean isDeleted) {
 		this.isDeleted = isDeleted;
 	}
+
 }

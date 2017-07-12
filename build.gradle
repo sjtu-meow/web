@@ -76,6 +76,9 @@ dependencies {
     compile 'com.qiniu:qiniu-java-sdk:7.2.+'
     
     compile 'org.mindrot:jbcrypt:0.3m'
+   
+    compile group: 'com.googlecode.owasp-java-html-sanitizer', name: 'owasp-java-html-sanitizer', version: 'r239'
+    
 
 }
 

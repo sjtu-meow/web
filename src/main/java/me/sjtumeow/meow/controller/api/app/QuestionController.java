@@ -18,6 +18,7 @@ import me.sjtumeow.meow.model.User;
 import me.sjtumeow.meow.model.form.AddQuestionForm;
 import me.sjtumeow.meow.model.result.FailureMessageResult;
 import me.sjtumeow.meow.model.result.NewEntityIdResult;
+import me.sjtumeow.meow.model.result.QuestionDetailResult;
 import me.sjtumeow.meow.service.ItemService;
 
 @RestController
@@ -30,7 +31,7 @@ public class QuestionController {
 	@GetMapping("/{id}")
 	ResponseEntity<?> getQuestion(@PathVariable("id") Long id) {
 		Question question = itemService.findQuestionById(id, false);
-        return question == null ? ResponseEntity.notFound().build() : ResponseEntity.ok(question);
+        return question == null ? ResponseEntity.notFound().build() : ResponseEntity.ok(new QuestionDetailResult(question));
 	}
 	
 	@PostMapping(consumes = "application/json")

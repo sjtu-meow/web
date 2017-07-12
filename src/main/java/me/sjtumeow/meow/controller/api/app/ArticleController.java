@@ -21,6 +21,7 @@ import me.sjtumeow.meow.model.result.FailureMessageResult;
 import me.sjtumeow.meow.model.result.NewEntityIdResult;
 import me.sjtumeow.meow.service.ItemService;
 import me.sjtumeow.meow.util.FormatValidator;
+import me.sjtumeow.meow.util.StringUtil;
 
 @RestController
 @RequestMapping("/api/articles")
@@ -30,9 +31,9 @@ public class ArticleController {
     private ItemService itemService;
 	
 	@GetMapping
-	Iterable<?> getArticles(@RequestParam(required = false) Integer page, @RequestParam(required = false) Integer size) {
+	Iterable<?> getArticles(@RequestParam(required = false) Integer page, @RequestParam(required = false) Integer size, @RequestParam(required = false) String keyword) {
 		return (!FormatValidator.checkNonNegativeInt(page) || !FormatValidator.checkPositiveInt(size)) ? 
-				itemService.findAllArticles(false) : itemService.findAllArticlesPageable(page, size, false);
+				itemService.findAllArticles(StringUtil.replaceNull(keyword), false) : itemService.findAllArticlesPageable(page, size, StringUtil.replaceNull(keyword), false);
 	}
 	
 	@GetMapping("/{id}")

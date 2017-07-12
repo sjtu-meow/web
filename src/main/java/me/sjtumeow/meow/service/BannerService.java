@@ -6,6 +6,6 @@ import me.sjtumeow.meow.model.result.BannerResult;
 
 public interface BannerService {
 	
-	List<BannerResult> findAllBanners();
+	List<BannerResult> findAll();
 
 }

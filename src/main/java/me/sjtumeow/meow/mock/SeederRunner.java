@@ -44,8 +44,7 @@ public class SeederRunner implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) {
-        // Put some initializing code here
-        
+       
     	User user1 = new User("12312312312", BCrypt.hashpw("meow233", BCrypt.gensalt()));
     	User user2 = new User("12132132132", BCrypt.hashpw("test123", BCrypt.gensalt()));
     	user1.setAdmin(true);
@@ -74,7 +73,7 @@ public class SeederRunner implements ApplicationRunner {
             	Media media = new Media(MediaType.Video, "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4", moment);
                 mediaRepository.save(media);
             } else {
-            	for (int j = 0; j <= i; ++j) {
+            	for (int j = 0; j < i; ++j) {
                 	Media media = new Media(MediaType.Image, "http://lorempixel.com/200/200", moment);
                     mediaRepository.save(media);
                 }
@@ -82,16 +81,11 @@ public class SeederRunner implements ApplicationRunner {
             
             Comment comment = new Comment(moment, profile1, String.format("神奇评论%d", i));
             commentRepository.save(comment);
-            
-            Banner banner = new Banner();
-        	banner.setUrl("http://lorempixel.com/400/200");
-        	banner.setItem(moment);
-        	bannerRepository.save(banner);
         	
         	Article article = new Article();
         	article.setTitle(String.format("铲屎官必读文章(%d)", i + 1));
         	article.setSummary("简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介");
-        	article.setContent("<p style=\"color:#63c;\">第一段/p><p>第二段</p>");
+        	article.setContent("<p style=\"color:#63c;\">第一段</p><p>第二段</p>");
         	article.setCover("http://lorempixel.com/400/200");
         	article.setProfile(i % 2 == 0 ? profile1 : profile2);
         	articleRepository.save(article);
@@ -103,19 +97,28 @@ public class SeederRunner implements ApplicationRunner {
         	questionRepository.save(question);
         	
         	Answer answer = new Answer();
-        	answer.setContent("吃的！吃的！");
+        	answer.setContent("<p style=\"color:#63c;\">吃的！吃的！</p>");
         	answer.setQuestion(question);
         	answer.setProfile(profile1);
         	answerRepository.save(answer);
         	
-        	if (i == 0) { // Soft delete test
-        		momentRepository.softDelete(moment);
+        	
+        	// Soft delete test
+        	
+        	if (i == 0) {
         		articleRepository.softDelete(article);
         		questionRepository.softDelete(question);
         		answerRepository.softDelete(answer);
         	}
         	
-        	if (i == 2) { // XSS test
+        	if (i == 3) {
+        		momentRepository.softDelete(moment);
+        	}
+        	
+        	
+        	// XSS test
+        	
+        	if (i == 2) {
         		moment.setContent("<script>alert('xss!')</script>");
         		comment.setContent("<script>alert('xss!')</script>");
         		article.setTitle("<script>alert('xss!')</script>");
@@ -129,40 +132,17 @@ public class SeederRunner implements ApplicationRunner {
         		questionRepository.save(question);
         		answerRepository.save(answer);
         	}
-        		
+        	
+        	if (i == 1)
+        		bannerRepository.save(new Banner(3, "http://lorempixel.com/400/200", moment));
+        	else if (i == 2)
+        		bannerRepository.save(new Banner(2, "http://lorempixel.com/400/200", article));
+        	else if (i == 3)
+        		bannerRepository.save(new Banner(1, "http://lorempixel.com/400/200", question));
+        	else if (i == 4)
+        		bannerRepository.save(new Banner(0, "http://lorempixel.com/400/200", answer));        	
         }
         
-  /*
-        for(int i = 0;i<10;i++) {
-            User user = new User();
-            user.setPhone(faker.phoneNumber().phoneNumber());
-            user.setPassword(faker.book().title());
-            userRepository.save(user);
-            Profile profile = new Profile();
-            profile.setUser(user);
-            profile.setNickname(faker.name().firstName());
-            profileRepository.save(profile);
-
-            for(int j = 0; j < 10; j++) {
-                Moment moment = new Moment();
-                Media media = new Media();
-
-                media.setUrl("http://lorempixel.com/400/200");
-                media.setThumbnail("http://lorempixel.com/400/200");
-                mediaRepository.save(media);
-
-
-                moment.setProfile(profile);
-                moment.setContent(faker.shakespeare().hamletQuote());
-                moment.addMedia(media);
-
-                momentRepository.save(new Moment());
-
-
-            }
-        }
-        userRepository.findAllActive();
-*/
     }
-
+    
 }

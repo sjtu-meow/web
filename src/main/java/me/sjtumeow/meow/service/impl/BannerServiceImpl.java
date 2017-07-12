@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -17,12 +19,14 @@ public class BannerServiceImpl implements BannerService {
 	@Autowired
     private BannerRepository bannerRepository;
 	
-	public List<BannerResult> findAllBanners() {
-		Iterable<Banner> banners = bannerRepository.findAllActive();
+	public List<BannerResult> findAll() {
+		Iterable<Banner> banners = bannerRepository.findAllActive(new Sort(Direction.ASC, "displayOrder"));
+		
 		List<BannerResult> result = new ArrayList<BannerResult>();
 		for (Banner banner: banners) {
-			result.add(new BannerResult(banner.getId(), banner.getUrl(), banner.getItem().getId(), banner.getItem().getType()));
+			result.add(new BannerResult(banner));
 		}
+		
 		return result;
 	}
 	
