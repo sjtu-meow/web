@@ -2,7 +2,7 @@
 <div class="panel panel-default">
   <div class="panel-heading">
     <h3 class="panel-title">
-      #{{banner.displayOrder + 1}} 一个问题的回答
+      #{{banner.displayOrder + 1}} 「{{question.title}}」的回答
       <small>来自 {{answer.profile.nickname}}（{{answer.profile.id}}）</small>
     </h3>
   </div>
@@ -58,6 +58,9 @@ export default {
         profile: {
           nickname: ''
         }
+      },
+      question: {
+        title: ''
       }
     }
   },
@@ -69,10 +72,19 @@ export default {
   created() {
     this.$http.get('http://106.14.156.19/api/admin/answers/' + this.banner.itemId)
       .then(function(response) {
+        // get content of answer
         this.answer = response.body;
+
+        // get content of question
+        this.$http.get('http://106.14.156.19/api/admin/questions/' + this.answer.questionId)
+          .then(function(response) {
+            this.question = response.body;
+          }, function(response) {
+            alert(response.body.message || '获取问题失败');
+          })
       }, function(response) {
         alert(response.body.message || '获取回答失败');
-      })
+      });
   },
   methods: {
     moveUp() {
