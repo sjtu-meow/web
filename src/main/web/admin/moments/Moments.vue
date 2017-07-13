@@ -129,7 +129,6 @@ export default {
   },
   methods: {
     fetchMoments(page) {
-      //TODO: change url
       this.$http.get('http://106.14.156.19/api/admin/moments?' + 'page=' + page + '&size=' + this.pageSize)
         .then(function(response) {
           this.moments = response.body.content;
@@ -157,7 +156,6 @@ export default {
       $('#recover-moment-modal').modal('show');
     },
     recoverMoment() {
-      //TODO: change url and test implementation
       this.$http.patch('http://106.14.156.19/api/admin/moments/' + this.momentToRecover.id, {
         isDeleted: false
       }).then(function(response) {
