@@ -4,11 +4,18 @@
     <section class="sidebar">
       <!-- Sidebar Menu -->
       <ul class="sidebar-menu">
-        <router-link activeClass="active" :to="item.link" tag="li" v-for="item in items" :key="item.name">
+        <template v-if="loggedIn">
+          <router-link activeClass="active" :to="item.link" tag="li" v-for="item in items" :key="item.name">
+            <a>
+              <i class="fa" v-bind:class="item.icon"></i><span>{{item.name}}</span>
+            </a>
+          </router-link>
+        </template>
+        <li v-else>
           <a>
-            <i class="fa" v-bind:class="item.icon"></i><span>{{item.name}}</span>
+            <i class="fa fa-user"></i><span>请先登录</span>
           </a>
-        </router-link>
+        </li>
       </ul><!-- /.sidebar-menu -->
 
     </section><!-- /.sidebar -->
@@ -18,6 +25,7 @@
 <script>
   export default {
     'name': 'SideBar',
+    props: ['loggedIn'],
     data() {
       return {
         'items': [
