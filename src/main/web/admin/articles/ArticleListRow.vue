@@ -5,7 +5,7 @@
   <td>{{article.title}}</td>
   <td>
     {{plainContent.substring(0, contentPreviewLength)}}{{plainContent.length > contentPreviewLength ? '…' : ''}}
-    <a @click="expandContent">查看详情</a>
+    <button type="button" class="btn btn-link btn-xs" @click="expandContent">查看详情</button>
   </td>
   <td>
     <button v-if="article.deleted" type="button" class="btn btn-primary btn-xs" @click="recoverArticle">
