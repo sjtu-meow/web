@@ -27,7 +27,7 @@
       </table>
     </div>
     <div class="text-center">
-      <pagination :pagination="pagination" @changePage="fetchUsers"/>
+      <pagination :pagination="pagination" @changePage="fetchUsers" />
     </div>
   </section>
 
@@ -44,22 +44,27 @@
             <form class="col-md-8">
               <div class="form-group">
                 <label class="control-label" for="new-user-phone">手机</label>
-                <input type="number" class="form-control" id="new-user-phone" v-model="newUserPhone" required/>
-                <span class="help-block"></span>
-              </div>
-              <div class="form-group">
-                <label class="control-label " for="new-user-nickname">昵称</label>
-                <input type="text" class="form-control" id="new-user-nickname" v-model="newUserNickname" required>
+                <input type="number" class="form-control" id="new-user-phone" v-model="newUser.phone" required/>
                 <span class="help-block"></span>
               </div>
               <div class="form-group">
                 <label class="control-label " for="new-user-password">密码</label>
-                <input type="password" class="form-control" id="new-user-password" v-model="newUserPassword" required>
+                <input type="password" class="form-control" id="new-user-password" v-model="newUser.password" required>
+                <span class="help-block"></span>
+              </div>
+              <div class="form-group">
+                <label class="control-label " for="new-user-nickname">昵称</label><span class="text-muted">（选填）</span>
+                <input type="text" class="form-control" id="new-user-nickname" v-model="newUser.nickname" required>
+                <span class="help-block"></span>
+              </div>
+              <div class="form-group">
+                <label class="control-label " for="new-user-bio">签名</label><span class="text-muted">（选填）</span>
+                <input type="text" class="form-control" id="new-user-bio" v-model="newUser.bio" required>
                 <span class="help-block"></span>
               </div>
               <div class="checkbox">
                 <label>
-                  <input type="checkbox" v-model="newUserisAdmin"/> 管理员权限
+                  <input type="checkbox" v-model="newUser.isAdmin"/> 管理员权限
                 </label>
               </div>
             </form>
@@ -68,7 +73,7 @@
                 <div class="form-group">
                   <label class="control-label" for="new-user-avatar">默认头像</label><span class="text-muted">（不让你改）</span>
                   <a class="thumbnail">
-                    <img :src="newUserAvatarUrl">
+                    <img :src="newUser.avatarUrl">
                   </a>
                 </div>
               </form>
@@ -179,11 +184,14 @@ export default {
         totalPages: 1
       },
       pageSize: 2,
-      newUserNickname: '',
-      newUserPassword: '',
-      newUserPhone: '',
-      newUserAvatarUrl: 'http://osg5c99b1.bkt.clouddn.com/defaultAvatar.png',
-      newUserisAdmin: false,
+      newUser: {
+        phone: '',
+        password: '',
+        nickname: '',
+        bio: '',
+        avatarUrl: 'http://osg5c99b1.bkt.clouddn.com/defaultAvatar.png',
+        isAdmin: false
+      },
       userToDelete: {
         id: 1,
         phone: '13512341234',
@@ -219,7 +227,6 @@ export default {
   },
   methods: {
     fetchUsers: function(page) {
-      //TODO: change url
       this.$http.get('http://106.14.156.19/api/admin/users?' + 'page=' + page + '&size=' + this.pageSize)
         .then(function(response) {
           this.users = response.body.content;
@@ -233,13 +240,13 @@ export default {
       $('#add-user-modal').modal('show');
     },
     addUser() {
-      //TODO: change url
       this.$http.post('http://106.14.156.19/api/admin/users', {
-        phone: this.newUserPhone,
-        password: this.newUserPassword,
-        nickname: this.newUserNickname,
-        admin: this.newUserisAdmin,
-        avatar: this.newUserAvatarUrl
+        phone: this.newUser.phone,
+        password: this.newUser.password,
+        nickname: this.newUser.nickname,
+        bio: this.newUser.bio,
+        admin: this.newUser.isAdmin,
+        avatar: this.newUser.avatarUrl
       }).then(function(response) {
         this.fetchUsers(this.pagination.totalPages - 1);
         $('#add-user-modal').modal('hide');
@@ -252,7 +259,6 @@ export default {
       $('#delete-user-modal').modal('show');
     },
     deleteUser: function(event) {
-      //TODO: change url and test this function call
       this.$http.delete('http://106.14.156.19/api/admin/users/' + this.userToDelete.id)
         .then(function(response) {
           this.userToDelete.deleted = true;
@@ -266,7 +272,6 @@ export default {
       $('#recover-user-modal').modal('show');
     },
     recoverUser() {
-      //TODO: change url and test implementation
       this.$http.patch('http://106.14.156.19/api/admin/users/' + this.userToRecover.id, {
         isDeleted: false
       }).then(function(response) {
@@ -281,7 +286,6 @@ export default {
       $('#set-admin-user-modal').modal('show');
     },
     setAdminUser() {
-      //TODO: change url
       this.$http.patch('http://106.14.156.19/api/admin/users/' + this.userToSetAdmin.id, {
         admin: true
       }).then(function(response) {
@@ -296,7 +300,6 @@ export default {
       $('#unset-admin-user-modal').modal('show');
     },
     unsetAdminUser() {
-      //TODO: change url
       this.$http.patch('http://106.14.156.19/api/admin/users/' + this.userToUnsetAdmin.id, {
         admin: false
       }).then(function(response) {

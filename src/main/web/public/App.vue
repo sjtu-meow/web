@@ -98,7 +98,7 @@ export default {
   name: 'app',
   data() {
     return {
-      loggedIn: false,
+      loggedIn: true,
       phone: '',
       password: '',
       title: '',
@@ -107,6 +107,15 @@ export default {
     }
   },
   created() {
+    this.$http.get('http://106.14.156.19/api/web/auth')
+      .then(function (response) {
+        if (response.body.loggedIn) {
+          this.loggedIn = true;
+        } else {
+          this.loggedIn = false;
+        }
+      })
+
     const vueModule = this;
     $(function() {
       // initialize login popover
@@ -162,12 +171,7 @@ export default {
       });
     });
 
-    this.$http.get('http://106.14.156.19/api/web/auth')
-      .then(function (response) {
-        if (response.body.loggedIn) {
-          this.loggedIn = true;
-        }
-      })
+
   },
   methods: {
     login() {

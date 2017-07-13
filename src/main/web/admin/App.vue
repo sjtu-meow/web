@@ -19,6 +19,7 @@ import Users from './users/Users.vue'
 import Moments from './moments/Moments.vue'
 import Articles from './articles/Articles.vue'
 import Questions from './questions/Questions.vue'
+import Banners from './banners/Banners.vue'
 
 Vue.use(VueRouter);
 Vue.use(VueResource);
@@ -40,6 +41,10 @@ const router = new VueRouter({
     {
       path: '/questions',
       component: Questions
+    },
+    {
+      path: '/banners',
+      component: Banners
     }
   ]
 })

@@ -218,7 +218,7 @@ export default {
           for (var i = 0; i < this.questionToDelete.answers.length; i++) {
             this.questionToDelete.answers[i].deleted = true;
           }
-          
+
           $('#delete-question-modal').modal('hide');
         }, function(response) {
           alert(response.body.message || '修改失败');
@@ -234,11 +234,6 @@ export default {
       }).then(function(response) {
         // recover question
         this.questionToRecover.deleted = false;
-
-        // recover related answers
-        for (var i = 0; i < questionToRecover.answers.length; i++) {
-          questionToRecover.answers[i].deleted = false;
-        }
 
         $('#recover-question-modal').modal('hide');
       }, function(response) {
@@ -267,6 +262,7 @@ export default {
         isDeleted: false
       }).then(function(response) {
         this.answerToRecover.deleted = false;
+        this.fetchQuestions(this.pagination.currentPage);
         $('#recover-answer-modal').modal('hide');
       }, function(response) {
         alert(response.body.message || '修改失败');
