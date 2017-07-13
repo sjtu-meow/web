@@ -12,9 +12,9 @@
     <div class="row">
       <div class="col-md-4">
         <label>吧呢封面</label><span class="text-muted">（点击修改）</span>
-        <a class="thumbnail">
-            <img :src="banner.image">
-          </a>
+        <a class="thumbnail" @click="triggerCoverInputClick">
+          <img :src="banner.image">
+        </a>
       </div>
       <div class="col-md-8">
         <label>回答预览</label>
@@ -86,6 +86,9 @@ export default {
     },
     expandContent() {
       this.$emit('expandContent', this.answer.content);
+    },
+    triggerCoverInputClick() {
+      this.$emit('triggerCoverInputClick', this.banner)
     }
   }
 }

@@ -12,11 +12,16 @@
   <section class="content">
     <template v-for="banner in banners">
       <article-banner v-if="banner.itemType === 1" :banner="banner"
-        @deleteBanner="deleteBanner" @moveUp="moveUp" @moveDown="moveDown" @expandContent="expandContent"/>
+        @deleteBanner="deleteBanner" @moveUp="moveUp" @moveDown="moveDown"
+        @expandContent="expandContent"@triggerCoverInputClick="triggerCoverInputClick"/>
       <answer-banner v-if="banner.itemType === 3" :banner="banner"
-        @deleteBanner="deleteBanner" @moveUp="moveUp" @moveDown="moveDown" @expandContent="expandContent"/>
+        @deleteBanner="deleteBanner" @moveUp="moveUp" @moveDown="moveDown"
+        @expandContent="expandContent"@triggerCoverInputClick="triggerCoverInputClick"/>
     </template>
   </section>
+
+  <!-- For ajax image upload -->
+  <input type="file" name="file" id="coverInput" style="display: none;" @change="uploadPicture" />
 
   <!-- Add Modal -->
   <div class="modal fade" id="add-banner-modal" tabindex="-1" role="dialog" aria-labelledby="add-banner-modal-title">
@@ -30,11 +35,10 @@
           <div class="row">
             <form class="col-md-6">
               <div class="form-group">
-                <label class="control-label" for="new-banner-cover">吧呢封面</label><span class="text-muted">（点击修改）</span>
-                <a class="thumbnail" @click="triggerCoverInputClick">
+                <label>吧呢封面</label><span class="text-muted">（点击修改）</span>
+                <a class="thumbnail" @click="triggerCoverInputClick(newBanner)">
                   <img :src="newBanner.image">
                 </a>
-                <input type="file" name="file" id="coverInput" style="display: none;" @change="uploadPicture" />
               </div>
             </form>
             <form class="col-md-6">
@@ -99,6 +103,7 @@ export default {
         itemId: '',
         image: 'http://lorempixel.com/400/200'
       },
+      bannerToUpdateImage: {},
       rawHtml: ''
     }
   },
@@ -152,10 +157,11 @@ export default {
       $('#content-detail-modal .modal-body').html(rawHtml);
       $('#content-detail-modal').modal('show');
     },
-    triggerCoverInputClick: function() {
+    triggerCoverInputClick(target) {
+      this.bannerToUpdateImage = target;
       $('#coverInput').click();
     },
-    uploadPicture: function(event) {
+    uploadPicture(event) {
       // get token
       this.$http.get('http://106.14.156.19/api/web/upload/token')
         .then(function(response) {
@@ -168,7 +174,10 @@ export default {
           this.$http.post('http://upload.qiniu.com/', data)
             .then(function(response) {
               const key = response.body.key;
-              this.newBanner.image = 'http://osg5c99b1.bkt.clouddn.com/' + key
+              this.bannerToUpdateImage.image = 'http://osg5c99b1.bkt.clouddn.com/' + key
+
+              // save updates (even change is made to new banner (not yet saved))
+              this.updateBanners();
             }, function(response) {
               alert(response.body.error || '上传图片失败');
             })
