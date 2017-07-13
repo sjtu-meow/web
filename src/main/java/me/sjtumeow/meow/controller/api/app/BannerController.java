@@ -13,6 +13,7 @@ import me.sjtumeow.meow.service.BannerService;
 @RestController
 @RequestMapping("/api/banners")
 public class BannerController {
+	
 	@Autowired
     private BannerService bannerService;
 	

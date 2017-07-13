@@ -84,6 +84,13 @@ public class ItemServiceImpl implements ItemService {
 		if ((content == null || content.trim().isEmpty()) && (amf.getMedias() == null || amf.getMedias().isEmpty()))
 			return new CreateResult();
 		
+		if (amf.getMedias() != null) {
+			for (MediaForm mf: amf.getMedias()) {
+				if (mf.getType() == null || mf.getUrl() == null)
+					return new CreateResult();
+			}
+		}
+		
 		Moment moment = new Moment();
 		moment.setProfile(user.getProfile());
 		
@@ -94,8 +101,6 @@ public class ItemServiceImpl implements ItemService {
 		
 		if (amf.getMedias() != null) {
 			for (MediaForm mf: amf.getMedias()) {
-				if (mf.getType() == null || mf.getUrl() == null)
-					return new CreateResult();
 				mediaRepository.save(new Media(mf.getType(), mf.getUrl(), moment));
 			}
 		}
