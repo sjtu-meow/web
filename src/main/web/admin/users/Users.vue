@@ -1,18 +1,19 @@
 <template>
 <section>
   <section class="content-header">
-    <h1>所有用户</h1>
+    <h1>
+      所有用户
+      <button class="btn btn-default" data-toggle="modal" data-target="#add-user-modal">
+        <span class="glyphicon glyphicon-plus"/>
+      </button>
+    </h1>
   </section>
   <section class="content">
     <div class="table-responsive">
       <table class="table table-hover">
         <thead>
           <tr>
-            <th class="col-md-1">
-              <button class="btn btn-default btn-xs" data-toggle="modal" data-target="#add-user-modal">
-                <span class="glyphicon glyphicon-plus"/>
-              </button>
-            </th>
+            <th class="col-md-1">#</th>
             <th class="col-md-1">头像</th>
             <th class="col-md-2">昵称</th>
             <th class="col-md-3">签名</th>
