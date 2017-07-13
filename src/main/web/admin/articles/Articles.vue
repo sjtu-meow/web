@@ -138,7 +138,6 @@ export default {
   },
   methods: {
     fetchArticles(page) {
-      //TODO: finish implementation and change url
       this.$http.get('http://106.14.156.19/api/admin/articles?' + 'page=' + page + '&size=' + this.pageSize)
         .then(function(response) {
           this.articles = response.body.content;

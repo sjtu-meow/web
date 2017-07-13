@@ -2,8 +2,8 @@
 <div class="panel panel-default">
   <div class="panel-heading">
     <h3 class="panel-title">
-      #{{banner.displayOrder}} {{banner.item.title}}
-      <small>来自 {{banner.item.profile.nickname}}（{{banner.item.profile.id}}）</small>
+      #{{banner.displayOrder + 1}} {{article.title}}
+      <small>来自 {{article.profile.nickname}}（{{article.profile.id}}）</small>
     </h3>
   </div>
 
@@ -12,7 +12,7 @@
     <div class="row">
       <div class="col-md-4">
         <a class="thumbnail">
-          <img :src="banner.bannerCoverUrl">
+          <img :src="banner.image">
         </a>
       </div>
       <div class="col-md-8">
@@ -43,13 +43,28 @@ export default {
   props: ['banner'],
   data() {
     return {
-      contentPreviewLength: 200
+      contentPreviewLength: 200,
+      article: {
+        title: '',
+        content: '',
+        profile: {
+          nickname: ''
+        }
+      }
     }
   },
   computed: {
     plainContent() {
-      return $(this.banner.item.content).text()
+      return $(this.article.content).text();
     }
+  },
+  created() {
+    this.$http.get('http://106.14.156.19/api/admin/articles/' + this.banner.itemId)
+      .then(function(response) {
+        this.article = response.body;
+      }, function(response) {
+        alert(response.body.message || '获取文章失败');
+      })
   },
   methods: {
     moveUp() {
@@ -62,7 +77,7 @@ export default {
       this.$emit('deleteBanner', this.banner)
     },
     expandContent() {
-      this.$emit('expandContent', this.banner.item.content)
+      this.$emit('expandContent', this.article.content)
     }
   }
 }

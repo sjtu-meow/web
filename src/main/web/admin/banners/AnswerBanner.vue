@@ -2,8 +2,8 @@
 <div class="panel panel-default">
   <div class="panel-heading">
     <h3 class="panel-title">
-      #{{banner.displayOrder}} 一个问题的回答
-      <small>来自 {{banner.item.profile.nickname}}（{{banner.item.profile.id}}）</small>
+      #{{banner.displayOrder + 1}} 一个问题的回答
+      <small>来自 {{answer.profile.nickname}}（{{answer.profile.id}}）</small>
     </h3>
   </div>
 
@@ -12,7 +12,7 @@
     <div class="row">
       <div class="col-md-4">
         <a class="thumbnail">
-            <img :src="banner.bannerCoverUrl">
+            <img :src="banner.image">
           </a>
       </div>
       <div class="col-md-8">
@@ -43,13 +43,27 @@ export default {
   props: ['banner'],
   data() {
     return {
-      contentPreviewLength: 200
+      contentPreviewLength: 200,
+      answer: {
+        content: '',
+        profile: {
+          nickname: ''
+        }
+      }
     }
   },
   computed: {
     plainContent() {
-      return $(this.banner.item.content).text();
+      return $(this.answer.content).text();
     }
+  },
+  created() {
+    this.$http.get('http://106.14.156.19/api/admin/answers/' + this.banner.itemId)
+      .then(function(response) {
+        this.answer = response.body;
+      }, function(response) {
+        alert(response.body.message || '获取回答失败');
+      })
   },
   methods: {
     moveUp() {
@@ -62,7 +76,7 @@ export default {
       this.$emit('deleteBanner', this.banner);
     },
     expandContent() {
-      this.$emit('expandContent', this.banner.item.content);
+      this.$emit('expandContent', this.answer.content);
     }
   }
 }

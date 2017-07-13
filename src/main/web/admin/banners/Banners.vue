@@ -11,9 +11,9 @@
 
   <section class="content">
     <template v-for="banner in banners">
-      <article-banner v-if="banner.type === 'article'" :banner="banner"
+      <article-banner v-if="banner.itemType === 1" :banner="banner"
         @deleteBanner="deleteBanner" @moveUp="moveUp" @moveDown="moveDown" @expandContent="expandContent"/>
-      <answer-banner v-if="banner.type === 'answer'" :banner="banner"
+      <answer-banner v-if="banner.itemType === 3" :banner="banner"
         @deleteBanner="deleteBanner" @moveUp="moveUp" @moveDown="moveDown" @expandContent="expandContent"/>
     </template>
   </section>
@@ -32,7 +32,7 @@
               <div class="form-group">
                 <label class="control-label" for="new-banner-cover">吧呢封面</label><span class="text-muted">（点击修改）</span>
                 <a class="thumbnail" @click="triggerCoverInputClick">
-                  <img :src="newBanner.bannerCoverUrl">
+                  <img :src="newBanner.image">
                 </a>
                 <input type="file" name="file" id="coverInput" style="display: none;" @change="uploadPicture" />
               </div>
@@ -45,7 +45,6 @@
                   <option>回答</option>
                   <option>文章</option>
                 </select>
-                <span class="help-block">{{newBanner.itemType}}</span>
               </div>
               <div class="form-group">
                 <label class="control-label" for="new-banner-item-id">项目ID</label>
@@ -94,148 +93,11 @@ export default {
   },
   data() {
     return {
-      banners: [{
-          displayOrder: 0,
-          type: 'article',
-          bannerCoverUrl: 'http://lorempixel.com/400/200',
-          item: {
-            createTime: "2017-07-12 09:03:02.0",
-            updateTime: "2017-07-12 09:03:02.0",
-            id: 2,
-            type: 1,
-            profile: {
-              createTime: "2017-07-12 09:03:01.0",
-              updateTime: "2017-07-12 09:03:01.0",
-              nickname: "喵喵喵的伙伴",
-              bio: "Web 开发专家",
-              avatar: null,
-              id: 1,
-              deleted: false
-            },
-            comments: [],
-            likeCount: 0,
-            commentCount: 0,
-            title: "铲屎官必读文章(0)",
-            summary: "简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介",
-            content: "<p style=\"color:#63c;\">第一段</p><p>第二段</p>",
-            cover: "http://lorempixel.com/400/200",
-            deleted: true
-          }
-        },
-        {
-          displayOrder: 1,
-          type: 'article',
-          bannerCoverUrl: 'http://lorempixel.com/400/200',
-          item: {
-            createTime: "2017-07-12 09:03:02.0",
-            updateTime: "2017-07-12 09:03:02.0",
-            id: 2,
-            type: 1,
-            profile: {
-              createTime: "2017-07-12 09:03:01.0",
-              updateTime: "2017-07-12 09:03:01.0",
-              nickname: "喵喵喵的伙伴",
-              bio: "Web 开发专家",
-              avatar: null,
-              id: 1,
-              deleted: false
-            },
-            comments: [],
-            likeCount: 0,
-            commentCount: 0,
-            title: "铲屎官必读文章(1)",
-            summary: "简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介",
-            content: "<p style=\"color:#63c;\">第一段</p><p>第二段</p>",
-            cover: "http://lorempixel.com/400/200",
-            deleted: true
-          }
-        },
-        {
-          displayOrder: 2,
-          type: 'article',
-          bannerCoverUrl: 'http://lorempixel.com/400/200',
-          item: {
-            createTime: "2017-07-12 09:03:02.0",
-            updateTime: "2017-07-12 09:03:02.0",
-            id: 2,
-            type: 1,
-            profile: {
-              createTime: "2017-07-12 09:03:01.0",
-              updateTime: "2017-07-12 09:03:01.0",
-              nickname: "喵喵喵的伙伴",
-              bio: "Web 开发专家",
-              avatar: null,
-              id: 1,
-              deleted: false
-            },
-            comments: [],
-            likeCount: 0,
-            commentCount: 0,
-            title: "铲屎官必读文章(2)",
-            summary: "简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介",
-            content: "<p style=\"color:#63c;\">第一段</p><p>第二段</p>",
-            cover: "http://lorempixel.com/400/200",
-            deleted: true
-          }
-        },
-        {
-          displayOrder: 3,
-          type: 'article',
-          bannerCoverUrl: 'http://lorempixel.com/400/200',
-          item: {
-            createTime: "2017-07-12 09:03:02.0",
-            updateTime: "2017-07-12 09:03:02.0",
-            id: 2,
-            type: 1,
-            profile: {
-              createTime: "2017-07-12 09:03:01.0",
-              updateTime: "2017-07-12 09:03:01.0",
-              nickname: "喵喵喵的伙伴",
-              bio: "Web 开发专家",
-              avatar: null,
-              id: 1,
-              deleted: false
-            },
-            comments: [],
-            likeCount: 0,
-            commentCount: 0,
-            title: "铲屎官必读文章(3)",
-            summary: "简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介",
-            content: "<p style=\"color:#63c;\">第一段</p><p>第二段</p>",
-            cover: "http://lorempixel.com/400/200",
-            deleted: true
-          }
-        },
-        {
-          displayOrder: 4,
-          type: 'answer',
-          bannerCoverUrl: 'http://lorempixel.com/400/200',
-          item: {
-            createTime: "2017-07-12 10:08:30.0",
-            updateTime: "2017-07-12 10:08:30.0",
-            id: 4,
-            type: 3,
-            profile: {
-              createTime: "2017-07-12 10:08:29.0",
-              updateTime: "2017-07-12 10:08:29.0",
-              nickname: "喵喵喵的伙伴",
-              bio: "Web 开发专家",
-              avatar: null,
-              id: 1,
-              deleted: false
-            },
-            comments: [],
-            likeCount: 0,
-            commentCount: 0,
-            content: "<p style=\"color:#63c;\">吃的！吃的！</p>",
-            deleted: true
-          }
-        }
-      ],
+      banners: [],
       newBanner: {
         itemType: '',
-        itemId: 66,
-        bannerCoverUrl: 'http://lorempixel.com/400/200'
+        itemId: '',
+        image: 'http://lorempixel.com/400/200'
       },
       rawHtml: ''
     }
@@ -258,7 +120,7 @@ export default {
         --this.banners[i].displayOrder;
       }
 
-      // TODO: send changes to server
+      this.updateBanners();
     },
     moveUp(banner) {
       if (banner.displayOrder == 0) {
@@ -271,7 +133,7 @@ export default {
       this.banners[banner.displayOrder].displayOrder = banner.displayOrder;
       banner.displayOrder = banner.displayOrder - 1;
 
-      // TODO: send changes to server
+      this.updateBanners()
     },
     moveDown(banner) {
       if (banner.displayOrder == this.banners.length - 1) {
@@ -284,10 +146,9 @@ export default {
       this.banners[banner.displayOrder].displayOrder = banner.displayOrder;
       banner.displayOrder = banner.displayOrder + 1;
 
-      // TODO: send changes to server
+      this.updateBanners()
     },
     expandContent(rawHtml) {
-      console.log(rawHtml);
       $('#content-detail-modal .modal-body').html(rawHtml);
       $('#content-detail-modal').modal('show');
     },
@@ -307,7 +168,7 @@ export default {
           this.$http.post('http://upload.qiniu.com/', data)
             .then(function(response) {
               const key = response.body.key;
-              this.newBanner.bannerCoverUrl = 'http://osg5c99b1.bkt.clouddn.com/' + key
+              this.newBanner.image = 'http://osg5c99b1.bkt.clouddn.com/' + key
             }, function(response) {
               alert(response.body.error || '上传图片失败');
             })
@@ -316,43 +177,47 @@ export default {
         })
     },
     addBanner() {
-      let banners = [];
-      let itemType = '';
+      let itemType = 4;  // an invalid value
       switch (this.newBanner.itemType) {
         case '回答':
-          itemType = 'answer';
+          itemType = 3;
           break;
         case '文章':
-          itemType = 'article';
+          itemType = 1;
           break;
         default:
           return;
       }
 
       // add new banner
-      banners.push({
+      this.banners.unshift({
         displayOrder: 0,
         itemType: itemType,
         itemId: this.newBanner.itemId,
-        image: this.newBanner.bannerCoverUrl
-      })
+        image: this.newBanner.image
+      });
+      for (var i = 1; i < this.banners.length; i++) {
+        ++this.banners[i].displayOrder;
+      }
 
-      // add the rest of banners (4 at most)
-      for (var i = 0; i < this.banners.length && i < 4; i++) {
+      // update to server
+      this.updateBanners();
+      $('#add-banner-modal').modal('hide');
+    },
+    updateBanners() {
+      let banners = [];
+      for (var i = 0; i < this.banners.length; i++) {
         banners.push({
           displayOrder: this.banners[i].displayOrder,
           itemType: this.banners[i].itemType,
           itemId: this.banners[i].itemId,
-          image: this.banners[i].bannerCoverUrl
+          image: this.banners[i].image
         })
       }
 
-      // update to server
-      this.$http.put('http://106.14.156.19/api/admin/banners', {
-        data: banners
-      }).then(function(response) {
+      this.$http.put('http://106.14.156.19/api/admin/banners', banners)
+      .then(function(response) {
         this.fetchBanners();
-        $('#add-banner-modal').modal('hide');
       }, function(response) {
         alert(response.body.message || '更新吧呢失败');
       })
