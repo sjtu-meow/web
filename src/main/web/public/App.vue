@@ -117,11 +117,8 @@ export default {
       })
 
     const vueModule = this;
+    // initialize editor
     $(function() {
-      // initialize login popover
-      $('[data-toggle="popover"]').popover()
-
-      // initialize editor
       $('#summernote').summernote({
         lang: 'zh-CN',
         minHeight: 200,
@@ -140,38 +137,35 @@ export default {
           onImageUpload: function(files) {
             // get token
             vueModule.$http.get('http://106.14.156.19/api/web/upload/token')
-              .then(function(response) {
-                const token = response.body.token
+            .then(function(response) {
+              const token = response.body.token
 
-                for (var i = 0; i < files.length; i++) {
-                  let file = files[i]
+              for (var i = 0; i < files.length; i++) {
+                let file = files[i]
 
-                  // send form data
-                  let data = new FormData();
-                  data.append('file', file)
-                  data.append('token', token)
-                  vueModule.$http.post('http://upload.qiniu.com/', data)
-                    .then(function(response) {
-                      const key = response.body.key;
-                      let imageUrl = 'http://osg5c99b1.bkt.clouddn.com/' + key
-                      let imgNode = document.createElement('img');
-                      imgNode.setAttribute('src', imageUrl)
+                // send form data
+                let data = new FormData();
+                data.append('file', file)
+                data.append('token', token)
+                vueModule.$http.post('http://upload.qiniu.com/', data)
+                .then(function(response) {
+                  const key = response.body.key;
+                  let imageUrl = 'http://osg5c99b1.bkt.clouddn.com/' + key
+                  let imgNode = document.createElement('img');
+                  imgNode.setAttribute('src', imageUrl)
 
-                      $('#summernote').summernote('insertNode', imgNode);
-                    }, function(response) {
-                      alert(response.body.error || '上传图片失败');
-                    })
-                }
-              }, function(response) {
-                alert(response.body.message || '获取token失败');
-              })
+                  $('#summernote').summernote('insertNode', imgNode);
+                }, function(response) {
+                  alert(response.body.error || '上传图片失败');
+                })
+              }
+            }, function(response) {
+              alert(response.body.message || '获取token失败');
+            })
           },
         }
-
       });
     });
-
-
   },
   methods: {
     login() {
@@ -190,7 +184,7 @@ export default {
         .then(function(response) {
           this.loggedIn = false;
         }, function(response) {
-          alert(response.body.message || '登录失败');
+          alert(response.body.message || '退出失败');
         })
     },
     getArticleHtml() {
