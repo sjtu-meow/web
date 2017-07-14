@@ -55,6 +55,10 @@ public class BannerServiceImpl implements BannerService {
 	@Transactional
 	public String update(List<UpdateBannerForm> ubfl) {
 		
+		if (ubfl.size() > 5) {
+			return "Banner 个数不能超过 5 个";
+		}
+		
 		for (UpdateBannerForm ubf: ubfl) {
 			
 			if (ubf.getDisplayOrder() == null)
