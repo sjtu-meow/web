@@ -83,7 +83,7 @@ export default {
       this.$emit('moveDown', this.banner);
     },
     deleteBanner() {
-      this.$emit('deleteBanner', this.banner)
+      this.$emit('deleteBanner', this.banner, this.article.title)
     },
     expandContent() {
       this.$emit('expandContent', this.article.content)

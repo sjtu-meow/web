@@ -11,11 +11,17 @@
 
   <section class="content">
     <template v-for="banner in banners">
+      <moment-banner v-if="banner.itemType === 0" :banner="banner"
+        @deleteBanner="promptDeleteBanner" @moveUp="moveUp" @moveDown="moveDown"
+        @expandContent="expandContent"@triggerCoverInputClick="triggerCoverInputClick"/>
       <article-banner v-if="banner.itemType === 1" :banner="banner"
-        @deleteBanner="deleteBanner" @moveUp="moveUp" @moveDown="moveDown"
+        @deleteBanner="promptDeleteBanner" @moveUp="moveUp" @moveDown="moveDown"
+        @expandContent="expandContent"@triggerCoverInputClick="triggerCoverInputClick"/>
+      <question-banner v-if="banner.itemType === 2" :banner="banner"
+        @deleteBanner="promptDeleteBanner" @moveUp="moveUp" @moveDown="moveDown"
         @expandContent="expandContent"@triggerCoverInputClick="triggerCoverInputClick"/>
       <answer-banner v-if="banner.itemType === 3" :banner="banner"
-        @deleteBanner="deleteBanner" @moveUp="moveUp" @moveDown="moveDown"
+        @deleteBanner="promptDeleteBanner" @moveUp="moveUp" @moveDown="moveDown"
         @expandContent="expandContent"@triggerCoverInputClick="triggerCoverInputClick"/>
     </template>
   </section>
@@ -83,17 +89,40 @@
       </div>
     </div>
   </div>
+
+  <!-- Delete Modal -->
+  <div class="modal fade" id="delete-banner-modal" tabindex="-1" role="dialog" aria-labelledby="delete-banner-modal-title">
+    <div class="modal-dialog modal-sm" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="delete-banner-modal-title">删除吧呢</h4>
+        </div>
+        <div class="modal-body">
+          <p class="text-danger">确定删除吧呢<b>「{{promptForDeletion.substring(0, 30)}}{{promptForDeletion.length > 30 ? '…' : ''}}」</b>吗？</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+          <button type="button" class="btn btn-danger" @click="deleteBanner">删除</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </section>
 </template>
 
 <script>
 import ArticleBanner from './ArticleBanner.vue'
 import AnswerBanner from './AnswerBanner.vue'
+import QuestionBanner from './QuestionBanner.vue'
+import MomentBanner from './MomentBanner.vue'
 
 export default {
   components: {
     ArticleBanner,
-    AnswerBanner
+    AnswerBanner,
+    QuestionBanner,
+    MomentBanner
   },
   data() {
     return {
@@ -104,6 +133,8 @@ export default {
         image: 'http://lorempixel.com/400/200'
       },
       bannerToUpdateImage: {},
+      bannerToDelete: {},
+      promptForDeletion: '',
       rawHtml: ''
     }
   },
@@ -119,13 +150,19 @@ export default {
           alert(response.body.message || '获取吧呢失败');
         })
     },
-    deleteBanner(banner) {
-      this.banners.splice(banner.displayOrder, 1);
-      for (var i = banner.displayOrder; i < this.banners.length; i++) {
+    promptDeleteBanner(banner, prompt) {
+      this.bannerToDelete = banner;
+      this.promptForDeletion = prompt;
+      $('#delete-banner-modal').modal('show');
+    },
+    deleteBanner() {
+      this.banners.splice(this.bannerToDelete.displayOrder, 1);
+      for (var i = this.bannerToDelete.displayOrder; i < this.banners.length; i++) {
         --this.banners[i].displayOrder;
       }
 
       this.updateBanners();
+      $('#delete-banner-modal').modal('hide');
     },
     moveUp(banner) {
       if (banner.displayOrder == 0) {
@@ -208,6 +245,8 @@ export default {
       for (var i = 1; i < this.banners.length; i++) {
         ++this.banners[i].displayOrder;
       }
+
+      // TODO: remove trailing banners
 
       // update to server
       this.updateBanners();
