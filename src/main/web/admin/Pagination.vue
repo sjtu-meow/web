@@ -23,7 +23,7 @@ export default {
   data() {
     return {
       config: {
-        offset: 3
+        offset: 2
       }
     }
   },
@@ -39,13 +39,18 @@ export default {
         return [];
       }
 
-      let from = this.pagination.currentPage - this.config.offset;
-      from = from > 0 ? from : 0;
-
-      let to = from + (this.config.offset * 2);
-      to = to <= this.pagination.totalPages ? to : this.pagination.totalPages - 1;
-
       let pages = [];
+      let length = this.config.offset * 2 + 1 > this.pagination.totalPages ? this.pagination.totalPages : this.config.offset * 2 + 1;
+      let from = this.pagination.currentPage - this.config.offset;
+      let to = this.pagination.currentPage + this.config.offset;
+      if (from < 0) {
+        from = 0;
+        to = from + length - 1;
+      } else if (to >= this.pagination.totalPages) {
+        to = this.pagination.totalPages - 1;
+        from = to - length + 1;
+      }
+
       while (from <= to) {
         pages.push(from);
         from++;
