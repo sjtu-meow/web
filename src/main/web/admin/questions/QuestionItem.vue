@@ -12,7 +12,7 @@
     <div class="row">
       <div class="col-md-11">
         <p>{{question.content.substring(0, contentPreviewLength)}}</p>
-        <a v-if="question.content.length > contentPreviewLength" @click="expandQuestionContent">展开</a>
+        <button v-if="question.content.length > contentPreviewLength" type="button" class="btn btn-link btn-xs" @click="expandQuestionContent">展开</button>
       </div>
       <div class="col-md-1">
         <button v-if="question.deleted" type="button" class="btn btn-primary btn-xs" @click="recoverQuestion">

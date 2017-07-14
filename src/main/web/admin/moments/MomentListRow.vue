@@ -6,7 +6,7 @@
   <td>{{moment.profile.nickname}}（{{moment.profile.id}}）</td>
   <td>
     {{moment.content.substring(0, contentPreviewLength)}}{{moment.content.length > contentPreviewLength ? '…' : ''}}
-    <a v-if="moment.content.length > contentPreviewLength" @click="expandContent">展开</a>
+    <button v-if="moment.content.length > contentPreviewLength" type="button" class="btn btn-link btn-xs" @click="expandContent">展开</button>
   </td>
   <td>
     <template v-for="media in moment.medias">

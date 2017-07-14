@@ -129,8 +129,7 @@ export default {
   },
   methods: {
     fetchMoments(page) {
-      //TODO: change url
-      this.$http.get('http://106.14.156.19/api/admin/moments?' + 'page=' + page + '&size=' + this.pageSize)
+      this.$http.get('/api/admin/moments?' + 'page=' + page + '&size=' + this.pageSize)
         .then(function(response) {
           this.moments = response.body.content;
           this.pagination.currentPage = response.body.number;
@@ -144,7 +143,7 @@ export default {
       $('#delete-moment-modal').modal('show');
     },
     deleteMoment() {
-      this.$http.delete('http://106.14.156.19/api/admin/moments/' + this.momentToDelete.id)
+      this.$http.delete('/api/admin/moments/' + this.momentToDelete.id)
         .then(function(response) {
           $('#delete-moment-modal').modal('hide');
           this.momentToDelete.deleted = true;
@@ -157,8 +156,7 @@ export default {
       $('#recover-moment-modal').modal('show');
     },
     recoverMoment() {
-      //TODO: change url and test implementation
-      this.$http.patch('http://106.14.156.19/api/admin/moments/' + this.momentToRecover.id, {
+      this.$http.patch('/api/admin/moments/' + this.momentToRecover.id, {
         isDeleted: false
       }).then(function(response) {
         $('#recover-moment-modal').modal('hide');

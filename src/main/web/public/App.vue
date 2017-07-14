@@ -107,7 +107,7 @@ export default {
     }
   },
   created() {
-    this.$http.get('http://106.14.156.19/api/web/auth')
+    this.$http.get('/api/web/auth')
       .then(function (response) {
         if (response.body.loggedIn) {
           this.loggedIn = true;
@@ -117,11 +117,8 @@ export default {
       })
 
     const vueModule = this;
+    // initialize editor
     $(function() {
-      // initialize login popover
-      $('[data-toggle="popover"]').popover()
-
-      // initialize editor
       $('#summernote').summernote({
         lang: 'zh-CN',
         minHeight: 200,
@@ -139,43 +136,40 @@ export default {
           // upload image to Qiniu
           onImageUpload: function(files) {
             // get token
-            vueModule.$http.get('http://106.14.156.19/api/web/upload/token')
-              .then(function(response) {
-                const token = response.body.token
+            vueModule.$http.get('/api/web/upload/token')
+            .then(function(response) {
+              const token = response.body.token
 
-                for (var i = 0; i < files.length; i++) {
-                  let file = files[i]
+              for (var i = 0; i < files.length; i++) {
+                let file = files[i]
 
-                  // send form data
-                  let data = new FormData();
-                  data.append('file', file)
-                  data.append('token', token)
-                  vueModule.$http.post('http://upload.qiniu.com/', data)
-                    .then(function(response) {
-                      const key = response.body.key;
-                      let imageUrl = 'http://osg5c99b1.bkt.clouddn.com/' + key
-                      let imgNode = document.createElement('img');
-                      imgNode.setAttribute('src', imageUrl)
+                // send form data
+                let data = new FormData();
+                data.append('file', file)
+                data.append('token', token)
+                vueModule.$http.post('http://upload.qiniu.com/', data)
+                .then(function(response) {
+                  const key = response.body.key;
+                  let imageUrl = 'http://osg5c99b1.bkt.clouddn.com/' + key
+                  let imgNode = document.createElement('img');
+                  imgNode.setAttribute('src', imageUrl)
 
-                      $('#summernote').summernote('insertNode', imgNode);
-                    }, function(response) {
-                      alert(response.body.error || '上传图片失败');
-                    })
-                }
-              }, function(response) {
-                alert(response.body.message || '获取token失败');
-              })
+                  $('#summernote').summernote('insertNode', imgNode);
+                }, function(response) {
+                  alert(response.body.error || '上传图片失败');
+                })
+              }
+            }, function(response) {
+              alert(response.body.message || '获取token失败');
+            })
           },
         }
-
       });
     });
-
-
   },
   methods: {
     login() {
-      this.$http.post('http://106.14.156.19/api/web/auth', {
+      this.$http.post('/api/web/auth', {
         phone: this.phone,
         password: this.password
       }).then(function(response) {
@@ -186,11 +180,11 @@ export default {
       $('#loginModal').modal('hide')
     },
     logout() {
-      this.$http.delete('http://106.14.156.19/api/web/auth')
+      this.$http.delete('/api/web/auth')
         .then(function(response) {
           this.loggedIn = false;
         }, function(response) {
-          alert(response.body.message || '登录失败');
+          alert(response.body.message || '退出失败');
         })
     },
     getArticleHtml() {
@@ -200,14 +194,23 @@ export default {
       alert('还没实现呢');
     },
     postArticle() {
-      alert('还没实现呢');
+      this.$http.post('/api/web/articles', {
+        title: this.title,
+        summary: this.summary,
+        content: this.getArticleHtml(),
+        cover: this.coverUrl
+      }).then(function(response) {
+          alert('发布成功')
+        }, function(response) {
+          alert(response.body.error || '发布失败');
+        })
     },
     triggerCoverInputClick: function() {
       $('#coverInput').click();
     },
     uploadPicture: function(event) {
       // get token
-      this.$http.get('http://106.14.156.19/api/web/upload/token')
+      this.$http.get('/api/web/upload/token')
         .then(function(response) {
           const token = response.body.token
 
@@ -217,7 +220,6 @@ export default {
           data.append('token', token)
           this.$http.post('http://upload.qiniu.com/', data)
             .then(function(response) {
-              console.log(response);
               const key = response.body.key;
               this.coverUrl = 'http://osg5c99b1.bkt.clouddn.com/' + key
             }, function(response) {

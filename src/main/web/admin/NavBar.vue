@@ -13,10 +13,26 @@
       <div class="navbar-custom-menu">
         <ul class="nav navbar-nav">
           <li>
-            <a href="/logout">退出登录</a>
+            <a v-if="loggedIn" @click="logout">退出登录</a>
+            <a v-else @click="login">登录</a>
           </li>
         </ul>
       </div>
     </nav>
   </header>
 </template>
+
+<script>
+export default {
+  name: 'NavBar',
+  props: ['loggedIn'],
+  methods: {
+    logout() {
+      this.$emit('logout');
+    },
+    login() {
+      this.$emit('login');
+    }
+  }
+}
+</script>

@@ -4,7 +4,7 @@
   <td>{{answer.profile.nickname}}（{{answer.profile.id}}）</td>
   <td>
     {{plainContent.substring(0, contentPreviewLength)}}{{plainContent.length > contentPreviewLength ? '…' : ''}}
-    <a @click="expandAnswerContent">查看详情</a>
+    <button type="button" class="btn btn-link btn-xs" @click="expandAnswerContent">查看详情</button>
   </td>
   <td>
     <button v-if="answer.deleted" type="button" class="btn btn-primary btn-xs" @click="recoverAnswer">
