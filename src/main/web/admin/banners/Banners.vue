@@ -112,7 +112,7 @@ export default {
   },
   methods: {
     fetchBanners() {
-      this.$http.get('http://106.14.156.19/api/admin/banners')
+      this.$http.get('/api/admin/banners')
         .then(function(response) {
           this.banners = response.body;
         }, function(response) {
@@ -163,7 +163,7 @@ export default {
     },
     uploadPicture(event) {
       // get token
-      this.$http.get('http://106.14.156.19/api/web/upload/token')
+      this.$http.get('/api/web/upload/token')
         .then(function(response) {
           const token = response.body.token
 
@@ -224,7 +224,7 @@ export default {
         })
       }
 
-      this.$http.put('http://106.14.156.19/api/admin/banners', banners)
+      this.$http.put('/api/admin/banners', banners)
       .then(function(response) {
         this.fetchBanners();
       }, function(response) {

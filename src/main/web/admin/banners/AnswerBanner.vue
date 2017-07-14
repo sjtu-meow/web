@@ -70,13 +70,13 @@ export default {
     }
   },
   created() {
-    this.$http.get('http://106.14.156.19/api/admin/answers/' + this.banner.itemId)
+    this.$http.get('/api/admin/answers/' + this.banner.itemId)
       .then(function(response) {
         // get content of answer
         this.answer = response.body;
 
         // get content of question
-        this.$http.get('http://106.14.156.19/api/admin/questions/' + this.answer.questionId)
+        this.$http.get('/api/admin/questions/' + this.answer.questionId)
           .then(function(response) {
             this.question = response.body;
           }, function(response) {

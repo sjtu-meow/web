@@ -138,7 +138,7 @@ export default {
   },
   methods: {
     fetchArticles(page) {
-      this.$http.get('http://106.14.156.19/api/admin/articles?' + 'page=' + page + '&size=' + this.pageSize)
+      this.$http.get('/api/admin/articles?' + 'page=' + page + '&size=' + this.pageSize)
         .then(function(response) {
           this.articles = response.body.content;
           this.pagination.currentPage = response.body.number;
@@ -152,7 +152,7 @@ export default {
       $('#delete-article-modal').modal('show');
     },
     deleteArticle() {
-      this.$http.delete('http://106.14.156.19/api/admin/articles/' + this.articleToDelete.id)
+      this.$http.delete('/api/admin/articles/' + this.articleToDelete.id)
         .then(function(response) {
           this.articleToDelete.deleted = true;
           $('#delete-article-modal').modal('hide');
@@ -165,7 +165,7 @@ export default {
       $('#recover-article-modal').modal('show');
     },
     recoverArticle() {
-      this.$http.patch('http://106.14.156.19/api/admin/articles/' + this.articleToRecover.id, {
+      this.$http.patch('/api/admin/articles/' + this.articleToRecover.id, {
         isDeleted: false
       }).then(function(response) {
         this.articleToRecover.deleted = false;

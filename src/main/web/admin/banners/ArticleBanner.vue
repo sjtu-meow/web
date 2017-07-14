@@ -68,7 +68,7 @@ export default {
     }
   },
   created() {
-    this.$http.get('http://106.14.156.19/api/admin/articles/' + this.banner.itemId)
+    this.$http.get('/api/admin/articles/' + this.banner.itemId)
       .then(function(response) {
         this.article = response.body;
       }, function(response) {

@@ -228,7 +228,7 @@ export default {
   },
   methods: {
     fetchUsers: function(page) {
-      this.$http.get('http://106.14.156.19/api/admin/users?' + 'page=' + page + '&size=' + this.pageSize)
+      this.$http.get('/api/admin/users?' + 'page=' + page + '&size=' + this.pageSize)
         .then(function(response) {
           this.users = response.body.content;
           this.pagination.currentPage = response.body.number;
@@ -241,7 +241,7 @@ export default {
       $('#add-user-modal').modal('show');
     },
     addUser() {
-      this.$http.post('http://106.14.156.19/api/admin/users', {
+      this.$http.post('/api/admin/users', {
         phone: this.newUser.phone,
         password: this.newUser.password,
         nickname: this.newUser.nickname,
@@ -260,7 +260,7 @@ export default {
       $('#delete-user-modal').modal('show');
     },
     deleteUser: function(event) {
-      this.$http.delete('http://106.14.156.19/api/admin/users/' + this.userToDelete.id)
+      this.$http.delete('/api/admin/users/' + this.userToDelete.id)
         .then(function(response) {
           this.userToDelete.deleted = true;
           $('#delete-user-modal').modal('hide');
@@ -273,7 +273,7 @@ export default {
       $('#recover-user-modal').modal('show');
     },
     recoverUser() {
-      this.$http.patch('http://106.14.156.19/api/admin/users/' + this.userToRecover.id, {
+      this.$http.patch('/api/admin/users/' + this.userToRecover.id, {
         isDeleted: false
       }).then(function(response) {
         this.userToRecover.deleted = false;
@@ -287,7 +287,7 @@ export default {
       $('#set-admin-user-modal').modal('show');
     },
     setAdminUser() {
-      this.$http.patch('http://106.14.156.19/api/admin/users/' + this.userToSetAdmin.id, {
+      this.$http.patch('/api/admin/users/' + this.userToSetAdmin.id, {
         admin: true
       }).then(function(response) {
         this.userToSetAdmin.admin = true;
@@ -301,7 +301,7 @@ export default {
       $('#unset-admin-user-modal').modal('show');
     },
     unsetAdminUser() {
-      this.$http.patch('http://106.14.156.19/api/admin/users/' + this.userToUnsetAdmin.id, {
+      this.$http.patch('/api/admin/users/' + this.userToUnsetAdmin.id, {
         admin: false
       }).then(function(response) {
         this.userToUnsetAdmin.admin = false;

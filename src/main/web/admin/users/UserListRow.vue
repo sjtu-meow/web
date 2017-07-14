@@ -98,7 +98,7 @@ export default {
   methods: {
     updateNickname(event) {
       //TODO: change url
-      this.$http.patch('http://106.14.156.19/api/admin/users/' + this.user.id, {
+      this.$http.patch('/api/admin/users/' + this.user.id, {
         nickname: this.newNickname
       }).then(function (response) {
         this.user.profile.nickname = this.newNickname;
@@ -109,7 +109,7 @@ export default {
     },
     updateBio(event) {
       //TODO: change url
-      this.$http.patch('http://106.14.156.19/api/admin/users/' + this.user.id, {
+      this.$http.patch('/api/admin/users/' + this.user.id, {
         bio: this.newBio
       }).then(function (response) {
         this.user.profile.bio = this.newBio;
@@ -120,7 +120,7 @@ export default {
     },
     updatePassword(event) {
       //TODO: change url
-      this.$http.patch('http://106.14.156.19/api/admin/users/' + this.user.id, {
+      this.$http.patch('/api/admin/users/' + this.user.id, {
         password: this.newPassword
       }).then(function (response) {
         this.editingPassword = false;

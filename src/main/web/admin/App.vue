@@ -97,7 +97,7 @@ export default {
     }
   },
   created() {
-    this.$http.get('http://106.14.156.19/api/web/auth')
+    this.$http.get('/api/web/auth')
       .then(function (response) {
         if (response.body.loggedIn) {
           this.loggedIn = true;
@@ -112,7 +112,7 @@ export default {
     },
     login() {
       // TODO: change to admin API
-      this.$http.post('http://106.14.156.19/api/web/auth', {
+      this.$http.post('/api/web/auth', {
         phone: this.phone,
         password: this.password
       }).then(function(response) {
@@ -124,7 +124,7 @@ export default {
     },
     logout() {
       // TODO: change to admin API
-      this.$http.delete('http://106.14.156.19/api/web/auth')
+      this.$http.delete('/api/web/auth')
         .then(function(response) {
           this.loggedIn = false;
         }, function(response) {

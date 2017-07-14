@@ -195,7 +195,7 @@ export default {
   methods: {
     fetchQuestions: function(page) {
       //TODO: change url
-      this.$http.get('http://106.14.156.19/api/admin/questions?' + 'page=' + page + '&size=' + this.pageSize)
+      this.$http.get('/api/admin/questions?' + 'page=' + page + '&size=' + this.pageSize)
         .then(function(response) {
           this.questions = response.body.content;
           this.pagination.currentPage = response.body.number;
@@ -209,7 +209,7 @@ export default {
       $('#delete-question-modal').modal('show');
     },
     deleteQuestion() {
-      this.$http.delete('http://106.14.156.19/api/admin/questions/' + this.questionToDelete.id)
+      this.$http.delete('/api/admin/questions/' + this.questionToDelete.id)
         .then(function(response) {
           // delete question
           this.questionToDelete.deleted = true;
@@ -229,7 +229,7 @@ export default {
       $('#recover-question-modal').modal('show');
     },
     recoverQuestion() {
-      this.$http.patch('http://106.14.156.19/api/admin/questions/' + this.questionToRecover.id, {
+      this.$http.patch('/api/admin/questions/' + this.questionToRecover.id, {
         isDeleted: false
       }).then(function(response) {
         // recover question
@@ -245,7 +245,7 @@ export default {
       $('#delete-answer-modal').modal('show');
     },
     deleteAnswer() {
-      this.$http.delete('http://106.14.156.19/api/admin/answers/' + this.answerToDelete.id)
+      this.$http.delete('/api/admin/answers/' + this.answerToDelete.id)
         .then(function(response) {
           this.answerToDelete.deleted = true;
           $('#delete-answer-modal').modal('hide');
@@ -258,7 +258,7 @@ export default {
       $('#recover-answer-modal').modal('show');
     },
     recoverAnswer() {
-      this.$http.patch('http://106.14.156.19/api/admin/answers/' + this.answerToRecover.id, {
+      this.$http.patch('/api/admin/answers/' + this.answerToRecover.id, {
         isDeleted: false
       }).then(function(response) {
         this.answerToRecover.deleted = false;

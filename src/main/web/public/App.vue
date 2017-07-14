@@ -107,7 +107,7 @@ export default {
     }
   },
   created() {
-    this.$http.get('http://106.14.156.19/api/web/auth')
+    this.$http.get('/api/web/auth')
       .then(function (response) {
         if (response.body.loggedIn) {
           this.loggedIn = true;
@@ -136,7 +136,7 @@ export default {
           // upload image to Qiniu
           onImageUpload: function(files) {
             // get token
-            vueModule.$http.get('http://106.14.156.19/api/web/upload/token')
+            vueModule.$http.get('/api/web/upload/token')
             .then(function(response) {
               const token = response.body.token
 
@@ -169,7 +169,7 @@ export default {
   },
   methods: {
     login() {
-      this.$http.post('http://106.14.156.19/api/web/auth', {
+      this.$http.post('/api/web/auth', {
         phone: this.phone,
         password: this.password
       }).then(function(response) {
@@ -180,7 +180,7 @@ export default {
       $('#loginModal').modal('hide')
     },
     logout() {
-      this.$http.delete('http://106.14.156.19/api/web/auth')
+      this.$http.delete('/api/web/auth')
         .then(function(response) {
           this.loggedIn = false;
         }, function(response) {
@@ -194,14 +194,23 @@ export default {
       alert('还没实现呢');
     },
     postArticle() {
-      alert('还没实现呢');
+      this.$http.post('/api/web/articles', {
+        title: this.title,
+        summary: this.summary,
+        content: this.getArticleHtml(),
+        cover: this.coverUrl
+      }).then(function(response) {
+          alert('发布成功')
+        }, function(response) {
+          alert(response.body.error || '发布失败');
+        })
     },
     triggerCoverInputClick: function() {
       $('#coverInput').click();
     },
     uploadPicture: function(event) {
       // get token
-      this.$http.get('http://106.14.156.19/api/web/upload/token')
+      this.$http.get('/api/web/upload/token')
         .then(function(response) {
           const token = response.body.token
 
@@ -211,7 +220,6 @@ export default {
           data.append('token', token)
           this.$http.post('http://upload.qiniu.com/', data)
             .then(function(response) {
-              console.log(response);
               const key = response.body.key;
               this.coverUrl = 'http://osg5c99b1.bkt.clouddn.com/' + key
             }, function(response) {
