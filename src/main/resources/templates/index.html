@@ -2,8 +2,19 @@
 
 <html lang="en">
 
+<head>
+  <meta charset="UTF-8">
+  <title>喵喵喵的文章编辑器🐱</title>
+  <link rel="stylesheet" data-th-each="style:${publicAsset.styles}" data-th-href="${style}">
+  <link rel="stylesheet" href="/styles/public-bundle.css">
+</head>
+
 <body>
-Hello World !
+
+  <div id="app"></div>
+
+  <script data-th-each="script:${publicAsset.scripts}" data-th-src="${script}"></script>
+  <script src="/scripts/public-bundle.js"></script>
 
 </body>
 
