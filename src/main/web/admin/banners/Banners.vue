@@ -10,20 +10,24 @@
   </section>
 
   <section class="content">
-    <template v-for="banner in banners">
-      <moment-banner v-if="banner.itemType === 0" :banner="banner"
-        @deleteBanner="promptDeleteBanner" @moveUp="moveUp" @moveDown="moveDown"
-        @expandContent="expandContent"@triggerCoverInputClick="triggerCoverInputClick"/>
-      <article-banner v-if="banner.itemType === 1" :banner="banner"
-        @deleteBanner="promptDeleteBanner" @moveUp="moveUp" @moveDown="moveDown"
-        @expandContent="expandContent"@triggerCoverInputClick="triggerCoverInputClick"/>
-      <question-banner v-if="banner.itemType === 2" :banner="banner"
-        @deleteBanner="promptDeleteBanner" @moveUp="moveUp" @moveDown="moveDown"
-        @expandContent="expandContent"@triggerCoverInputClick="triggerCoverInputClick"/>
-      <answer-banner v-if="banner.itemType === 3" :banner="banner"
-        @deleteBanner="promptDeleteBanner" @moveUp="moveUp" @moveDown="moveDown"
-        @expandContent="expandContent"@triggerCoverInputClick="triggerCoverInputClick"/>
-    </template>
+    <transition-group name="list">
+      <template v-for="banner in banners">
+        <moment-banner v-if="banner.itemType === 0" :banner="banner" :key="banner.id"
+          @deleteBanner="promptDeleteBanner" @moveUp="moveUp" @moveDown="moveDown"
+          @expandContent="expandContent"@triggerCoverInputClick="triggerCoverInputClick"/>
+        <article-banner v-if="banner.itemType === 1" :banner="banner" :key="banner.id"
+          @deleteBanner="promptDeleteBanner" @moveUp="moveUp" @moveDown="moveDown"
+          @expandContent="expandContent"@triggerCoverInputClick="triggerCoverInputClick"/>
+        <question-banner v-if="banner.itemType === 2" :banner="banner" :key="banner.id"
+          @deleteBanner="promptDeleteBanner" @moveUp="moveUp" @moveDown="moveDown"
+          @expandContent="expandContent"@triggerCoverInputClick="triggerCoverInputClick"/>
+        <answer-banner v-if="banner.itemType === 3" :banner="banner" :key="banner.id"
+          @deleteBanner="promptDeleteBanner" @moveUp="moveUp" @moveDown="moveDown"
+          @expandContent="expandContent"@triggerCoverInputClick="triggerCoverInputClick"/>
+      </template>
+    </transition-group>
+
+
   </section>
 
   <!-- For ajax image upload -->
@@ -177,7 +181,7 @@ export default {
       this.banners[banner.displayOrder].displayOrder = banner.displayOrder;
       banner.displayOrder = banner.displayOrder - 1;
 
-      this.updateBanners()
+      setTimeout(this.updateBanners, 1000);
     },
     moveDown(banner) {
       if (banner.displayOrder == this.banners.length - 1) {
@@ -190,7 +194,7 @@ export default {
       this.banners[banner.displayOrder].displayOrder = banner.displayOrder;
       banner.displayOrder = banner.displayOrder + 1;
 
-      this.updateBanners()
+      setTimeout(this.updateBanners, 1000);
     },
     expandContent(rawHtml) {
       $('#content-detail-modal .modal-body').html(rawHtml);
@@ -281,3 +285,9 @@ export default {
   }
 }
 </script>
+
+<style>
+.list-move {
+  transition: transform 1s;
+}
+</style>
