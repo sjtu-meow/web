@@ -53,6 +53,7 @@ import Moments from './moments/Moments.vue'
 import Articles from './articles/Articles.vue'
 import Questions from './questions/Questions.vue'
 import Banners from './banners/Banners.vue'
+import Pushes from './pushes/Pushes.vue'
 
 Vue.use(VueRouter);
 Vue.use(VueResource);
@@ -78,6 +79,10 @@ const router = new VueRouter({
     {
       path: '/banners',
       component: Banners
+    },
+    {
+      path: '/pushes',
+      component: Pushes,
     }
   ]
 })
@@ -127,6 +132,7 @@ export default {
       this.$http.delete('/api/web/auth')
         .then(function(response) {
           this.loggedIn = false;
+          window.location = window.location.pathname;
         }, function(response) {
           alert(response.body.message || '退出失败');
         })
