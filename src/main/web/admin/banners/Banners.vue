@@ -50,7 +50,7 @@
             <form class="col-md-6">
               <div class="form-group">
                 <label class="control-label" for="new-banner-type">类型</label>
-                <select class="form-control" id="new-banner-type" v-model="newBanner.itemType" required>
+                <select class="form-control" id="new-banner-type" v-model="newBanner.itemTextualType" required>
                   <option disabled value="">请选择</option>
                   <option>点滴</option>
                   <option>文章</option>
@@ -65,7 +65,7 @@
               </div>
             </form>
           </div>
-          <p v-if="banners.length >= 5" class="text-danger">当前吧呢数量为 <b>{{banners.length}}</b>，系统仅保留前 <b>5</b> 个吧呢</p>
+          <p v-if="banners.length >= bannerSizeBound" class="text-danger">当前吧呢数量为 <b>{{banners.length}}</b>，系统仅保留前 <b>{{bannerSizeBound}}</b> 个吧呢</p>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
@@ -130,14 +130,14 @@ export default {
     return {
       banners: [],
       newBanner: {
-        itemType: '',
+        itemTextualType: '',
         itemId: '',
         image: 'http://lorempixel.com/400/200'
       },
       bannerToUpdateImage: {},
       bannerToDelete: {},
       promptForDeletion: '',
-      rawHtml: ''
+      bannerSizeBound: 5
     }
   },
   created() {
@@ -226,7 +226,7 @@ export default {
     },
     addBanner() {
       let itemType = 4; // an invalid value
-      switch (this.newBanner.itemType) {
+      switch (this.newBanner.itemTextualType) {
         case '点滴':
           itemType = 0;
           break;
@@ -262,7 +262,7 @@ export default {
     },
     updateBanners() {
       let banners = [];
-      for (var i = 0; i < this.banners.length; i++) {
+      for (var i = 0; i < this.banners.length && i < this.bannerSizeBound; i++) {
         banners.push({
           displayOrder: this.banners[i].displayOrder,
           itemType: this.banners[i].itemType,
