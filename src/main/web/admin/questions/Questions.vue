@@ -1,16 +1,39 @@
 <template>
 <section>
   <section class="content-header">
-    <h1>所有问答</h1>
+    <h1>问答管理</h1>
   </section>
   <section class="content">
-    <question-item v-for="question in questions" :key="question" :question="question"
-      @deleteQuestion="promptDeleteQuestion" @recoverQuestion="promptRecoverQuestion"
-      @deleteAnswer="promptDeleteAnswer" @recoverAnswer="promptRecoverAnswer"
-      @expandAnswerContent="expandAnswerContent" @expandQuestionContent="expandQuestionContent" />
+    <div class="row">
+      <div class="col-md-12">
+        <div class="box">
+          <div class="box-header">
+            <h3 class="box-title">所有问答</h3>
 
-    <div class="text-center">
-      <pagination :pagination="pagination" @changePage="fetchQuestions"/>
+            <div class="box-tools">
+              <div class="input-group input-group-sm" style="width: 150px;">
+                <input type="text" class="form-control pull-right" placeholder="搜索" v-model="keywordFromInput">
+                <div class="input-group-btn">
+                  <button type="button" class="btn btn-default" @click="search"><i class="fa fa-search"></i></button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- /.box-header -->
+          <div class="box-body">
+            <question-item v-for="question in questions" :key="question" :question="question"
+              @deleteQuestion="promptDeleteQuestion" @recoverQuestion="promptRecoverQuestion"
+              @deleteAnswer="promptDeleteAnswer" @recoverAnswer="promptRecoverAnswer"
+              @expandAnswerContent="expandAnswerContent" @expandQuestionContent="expandQuestionContent" />
+          </div>
+          <!-- /.box-body -->
+
+          <div class="box-footer clearfix">
+            <pagination :pagination="pagination" @changePage="fetchQuestions"/>
+          </div>
+        </div>
+        <!-- /.box -->
+      </div>
     </div>
 
     <!-- Delete Question Modal -->
@@ -149,6 +172,8 @@ export default {
         totalPages: 1
       },
       pageSize: 2,
+      keywordFromInput: '',
+      keywordOfResult: '',
       questionToDelete: {
         profile: {
           nickname: 'haha'
@@ -194,8 +219,14 @@ export default {
   },
   methods: {
     fetchQuestions: function(page) {
-      //TODO: change url
-      this.$http.get('/api/admin/questions?' + 'page=' + page + '&size=' + this.pageSize)
+      let url = ''
+      if (this.keywordOfResult) {
+        url = '/api/admin/questions?' + 'page=' + page + '&size=' + this.pageSize + '&keyword=' + this.keywordOfResult
+      } else {
+        url = '/api/admin/questions?' + 'page=' + page + '&size=' + this.pageSize
+      }
+
+      this.$http.get(url)
         .then(function(response) {
           this.questions = response.body.content;
           this.pagination.currentPage = response.body.number;
@@ -275,6 +306,10 @@ export default {
     expandQuestionContent(question) {
       this.quesitionToShow = question;
       $('#question-content-detail-modal').modal('show');
+    },
+    search() {
+      this.keywordOfResult = this.keywordFromInput;
+      this.fetchQuestions(0);
     }
   }
 }

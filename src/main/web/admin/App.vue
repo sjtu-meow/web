@@ -2,7 +2,7 @@
 <div id="app" class="wrapper" style="height: auto;">
   <nav-bar :loggedIn="loggedIn" @login="promptLogin" @logout="logout"></nav-bar>
   <side-bar :loggedIn="loggedIn"></side-bar>
-  <div class="content-wrapper" style="min-height: 320px; background-color: #ffffff;">
+  <div class="content-wrapper" style="min-height: 320px;">
     <router-view></router-view>
   </div>
 

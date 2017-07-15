@@ -2,33 +2,58 @@
 <section>
   <section class="content-header">
     <h1>
-      所有用户
-      <button class="btn btn-default" data-toggle="modal" data-target="#add-user-modal">
-        <span class="glyphicon glyphicon-plus"/>
-      </button>
+      用户管理
     </h1>
   </section>
   <section class="content">
-    <div class="table-responsive">
-      <table class="table table-hover">
-        <thead>
-          <tr>
-            <th class="col-md-1">#</th>
-            <th class="col-md-1">头像</th>
-            <th class="col-md-2">昵称</th>
-            <th class="col-md-3">签名</th>
-            <th class="col-md-2">手机</th>
-            <th class="col-md-2">密码</th>
-            <th class="col-md-1"></th>
-          </tr>
-        </thead>
-        <tbody>
-          <user-list-row v-for="user in users" :key="user.id" :user="user" @deleteUser="promptDeleteUser" @recoverUser="promptRecoverUser" @setAdminUser="promptSetAdminUser" @unsetAdminUser="promptUnsetAdminUser" />
-        </tbody>
-      </table>
-    </div>
-    <div class="text-center">
-      <pagination :pagination="pagination" @changePage="fetchUsers" />
+    <div class="row">
+      <div class="col-md-12">
+        <div class="box">
+          <div class="box-header">
+            <h3 class="box-title">所有用户</h3>
+
+            <div class="box-tools">
+              <div class="input-group input-group-sm" style="width: 150px;">
+                <input type="text" class="form-control pull-right" placeholder="搜索" v-model="keywordFromInput">
+                <div class="input-group-btn">
+                  <button type="button" class="btn btn-default" @click="search"><i class="fa fa-search"></i></button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- /.box-header -->
+          <div class="box-body table-responsive no-padding">
+            <div class="table-responsive">
+              <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th>
+                      <button class="btn btn-default btn-xs" data-toggle="modal" data-target="#add-user-modal">
+                        <span class="glyphicon glyphicon-plus"/>
+                      </button>
+                    </th>
+                    <th>头像</th>
+                    <th>昵称</th>
+                    <th>签名</th>
+                    <th>手机</th>
+                    <th>密码</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <user-list-row v-for="user in users" :key="user.id" :user="user" @deleteUser="promptDeleteUser" @recoverUser="promptRecoverUser" @setAdminUser="promptSetAdminUser" @unsetAdminUser="promptUnsetAdminUser" />
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <!-- /.box-body -->
+
+          <div class="box-footer clearfix">
+            <pagination :pagination="pagination" @changePage="fetchUsers" />
+          </div>
+        </div>
+        <!-- /.box -->
+      </div>
     </div>
   </section>
 
@@ -185,6 +210,8 @@ export default {
         totalPages: 1
       },
       pageSize: 2,
+      keywordFromInput: '',
+      keywordOfResult: '',
       newUser: {
         phone: '',
         password: '',
@@ -228,7 +255,14 @@ export default {
   },
   methods: {
     fetchUsers: function(page) {
-      this.$http.get('/api/admin/users?' + 'page=' + page + '&size=' + this.pageSize)
+      let url = ''
+      if (this.keywordOfResult) {
+        url = '/api/admin/users?' + 'page=' + page + '&size=' + this.pageSize + '&keyword=' + this.keywordOfResult
+      } else {
+        url = '/api/admin/users?' + 'page=' + page + '&size=' + this.pageSize
+      }
+
+      this.$http.get(url)
         .then(function(response) {
           this.users = response.body.content;
           this.pagination.currentPage = response.body.number;
@@ -309,6 +343,10 @@ export default {
       }, function(response) {
         alert(response.body.message || '修改失败')
       })
+    },
+    search() {
+      this.keywordOfResult = this.keywordFromInput;
+      this.fetchUsers(0);
     }
   }
 }

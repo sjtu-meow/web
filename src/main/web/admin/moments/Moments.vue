@@ -1,28 +1,49 @@
 <template>
 <section>
   <section class="content-header">
-    <h1>所有点滴</h1>
+    <h1>点滴管理</h1>
   </section>
   <section class="content">
-    <div class="table-responsive">
-      <table class="table table-hover">
-        <thead>
-          <tr>
-            <th class="col-md-1">#</th>
-            <th class="col-md-2">用户</th>
-            <th class="col-md-3">点滴文字预览</th>
-            <th class="col-md-5">媒体</th>
-            <th class="col-md-1"></th>
-          </tr>
-        </thead>
-        <tbody>
-          <moment-list-row v-for="moment in moments" :key="moment.id" :moment="moment" @deleteMoment="promptDeleteMoment" @recoverMoment="promptRecoverMoment" @expandContent="expandContent" />
-        </tbody>
-      </table>
-    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="box">
+          <div class="box-header">
+            <h3 class="box-title">所有点滴</h3>
 
-    <div class="text-center">
-      <pagination :pagination="pagination" @changePage="fetchMoments" />
+            <div class="box-tools">
+              <div class="input-group input-group-sm" style="width: 150px;">
+                <input type="text" class="form-control pull-right" placeholder="搜索" v-model="keywordFromInput">
+                <div class="input-group-btn">
+                  <button type="button" class="btn btn-default" @click="search"><i class="fa fa-search"></i></button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- /.box-header -->
+          <div class="box-body table-responsive no-padding">
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>用户</th>
+                  <th>点滴文字预览</th>
+                  <th>媒体</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <moment-list-row v-for="moment in moments" :key="moment.id" :moment="moment" @deleteMoment="promptDeleteMoment" @recoverMoment="promptRecoverMoment" @expandContent="expandContent" />
+              </tbody>
+            </table>
+          </div>
+          <!-- /.box-body -->
+
+          <div class="box-footer clearfix">
+            <pagination :pagination="pagination" @changePage="fetchMoments" />
+          </div>
+        </div>
+        <!-- /.box -->
+      </div>
     </div>
   </section>
 
@@ -104,6 +125,8 @@ export default {
         totalPages: 1
       },
       pageSize: 2,
+      keywordFromInput: '',
+      keywordOfResult: '',
       momentToDelete: {
         profile: {
           nickname: 'haha'
@@ -129,7 +152,14 @@ export default {
   },
   methods: {
     fetchMoments(page) {
-      this.$http.get('/api/admin/moments?' + 'page=' + page + '&size=' + this.pageSize)
+      let url = ''
+      if (this.keywordOfResult) {
+        url = '/api/admin/moments?' + 'page=' + page + '&size=' + this.pageSize + '&keyword=' + this.keywordOfResult
+      } else {
+        url = '/api/admin/moments?' + 'page=' + page + '&size=' + this.pageSize
+      }
+
+      this.$http.get(url)
         .then(function(response) {
           this.moments = response.body.content;
           this.pagination.currentPage = response.body.number;
@@ -168,6 +198,10 @@ export default {
     expandContent(moment) {
       this.momentToShow = moment;
       $('#moment-content-detail-modal').modal('show');
+    },
+    search() {
+      this.keywordOfResult = this.keywordFromInput;
+      this.fetchMoments(0);
     }
   }
 }

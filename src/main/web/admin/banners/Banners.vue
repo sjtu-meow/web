@@ -52,8 +52,10 @@
                 <label class="control-label" for="new-banner-type">类型</label>
                 <select class="form-control" id="new-banner-type" v-model="newBanner.itemType" required>
                   <option disabled value="">请选择</option>
-                  <option>回答</option>
+                  <option>点滴</option>
                   <option>文章</option>
+                  <option>问题</option>
+                  <option>回答</option>
                 </select>
               </div>
               <div class="form-group">
@@ -223,13 +225,19 @@ export default {
         })
     },
     addBanner() {
-      let itemType = 4;  // an invalid value
+      let itemType = 4; // an invalid value
       switch (this.newBanner.itemType) {
-        case '回答':
-          itemType = 3;
+        case '点滴':
+          itemType = 0;
           break;
         case '文章':
           itemType = 1;
+          break;
+        case '问题':
+          itemType = 2;
+          break;
+        case '回答':
+          itemType = 3;
           break;
         default:
           return;
@@ -264,11 +272,11 @@ export default {
       }
 
       this.$http.put('/api/admin/banners', banners)
-      .then(function(response) {
-        this.fetchBanners();
-      }, function(response) {
-        alert(response.body.message || '更新吧呢失败');
-      })
+        .then(function(response) {
+          this.fetchBanners();
+        }, function(response) {
+          alert(response.body.message || '更新吧呢失败');
+        })
     }
   }
 }
