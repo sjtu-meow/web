@@ -23,32 +23,31 @@
           </div>
           <!-- /.box-header -->
           <div class="box-body table-responsive no-padding">
-            <div class="table-responsive">
-              <table class="table table-hover">
-                <thead>
-                  <tr>
-                    <th>
-                      <button class="btn btn-default btn-xs" data-toggle="modal" data-target="#add-user-modal">
+
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th>
+                    <button class="btn btn-default btn-xs" data-toggle="modal" data-target="#add-user-modal">
                         <span class="glyphicon glyphicon-plus"/>
                       </button>
-                    </th>
-                    <th>头像</th>
-                    <th>昵称</th>
-                    <th>签名</th>
-                    <th>手机</th>
-                    <th>密码</th>
-                    <th></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <user-list-row v-for="user in users" :key="user.id" :user="user" @deleteUser="promptDeleteUser" @recoverUser="promptRecoverUser" @setAdminUser="promptSetAdminUser" @unsetAdminUser="promptUnsetAdminUser" />
-                </tbody>
-              </table>
-            </div>
+                  </th>
+                  <th>头像</th>
+                  <th>昵称</th>
+                  <th>签名</th>
+                  <th>手机</th>
+                  <th>密码</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <user-list-row v-for="user in users" :key="user.id" :user="user" @deleteUser="promptDeleteUser" @recoverUser="promptRecoverUser" @setAdminUser="promptSetAdminUser" @unsetAdminUser="promptUnsetAdminUser" />
+              </tbody>
+            </table>
           </div>
           <!-- /.box-body -->
 
-          <div class="box-footer clearfix">
+          <div v-if="pagination.totalPages > 1" class="box-footer clearfix">
             <pagination :pagination="pagination" @changePage="fetchUsers" />
           </div>
         </div>

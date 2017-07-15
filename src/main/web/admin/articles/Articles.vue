@@ -39,7 +39,7 @@
           </div>
           <!-- /.box-body -->
 
-          <div class="box-footer clearfix">
+          <div v-if="pagination.totalPages > 1" class="box-footer clearfix">
             <pagination :pagination="pagination" @changePage="fetchArticles"/>
           </div>
         </div>
