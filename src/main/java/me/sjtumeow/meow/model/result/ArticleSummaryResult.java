@@ -2,6 +2,7 @@ package me.sjtumeow.meow.model.result;
 
 import me.sjtumeow.meow.model.Article;
 import me.sjtumeow.meow.model.Item;
+import me.sjtumeow.meow.model.Profile;
 
 public class ArticleSummaryResult {
 	protected Long id;
@@ -9,6 +10,7 @@ public class ArticleSummaryResult {
 	protected String title;
 	protected String summary;
 	protected String cover;
+	protected Profile profile;
 	protected Integer likeCount;
     protected Integer commentCount;
     protected String createTime;
@@ -21,6 +23,7 @@ public class ArticleSummaryResult {
     	title = article.getTitle();
     	summary = article.getSummary();
     	cover = article.getCover();
+    	profile = article.getProfile();
     	likeCount = article.getLikeCount();
         commentCount = article.getCommentCount();
         createTime = article.getCreateTime();
@@ -66,6 +69,14 @@ public class ArticleSummaryResult {
 	
 	public void setCover(String cover) {
 		this.cover = cover;
+	}
+	
+	public Profile getProfile() {
+		return profile;
+	}
+
+	public void setProfile(Profile profile) {
+		this.profile = profile;
 	}
 	
 	public Integer getLikeCount() {

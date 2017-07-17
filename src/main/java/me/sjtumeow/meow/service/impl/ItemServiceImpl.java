@@ -171,7 +171,7 @@ public class ItemServiceImpl implements ItemService {
 	
 	@Transactional
 	public Long addArticle(AddArticleForm aaf, User user) {
-		Article article = new Article(aaf.getTitle(), aaf.getSummary(), StringUtil.RichTextFilter(aaf.getContent()), aaf.getCover());
+		Article article = new Article(aaf.getTitle(), aaf.getSummary(), StringUtil.filterRichText(aaf.getContent()), aaf.getCover());
 		article.setProfile(user.getProfile());
 		articleRepository.save(article);
 		return article.getId();
@@ -296,7 +296,7 @@ public class ItemServiceImpl implements ItemService {
 	
 	@Transactional
 	public Long addAnswer(String content, Question question, User user) {
-		Answer answer = new Answer(StringUtil.RichTextFilter(content));
+		Answer answer = new Answer(StringUtil.filterRichText(content));
 		answer.setQuestion(question);
 		answer.setProfile(user.getProfile());
 		answerRepository.save(answer);

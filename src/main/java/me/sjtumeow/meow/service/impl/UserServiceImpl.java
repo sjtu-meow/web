@@ -9,6 +9,7 @@ import me.sjtumeow.meow.model.form.AdminUpdateUserForm;
 import me.sjtumeow.meow.model.form.ProfileForm;
 import me.sjtumeow.meow.model.form.UserCredentialsForm;
 import me.sjtumeow.meow.service.UserService;
+import me.sjtumeow.meow.util.StringUtil;
 
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,12 +29,14 @@ public class UserServiceImpl implements UserService {
     @Autowired
 	private TokenManager tokenManager;
     
-    public Iterable<User> findAll(boolean isAdmin) {
-        return isAdmin ? userRepository.findAll() : userRepository.findAllActive();
+    public Iterable<User> findAll(String keyword, boolean isAdmin) {
+        return isAdmin ? userRepository.findByKeyword(StringUtil.tryStringToPosLong(keyword), StringUtil.wrapLikeSubstr(keyword))
+        		: userRepository.findByKeywordActive(StringUtil.tryStringToPosLong(keyword), StringUtil.wrapLikeSubstr(keyword));
     }
     
-    public Iterable<User> findAllPageable(Integer page, Integer size, boolean isAdmin) {
-    	return isAdmin ? userRepository.findAll(new PageRequest(page, size)) : userRepository.findAllActive(new PageRequest(page, size));
+    public Iterable<User> findAllPageable(Integer page, Integer size, String keyword, boolean isAdmin) {
+    	return isAdmin ? userRepository.findByKeyword(StringUtil.tryStringToPosLong(keyword), StringUtil.wrapLikeSubstr(keyword), new PageRequest(page, size))
+    			: userRepository.findByKeywordActive(StringUtil.tryStringToPosLong(keyword), StringUtil.wrapLikeSubstr(keyword), new PageRequest(page, size));
     }
     
     public User findById(Long id, boolean isAdmin) {
