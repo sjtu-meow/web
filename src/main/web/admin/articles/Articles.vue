@@ -1,29 +1,50 @@
 <template>
 <section>
   <section class="content-header">
-    <h1>所有文章</h1>
+    <h1>文章管理</h1>
   </section>
   <section class="content">
-    <div class="table-responsive">
-      <table class="table table-hover">
-        <thead>
-          <tr>
-            <th class="col-md-1">#</th>
-            <th class="col-md-2">用户</th>
-            <th class="col-md-2">标题</th>
-            <th class="col-md-6">文章内容预览</th>
-            <th class="col-md-1"></th>
-          </tr>
-        </thead>
-        <tbody>
-          <article-list-row v-for="article in articles" :key="article.id" :article="article"
-            @deleteArticle="promptDeleteArticle" @recoverArticle="promptRecoverArticle" @expandContent="expandContent" />
-        </tbody>
-      </table>
-    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="box">
+          <div class="box-header">
+            <h3 class="box-title">所有用户</h3>
 
-    <div class="text-center">
-      <pagination :pagination="pagination" @changePage="fetchArticles"/>
+            <div class="box-tools">
+              <div class="input-group input-group-sm" style="width: 150px;">
+                <input type="text" class="form-control pull-right" placeholder="搜索" v-model="keywordFromInput">
+                <div class="input-group-btn">
+                  <button type="button" class="btn btn-default" @click="search"><i class="fa fa-search"></i></button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- /.box-header -->
+          <div class="box-body table-responsive no-padding">
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>用户</th>
+                  <th>标题</th>
+                  <th>文章内容预览</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <article-list-row v-for="article in articles" :key="article.id" :article="article"
+                  @deleteArticle="promptDeleteArticle" @recoverArticle="promptRecoverArticle" @expandContent="expandContent" />
+              </tbody>
+            </table>
+          </div>
+          <!-- /.box-body -->
+
+          <div v-if="pagination.totalPages > 1" class="box-footer clearfix">
+            <pagination :pagination="pagination" @changePage="fetchArticles"/>
+          </div>
+        </div>
+        <!-- /.box -->
+      </div>
     </div>
   </section>
 
@@ -102,6 +123,8 @@ export default {
         totalPages: 1
       },
       pageSize: 2,
+      keywordFromInput: '',
+      keywordOfResult: '',
       articleToDelete: {
         profile: {
           nickname: 'haha'
@@ -138,7 +161,14 @@ export default {
   },
   methods: {
     fetchArticles(page) {
-      this.$http.get('/api/admin/articles?' + 'page=' + page + '&size=' + this.pageSize)
+      let url = ''
+      if (this.keywordOfResult) {
+        url = '/api/admin/articles?' + 'page=' + page + '&size=' + this.pageSize + '&keyword=' + this.keywordOfResult
+      } else {
+        url = '/api/admin/articles?' + 'page=' + page + '&size=' + this.pageSize
+      }
+
+      this.$http.get(url)
         .then(function(response) {
           this.articles = response.body.content;
           this.pagination.currentPage = response.body.number;
@@ -178,6 +208,10 @@ export default {
       this.articleToShow = article;
       $('#article-content-detail-modal .modal-body').html(article.content);
       $('#article-content-detail-modal').modal('show');
+    },
+    search() {
+      this.keywordOfResult = this.keywordFromInput;
+      this.fetchArticles(0);
     }
   }
 }

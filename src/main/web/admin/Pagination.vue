@@ -1,6 +1,6 @@
 <template>
 <nav>
-  <ul class="pagination" v-if="pagination.totalPages > 1">
+  <ul class="pagination pagination-sm no-margin pull-right" v-if="pagination.totalPages > 1">
     <li :class="{'disabled': pagination.currentPage === 0}">
       <a href="#" @click.prevent="changePage(0)">
         <span>«</span>

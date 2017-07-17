@@ -1,9 +1,9 @@
-<template>
+moment<template>
 <div class="panel panel-default">
   <div class="panel-heading">
     <h3 class="panel-title">
-      #{{banner.displayOrder + 1}} 「{{question.title}}」的回答
-      <small>来自 {{answer.profile.nickname}}（{{answer.profile.id}}）</small>
+      #{{banner.displayOrder + 1}} 点滴
+      <small>来自 {{moment.profile.nickname}}（{{moment.profile.id}}）</small>
     </h3>
   </div>
 
@@ -17,8 +17,8 @@
         </a>
       </div>
       <div class="col-md-8">
-        <label>回答预览</label>
-        <p v-for="line in plainContent.substring(0, contentPreviewLength).split('\n')">{{line}}</p>
+        <label>问题预览</label>
+        <p v-for="line in moment.content.substring(0, contentPreviewLength).split('\n')">{{line}}</p>
         <p>
           <div class="btn-toolbar">
             <div class="btn-group" role="group">
@@ -48,43 +48,27 @@
 
 <script>
 export default {
-  name: 'AnswerBanner',
+  name: 'MomentBanner',
   props: ['banner'],
   data() {
     return {
       contentPreviewLength: 200,
-      answer: {
+      moment: {
+        title: '',
         content: '',
         profile: {
           nickname: ''
         }
-      },
-      question: {
-        title: ''
       }
     }
   },
-  computed: {
-    plainContent() {
-      return $(this.answer.content).text();
-    }
-  },
   created() {
-    this.$http.get('/api/admin/answers/' + this.banner.itemId)
+    this.$http.get('/api/admin/moments/' + this.banner.itemId)
       .then(function(response) {
-        // get content of answer
-        this.answer = response.body;
-
-        // get content of question
-        this.$http.get('/api/admin/questions/' + this.answer.questionId)
-          .then(function(response) {
-            this.question = response.body;
-          }, function(response) {
-            alert(response.body.message || '获取问题失败');
-          })
+        this.moment = response.body;
       }, function(response) {
-        alert(response.body.message || '获取回答失败');
-      });
+        alert(response.body.message || '获取问题失败');
+      })
   },
   methods: {
     moveUp() {
@@ -94,10 +78,10 @@ export default {
       this.$emit('moveDown', this.banner);
     },
     deleteBanner() {
-      this.$emit('deleteBanner', this.banner, this.answer.profile.nickname + '的回答（' + this.question.title + '）');
+      this.$emit('deleteBanner', this.banner, this.moment.profile.nickname + '的点滴')
     },
     expandContent() {
-      this.$emit('expandContent', this.answer.content);
+      this.$emit('expandContent', this.moment.content)
     },
     triggerCoverInputClick() {
       this.$emit('triggerCoverInputClick', this.banner)
