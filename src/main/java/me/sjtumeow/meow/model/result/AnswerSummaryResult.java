@@ -2,6 +2,7 @@ package me.sjtumeow.meow.model.result;
 
 import me.sjtumeow.meow.model.Answer;
 import me.sjtumeow.meow.model.Profile;
+import me.sjtumeow.meow.util.StringUtil;
 
 public class AnswerSummaryResult {
 	protected Long questionId;
@@ -14,6 +15,7 @@ public class AnswerSummaryResult {
     	this.questionTitle = answer.getQuestion().getTitle();
     	this.questionProfile = answer.getQuestion().getProfile();
     	this.answer = answer;
+    	this.answer.setContent(StringUtil.extractHTMLSummary(answer.getContent()));
     }
     
 	public Long getQuestionId() {

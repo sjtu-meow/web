@@ -97,7 +97,7 @@ public class SeederRunner implements ApplicationRunner {
         	questionRepository.save(question);
         	
         	Answer answer = new Answer();
-        	answer.setContent("<p style=\"color:#63c;\">吃的！吃的！</p>");
+        	answer.setContent("<p style=\"color:#63c;\">吃的！吃的！</p><p>就是哭的样子很难看...</p>");
         	answer.setQuestion(question);
         	answer.setProfile(profile1);
         	answerRepository.save(answer);
@@ -125,12 +125,10 @@ public class SeederRunner implements ApplicationRunner {
         		article.setSummary("<script>alert('xss!')</script>");
         		question.setTitle("<script>alert('xss!')</script>");
             	question.setContent("<script>alert('xss!')</script>");
-            	answer.setContent("<script>alert('xss!')</script>");
         		momentRepository.save(moment);
         		commentRepository.save(comment);
         		articleRepository.save(article);
         		questionRepository.save(question);
-        		answerRepository.save(answer);
         	}
         	
         	if (i == 1)

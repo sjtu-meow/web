@@ -7,11 +7,13 @@ import java.util.List;
 
 import me.sjtumeow.meow.model.Answer;
 import me.sjtumeow.meow.model.Comment;
+import me.sjtumeow.meow.model.Item;
 import me.sjtumeow.meow.model.Profile;
 import me.sjtumeow.meow.model.Question;
 
 public class QuestionDetailResult {
 	protected Long id;
+	protected Integer type;
 	protected Profile profile;
 	protected List<Comment> comments;
 	protected Integer likeCount;
@@ -25,6 +27,7 @@ public class QuestionDetailResult {
 	
 	public QuestionDetailResult(Question question) {
 		this.id = question.getId();
+		this.type = Item.ITEM_TYPE_QUESTION;
 		this.profile = question.getProfile();
 		this.likeCount = question.getLikeCount();
 		this.commentCount = question.getCommentCount();
@@ -65,6 +68,10 @@ public class QuestionDetailResult {
 
 	public Long getId() {
 		return id;
+	}
+	
+	public Integer getType() {
+		return type;
 	}
 
 	public Profile getProfile() {
@@ -109,6 +116,10 @@ public class QuestionDetailResult {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+	
+	public void setType(Integer type) {
+		this.type = type;
 	}
 
 	public void setProfile(Profile profile) {
