@@ -53,22 +53,42 @@ public class ItemServiceImpl implements ItemService {
 	@Autowired
     private AnswerRepository answerRepository;
 	
-	
 	// Moment
+	
+	public Moment filterMomentComments(Moment moment) {
+		if (moment == null)
+			return null;
+		moment.filterDeletedComments();
+		return moment;
+	}
+	
+	public Iterable<Moment> filterMomentComments(Iterable<Moment> moments) {
+		for (Moment moment: moments) {
+			moment.filterDeletedComments();
+		}
+		return moments;
+	}
 	
 	public Iterable<Moment> findAllMoments(String keyword, boolean isAdmin) {
 		return isAdmin ? momentRepository.findByContentContaining(keyword)
-				: momentRepository.findByContentContainingAndDeletedAtIsNull(keyword, new Sort(Direction.DESC, "createdAt"));
+				: filterMomentComments(momentRepository.findByContentContainingAndDeletedAtIsNull(keyword, new Sort(Direction.DESC, "createdAt")));
 	}
 	
 	public Iterable<Moment> findAllMomentsPageable(Integer page, Integer size, String keyword, boolean isAdmin) {
-		return isAdmin ?
-			momentRepository.findByContentContaining(keyword, new PageRequest(page, size))
-			: momentRepository.findByContentContainingAndDeletedAtIsNull(keyword, new PageRequest(page, size, Direction.DESC, "createdAt"));
+		return isAdmin ? momentRepository.findByContentContaining(keyword, new PageRequest(page, size))
+			: filterMomentComments(momentRepository.findByContentContainingAndDeletedAtIsNull(keyword, new PageRequest(page, size, Direction.DESC, "createdAt")));
+	}
+	
+	public Iterable<Moment> findMomentsByUser(Long userId) {
+		return filterMomentComments(momentRepository.findByProfileIdAndDeletedAtIsNull(userId, new Sort(Direction.DESC, "createdAt")));
+	}
+	
+	public Iterable<Moment> findMomentsByUser(Integer page, Integer size, Long userId) {
+		return filterMomentComments(momentRepository.findByProfileIdAndDeletedAtIsNull(userId, new PageRequest(page, size, Direction.DESC, "createdAt")));
 	}
     
 	public Moment findMomentById(Long id, boolean isAdmin) {
-		return isAdmin ? momentRepository.findOne(id) : momentRepository.findOneActive(id);
+		return isAdmin ? momentRepository.findOne(id) : filterMomentComments(momentRepository.findOneActive(id));
 	}
 	
 	public User getMomentCreator(Long id) {
@@ -131,11 +151,22 @@ public class ItemServiceImpl implements ItemService {
 	
 	// Article
 	
-	public Iterable<?> findAllArticles(String keyword, boolean isAdmin) {
-		if (isAdmin)
-			return articleRepository.findByTitleContaining(keyword);
-		
-		Iterable<Article> articles = articleRepository.findByTitleContainingAndDeletedAtIsNull(keyword, new Sort(Direction.DESC, "createdAt"));
+	public Article filterArticleComments(Article article) {
+		if (article == null)
+			return null;
+		article.filterDeletedComments();
+		return article;
+	}
+	
+
+	public Iterable<Article> filterArticleComments(Iterable<Article> articles) {
+		for (Article article: articles) {
+			article.filterDeletedComments();
+		}
+		return articles;
+	}
+	
+	public Iterable<ArticleSummaryResult> getArticleSummary(Iterable<Article> articles) {
 		List<ArticleSummaryResult> result = new ArrayList<ArticleSummaryResult>();
 		
 		for (Article article: articles) {
@@ -143,23 +174,28 @@ public class ItemServiceImpl implements ItemService {
 		}
 		
 		return result;
+	}
+	
+	public Iterable<?> findAllArticles(String keyword, boolean isAdmin) {
+		return isAdmin ? articleRepository.findByTitleContaining(keyword) :
+			getArticleSummary(articleRepository.findByTitleContainingAndDeletedAtIsNull(keyword, new Sort(Direction.DESC, "createdAt")));
 	}
 	
 	public Iterable<?> findAllArticlesPageable(Integer page, Integer size, String keyword, boolean isAdmin) {
-		if (isAdmin)
-			return articleRepository.findByTitleContaining(keyword, new PageRequest(page, size));
-		Iterable<Article> articles = articleRepository.findByTitleContainingAndDeletedAtIsNull(keyword, new PageRequest(page, size, Direction.DESC, "createdAt"));
-		List<ArticleSummaryResult> result = new ArrayList<ArticleSummaryResult>();
-		
-		for (Article article: articles) {
-			result.add(new ArticleSummaryResult(article));
-		}
-		
-		return result;
+		return isAdmin ? articleRepository.findByTitleContaining(keyword, new PageRequest(page, size)) :
+			getArticleSummary(articleRepository.findByTitleContainingAndDeletedAtIsNull(keyword, new PageRequest(page, size, Direction.DESC, "createdAt")));
+	}
+	
+	public Iterable<ArticleSummaryResult> findArticlesByUser(Long userId) {
+		return getArticleSummary(articleRepository.findByProfileIdAndDeletedAtIsNull(userId, new Sort(Direction.DESC, "createdAt")));
+	}
+	
+	public Iterable<ArticleSummaryResult> findArticlesByUser(Integer page, Integer size, Long userId) {
+		return getArticleSummary(articleRepository.findByProfileIdAndDeletedAtIsNull(userId, new PageRequest(page, size, Direction.DESC, "createdAt")));
 	}
 	
 	public Article findArticleById(Long id, boolean isAdmin) {
-		return isAdmin ? articleRepository.findOne(id) : articleRepository.findOneActive(id);
+		return isAdmin ? articleRepository.findOne(id) : filterArticleComments(articleRepository.findOneActive(id));
 	}
 	
 	public User getArticleCreator(Long id) {
@@ -259,8 +295,22 @@ public class ItemServiceImpl implements ItemService {
 	
 	// Answer
 	
-	public Iterable<AnswerSummaryResult> findAllAnswers(boolean isAdmin) {
-		Iterable<Answer> answers = isAdmin ? answerRepository.findAll() : answerRepository.findAllActive(new Sort(Direction.DESC, "createdAt"));
+	public Answer filterAnswerComments(Answer answer) {
+		if (answer == null)
+			return null;
+		answer.filterDeletedComments();
+		return answer;
+	}
+	
+	
+	public Iterable<Answer> filterAnswerComments(Iterable<Answer> answers) {
+		for (Answer answer: answers) {
+			answer.filterDeletedComments();
+		}
+		return answers;
+	}
+	
+	public Iterable<AnswerSummaryResult> getAnswerSummary(Iterable<Answer> answers) {
 		List<AnswerSummaryResult> result = new ArrayList<AnswerSummaryResult>();
 		
 		for (Answer answer: answers) {
@@ -270,21 +320,18 @@ public class ItemServiceImpl implements ItemService {
 		return result;
 	}
 	
-	public Iterable<AnswerSummaryResult> findAllAnswersPageable(Integer page, Integer size, boolean isAdmin) {
-		Iterable<Answer> answers = isAdmin ?
-				answerRepository.findAll(new PageRequest(page, size))
-				: answerRepository.findAllActive(new PageRequest(page, size, Direction.DESC, "createdAt"));
-		List<AnswerSummaryResult> result = new ArrayList<AnswerSummaryResult>();
-		
-		for (Answer answer: answers) {
-			result.add(new AnswerSummaryResult(answer));
-		}
-		
-		return result;
+	public Iterable<?> findAllAnswers(boolean isAdmin) {
+		return isAdmin ? answerRepository.findAll() :
+			getAnswerSummary(filterAnswerComments(answerRepository.findAllActive(new Sort(Direction.DESC, "createdAt"))));
+	}
+	
+	public Iterable<?> findAllAnswersPageable(Integer page, Integer size, boolean isAdmin) {
+		return isAdmin ? answerRepository.findAll(new PageRequest(page, size)) :
+			getAnswerSummary(filterAnswerComments(answerRepository.findAllActive(new PageRequest(page, size, Direction.DESC, "createdAt"))));
 	}
 	
 	public Answer findAnswerById(Long id, boolean isAdmin) {
-		return isAdmin ? answerRepository.findOne(id) : answerRepository.findOneActive(id);
+		return isAdmin ? answerRepository.findOne(id) : filterAnswerComments(answerRepository.findOneActive(id));
 	}
 	
 	public User getAnswerCreator(Long id) {

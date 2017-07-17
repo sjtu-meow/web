@@ -15,17 +15,27 @@ import me.sjtumeow.meow.model.form.UpdateArticleForm;
 import me.sjtumeow.meow.model.form.UpdateMomentForm;
 import me.sjtumeow.meow.model.form.UpdateQuestionForm;
 import me.sjtumeow.meow.model.result.AnswerSummaryResult;
+import me.sjtumeow.meow.model.result.ArticleSummaryResult;
 import me.sjtumeow.meow.model.result.CreateResult;
 
 public interface ItemService {
 	
 	// Moment
 	
+	Moment filterMomentComments(Moment moment);
+	
+	Iterable<Moment> filterMomentComments(Iterable<Moment> moment);
+	
 	Iterable<Moment> findAllMoments(String keyword, boolean isAdmin);
 	
 	Iterable<Moment> findAllMomentsPageable(Integer page, Integer size, String keyword, boolean isAdmin);
 	
+	Iterable<Moment> findMomentsByUser(Long userId);
+	
+	Iterable<Moment> findMomentsByUser(Integer page, Integer size, Long userId);
+	
 	Moment findMomentById(Long id, boolean isAdmin);
+	
 	
 	User getMomentCreator(Long id);
 	
@@ -38,9 +48,19 @@ public interface ItemService {
 	
 	// Article
 	
+	Article filterArticleComments(Article article);
+	
+	Iterable<Article> filterArticleComments(Iterable<Article> articles);
+	
+	Iterable<ArticleSummaryResult> getArticleSummary(Iterable<Article> articles);
+	
 	Iterable<?> findAllArticles(String keyword, boolean isAdmin);
 	
 	Iterable<?> findAllArticlesPageable(Integer page, Integer size, String keyword, boolean isAdmin);
+	
+	Iterable<ArticleSummaryResult> findArticlesByUser(Long userId);
+	
+	Iterable<ArticleSummaryResult> findArticlesByUser(Integer page, Integer size, Long userId);
 	
 	Article findArticleById(Long id, boolean isAdmin);
 	
@@ -72,9 +92,15 @@ public interface ItemService {
 	
 	// Answer
 	
-	Iterable<AnswerSummaryResult> findAllAnswers(boolean isAdmin);
+	Answer filterAnswerComments(Answer answer);
 	
-	Iterable<AnswerSummaryResult> findAllAnswersPageable(Integer page, Integer size, boolean isAdmin);
+	Iterable<Answer> filterAnswerComments(Iterable<Answer> answers);
+	
+	Iterable<AnswerSummaryResult> getAnswerSummary(Iterable<Answer> answers);
+	
+	Iterable<?> findAllAnswers(boolean isAdmin);
+	
+	Iterable<?> findAllAnswersPageable(Integer page, Integer size, boolean isAdmin);
 	
 	Answer findAnswerById(Long id, boolean isAdmin);
 	

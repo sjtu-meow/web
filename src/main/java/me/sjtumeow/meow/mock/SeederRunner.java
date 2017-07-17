@@ -58,6 +58,8 @@ public class SeederRunner implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) {
     	
+    	// Add two users
+    	
     	Long userId1 = userService.create("13333333333", "meow233", true, "喵喵喵的伙伴", "Web 开发专家", "http://lorempixel.com/50/50");
     	User user1 = userService.findById(userId1, false);
     	Profile profile1 = user1.getProfile();
@@ -69,6 +71,8 @@ public class SeederRunner implements ApplicationRunner {
         for (int i = 0; i < 10; i++) {
         	userService.create(String.format("188%d", 88888001 + i), "111111", false,
         			String.format("吃瓜群众%d", i + 1), i % 2 == 0 ? "不存在的" : null, "http://lorempixel.com/50/50");
+        	
+        	// Add a moment
         	
             Moment moment = new Moment();
             moment.setProfile(i % 2 == 0 ? profile1 : profile2);
@@ -83,9 +87,12 @@ public class SeederRunner implements ApplicationRunner {
                 }
             }
             
-            Comment comment = new Comment(moment, profile1, String.format("神奇评论%d", i + 1));
-            commentRepository.save(comment);
+            Comment comment1 = new Comment(moment, profile1, String.format("神奇点滴评论%d", i + 1));
+            commentRepository.save(comment1);
         	
+            
+            // Add an article
+            
         	Article article = new Article();
         	article.setTitle(String.format("铲屎官必读文章(%d)", i + 1));
         	article.setSummary("99% 的铲屎官都不知道的主子特性！删前速看！");
@@ -94,17 +101,32 @@ public class SeederRunner implements ApplicationRunner {
         	article.setProfile(i % 2 == 0 ? profile1 : profile2);
         	articleRepository.save(article);
         	
+        	Comment comment2 = new Comment(article, profile2, String.format("神奇文章评论%d", i + 1));
+            commentRepository.save(comment2);
+        	
+            
+            // Add a question 
+            
         	Question question = new Question();
         	question.setTitle("四川的猫吃辣吗？");
         	question.setContent("如题，就是想问问在四川领养了一只猫以后，给它秋刀鱼要加辣椒吗？就这个问题...");
         	question.setProfile(i % 2 == 0 ? profile1 : profile2);
         	questionRepository.save(question);
         	
+        	Comment comment3 = new Comment(question, profile1, String.format("神奇问题评论%d", i + 1));
+            commentRepository.save(comment3);
+        	
+            
+            // Add an answer
+            
         	Answer answer = new Answer();
         	answer.setContent("<p style=\"color:#63c;\">吃的！吃的！</p><p>但就是哭的样子很难看...</p>");
         	answer.setQuestion(question);
         	answer.setProfile(profile1);
         	answerRepository.save(answer);
+        	
+        	Comment comment4 = new Comment(answer, profile2, String.format("神奇回答评论%d", i + 1));
+            commentRepository.save(comment4);
         	
         	
         	// Soft delete test
@@ -117,22 +139,36 @@ public class SeederRunner implements ApplicationRunner {
         	if (i == 3) {
         		momentRepository.softDelete(moment);
         	}
+        	if (i >= 8) {
+        		commentRepository.softDelete(comment1);
+        		commentRepository.softDelete(comment2);
+        		commentRepository.softDelete(comment3);
+        		commentRepository.softDelete(comment4);
+        	}
         	
         	
         	// XSS test
         	
         	if (i == 2) {
         		moment.setContent("<script>alert('xss!')</script>");
-        		comment.setContent("<script>alert('xss!')</script>");
+        		comment1.setContent("<script>alert('xss!')</script>");
+        		comment2.setContent("<script>alert('xss!')</script>");
+        		comment3.setContent("<script>alert('xss!')</script>");
+        		comment4.setContent("<script>alert('xss!')</script>");
         		article.setTitle("<script>alert('xss!')</script>");
         		article.setSummary("<script>alert('xss!')</script>");
         		question.setTitle("<script>alert('xss!')</script>");
             	question.setContent("<script>alert('xss!')</script>");
         		momentRepository.save(moment);
-        		commentRepository.save(comment);
+        		commentRepository.save(comment1);
+        		commentRepository.save(comment2);
+        		commentRepository.save(comment3);
+        		commentRepository.save(comment4);
         		articleRepository.save(article);
         		questionRepository.save(question);
         	}
+        	
+        	// Add banners
         	
         	if (i == 1)
         		bannerRepository.save(new Banner(3, "http://lorempixel.com/400/200", moment));

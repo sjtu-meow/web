@@ -21,4 +21,10 @@ public interface ArticleRepository extends SoftDeleteRepository<Article, Long> {
 	List<Article> findByTitleContainingAndDeletedAtIsNull(String keyword, Sort sort);
 	
 	Page<Article> findByTitleContainingAndDeletedAtIsNull(String keyword, Pageable pageable);
+	
+	List<Article> findByProfileIdAndDeletedAtIsNull(Long id);
+	
+	List<Article> findByProfileIdAndDeletedAtIsNull(Long id, Sort sort);
+	
+	Page<Article> findByProfileIdAndDeletedAtIsNull(Long id, Pageable pageable);
 }

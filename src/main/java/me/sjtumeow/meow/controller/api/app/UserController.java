@@ -2,14 +2,17 @@ package me.sjtumeow.meow.controller.api.app;
 
 import me.sjtumeow.meow.authorization.annotation.Authorization;
 import me.sjtumeow.meow.authorization.annotation.CurrentUser;
+import me.sjtumeow.meow.model.Moment;
 import me.sjtumeow.meow.model.Profile;
 import me.sjtumeow.meow.model.User;
 import me.sjtumeow.meow.model.form.ChangePasswordForm;
 import me.sjtumeow.meow.model.form.ProfileForm;
 import me.sjtumeow.meow.model.form.RegisterForm;
+import me.sjtumeow.meow.model.result.ArticleSummaryResult;
 import me.sjtumeow.meow.model.result.FailureMessageResult;
 import me.sjtumeow.meow.model.result.NewEntityIdResult;
 import me.sjtumeow.meow.service.AuthService;
+import me.sjtumeow.meow.service.ItemService;
 import me.sjtumeow.meow.service.UserService;
 import me.sjtumeow.meow.util.FormatValidator;
 
@@ -22,16 +25,21 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api")
 public class UserController {
+	
     @Autowired
     private UserService userService;
     
     @Autowired
     private AuthService authService;
+    
+    @Autowired
+    private ItemService itemService;
     
 
     @PostMapping(path = "/users", consumes = "application/json")
@@ -91,5 +99,19 @@ public class UserController {
     ResponseEntity<?> getProfile(@PathVariable("id") Long id) {
     	Profile profile = userService.getProfile(id, false);
     	return profile == null ? ResponseEntity.notFound().build() : ResponseEntity.ok(profile);
+    }
+    
+    @GetMapping("/user/moments")
+    @Authorization
+    Iterable<Moment> getMoments(@CurrentUser User user, @RequestParam(required = false) Integer page, @RequestParam(required = false) Integer size) {
+    	return (!FormatValidator.checkNonNegativeInt(page) || !FormatValidator.checkPositiveInt(size)) ? 
+				itemService.findMomentsByUser(user.getId()) : itemService.findMomentsByUser(page, size, user.getId());
+    }
+    
+    @GetMapping("/user/articles")
+    @Authorization
+    Iterable<ArticleSummaryResult> getArticles(@CurrentUser User user, @RequestParam(required = false) Integer page, @RequestParam(required = false) Integer size) {
+    	return (!FormatValidator.checkNonNegativeInt(page) || !FormatValidator.checkPositiveInt(size)) ? 
+				itemService.findArticlesByUser(user.getId()) : itemService.findArticlesByUser(page, size, user.getId());
     }
 }

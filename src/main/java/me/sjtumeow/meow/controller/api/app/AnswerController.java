@@ -18,7 +18,6 @@ import me.sjtumeow.meow.model.Answer;
 import me.sjtumeow.meow.model.Question;
 import me.sjtumeow.meow.model.User;
 import me.sjtumeow.meow.model.form.AddAnswerForm;
-import me.sjtumeow.meow.model.result.AnswerSummaryResult;
 import me.sjtumeow.meow.model.result.FailureMessageResult;
 import me.sjtumeow.meow.model.result.NewEntityIdResult;
 import me.sjtumeow.meow.service.ItemService;
@@ -32,7 +31,7 @@ public class AnswerController {
     private ItemService itemService;
 	
 	@GetMapping("/answers")
-	Iterable<AnswerSummaryResult> getAnswers(@RequestParam(required = false) Integer page, @RequestParam(required = false) Integer size) {
+	Iterable<?> getAnswers(@RequestParam(required = false) Integer page, @RequestParam(required = false) Integer size) {
 		return (!FormatValidator.checkNonNegativeInt(page) || !FormatValidator.checkPositiveInt(size)) ? 
 				itemService.findAllAnswers(false) : itemService.findAllAnswersPageable(page, size, false);
 	}

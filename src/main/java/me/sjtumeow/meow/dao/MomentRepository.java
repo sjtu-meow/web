@@ -21,5 +21,11 @@ public interface MomentRepository extends SoftDeleteRepository<Moment, Long> {
 	List<Moment> findByContentContainingAndDeletedAtIsNull(String keyword, Sort sort);
 	
 	Page<Moment> findByContentContainingAndDeletedAtIsNull(String keyword, Pageable pageable);
+	
+	List<Moment> findByProfileIdAndDeletedAtIsNull(Long id);
+	
+	List<Moment> findByProfileIdAndDeletedAtIsNull(Long id, Sort sort);
+	
+	Page<Moment> findByProfileIdAndDeletedAtIsNull(Long id, Pageable pageable);
 
 }

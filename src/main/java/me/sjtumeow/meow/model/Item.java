@@ -1,5 +1,6 @@
 package me.sjtumeow.meow.model;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -45,7 +46,7 @@ public abstract class Item extends BaseEntity {
     @Formula("0") // TODO: edit this query
     Integer likeCount;
     
-    @Formula("(SELECT COUNT(*) FROM comment c WHERE c.item_id = id)")
+    @Formula("(SELECT COUNT(*) FROM comment c WHERE c.item_id = id AND c.deleted_at IS NULL)")
     Integer commentCount;
 
     public Long getId() {
@@ -94,5 +95,14 @@ public abstract class Item extends BaseEntity {
 
 	public void setCommentCount(Integer commentCount) {
 		this.commentCount = commentCount;
+	}
+	
+	public void filterDeletedComments() {
+		Set<Comment> filteredComments = new HashSet<Comment>();
+		for (Comment comment: comments) {
+			if (!comment.isDeleted())
+				filteredComments.add(comment);
+		}
+		comments = filteredComments;
 	}
 }
