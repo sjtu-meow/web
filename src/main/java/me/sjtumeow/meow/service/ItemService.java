@@ -17,6 +17,7 @@ import me.sjtumeow.meow.model.form.UpdateQuestionForm;
 import me.sjtumeow.meow.model.result.AnswerSummaryResult;
 import me.sjtumeow.meow.model.result.ArticleSummaryResult;
 import me.sjtumeow.meow.model.result.CreateResult;
+import me.sjtumeow.meow.model.result.QuestionSummaryResult;
 
 public interface ItemService {
 	
@@ -75,9 +76,15 @@ public interface ItemService {
 	
 	// Question
 	
+	Iterable<QuestionSummaryResult> getQuestionSummary(Iterable<Question> questions);
+	
 	Iterable<Question> findAllQuestions(String keyword, boolean isAdmin);
 	
 	Iterable<Question> findAllQuestionsPageable(Integer page, Integer size, String keyword, boolean isAdmin);
+	
+	Iterable<QuestionSummaryResult> findQuestionsByUser(Long userId);
+	
+	Iterable<QuestionSummaryResult> findQuestionsByUser(Integer page, Integer size, Long userId);
 	
 	Question findQuestionById(Long id, boolean isAdmin);
 	
@@ -101,6 +108,10 @@ public interface ItemService {
 	Iterable<?> findAllAnswers(boolean isAdmin);
 	
 	Iterable<?> findAllAnswersPageable(Integer page, Integer size, boolean isAdmin);
+	
+	Iterable<AnswerSummaryResult> findAnswersByUser(Long userId);
+	
+	Iterable<AnswerSummaryResult> findAnswersByUser(Integer page, Integer size, Long userId);
 	
 	Answer findAnswerById(Long id, boolean isAdmin);
 	

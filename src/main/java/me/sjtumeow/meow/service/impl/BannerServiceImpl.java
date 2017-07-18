@@ -95,11 +95,8 @@ public class BannerServiceImpl implements BannerService {
 		Collections.sort(ubfl, new Comparator<UpdateBannerForm>() {
             @Override
             public int compare(UpdateBannerForm lhs, UpdateBannerForm rhs) {
-                if (lhs.getDisplayOrder() < rhs.getDisplayOrder())
-                	return -1;
-                if (lhs.getDisplayOrder() > rhs.getDisplayOrder())
-                	return 1;
-                return 0;
+                Integer res = lhs.getDisplayOrder().compareTo(rhs.getDisplayOrder());
+				return res == 0 ? 0 : res / Math.abs(res);
             }
         });
 		

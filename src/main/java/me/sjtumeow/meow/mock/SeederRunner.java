@@ -60,11 +60,11 @@ public class SeederRunner implements ApplicationRunner {
     	
     	// Add two users
     	
-    	Long userId1 = userService.create("13333333333", "meow233", true, "喵喵喵的伙伴", "Web 开发专家", "http://lorempixel.com/50/50");
+    	Long userId1 = userService.create("13344445555", "meow233", true, "喵喵喵的伙伴", "Web 开发专家", "http://lorempixel.com/50/50");
     	User user1 = userService.findById(userId1, false);
     	Profile profile1 = user1.getProfile();
     	
-    	Long userId2 = userService.create("16666666666", "test123", false, "Hacker", "<script>alert('xss!')</script>", null);
+    	Long userId2 = userService.create("16677778888", "test123", false, "Hacker", "<script>alert('xss!')</script>", null);
     	User user2 = userService.findById(userId2, false);
     	Profile profile2 = user2.getProfile();
         
@@ -89,6 +89,7 @@ public class SeederRunner implements ApplicationRunner {
             
             Comment comment1 = new Comment(moment, profile1, String.format("神奇点滴评论%d", i + 1));
             commentRepository.save(comment1);
+            commentRepository.save(new Comment(moment, profile2, String.format("神奇点滴又一个评论%d", i + 1)));
         	
             
             // Add an article
@@ -103,6 +104,7 @@ public class SeederRunner implements ApplicationRunner {
         	
         	Comment comment2 = new Comment(article, profile2, String.format("神奇文章评论%d", i + 1));
             commentRepository.save(comment2);
+            commentRepository.save(new Comment(article, profile1, String.format("神奇文章又一个评论%d", i + 1)));
         	
             
             // Add a question 
@@ -115,6 +117,7 @@ public class SeederRunner implements ApplicationRunner {
         	
         	Comment comment3 = new Comment(question, profile1, String.format("神奇问题评论%d", i + 1));
             commentRepository.save(comment3);
+            commentRepository.save(new Comment(question, profile2, String.format("神奇问题又一个评论%d", i + 1)));
         	
             
             // Add an answer
@@ -127,6 +130,7 @@ public class SeederRunner implements ApplicationRunner {
         	
         	Comment comment4 = new Comment(answer, profile2, String.format("神奇回答评论%d", i + 1));
             commentRepository.save(comment4);
+            commentRepository.save(new Comment(answer, profile1, String.format("神奇回答又一个评论%d", i + 1)));
         	
         	
         	// Soft delete test

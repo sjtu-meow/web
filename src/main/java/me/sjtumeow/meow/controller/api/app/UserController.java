@@ -8,9 +8,11 @@ import me.sjtumeow.meow.model.User;
 import me.sjtumeow.meow.model.form.ChangePasswordForm;
 import me.sjtumeow.meow.model.form.ProfileForm;
 import me.sjtumeow.meow.model.form.RegisterForm;
+import me.sjtumeow.meow.model.result.AnswerSummaryResult;
 import me.sjtumeow.meow.model.result.ArticleSummaryResult;
 import me.sjtumeow.meow.model.result.FailureMessageResult;
 import me.sjtumeow.meow.model.result.NewEntityIdResult;
+import me.sjtumeow.meow.model.result.QuestionSummaryResult;
 import me.sjtumeow.meow.service.AuthService;
 import me.sjtumeow.meow.service.ItemService;
 import me.sjtumeow.meow.service.UserService;
@@ -113,5 +115,19 @@ public class UserController {
     Iterable<ArticleSummaryResult> getArticles(@CurrentUser User user, @RequestParam(required = false) Integer page, @RequestParam(required = false) Integer size) {
     	return (!FormatValidator.checkNonNegativeInt(page) || !FormatValidator.checkPositiveInt(size)) ? 
 				itemService.findArticlesByUser(user.getId()) : itemService.findArticlesByUser(page, size, user.getId());
+    }
+    
+    @GetMapping("/user/questions")
+    @Authorization
+    Iterable<QuestionSummaryResult> getQuestions(@CurrentUser User user, @RequestParam(required = false) Integer page, @RequestParam(required = false) Integer size) {
+    	return (!FormatValidator.checkNonNegativeInt(page) || !FormatValidator.checkPositiveInt(size)) ? 
+				itemService.findQuestionsByUser(user.getId()) : itemService.findQuestionsByUser(page, size, user.getId());
+    }
+    
+    @GetMapping("/user/answers")
+    @Authorization
+    Iterable<AnswerSummaryResult> getAnswers(@CurrentUser User user, @RequestParam(required = false) Integer page, @RequestParam(required = false) Integer size) {
+    	return (!FormatValidator.checkNonNegativeInt(page) || !FormatValidator.checkPositiveInt(size)) ? 
+				itemService.findAnswersByUser(user.getId()) : itemService.findAnswersByUser(page, size, user.getId());
     }
 }

@@ -21,6 +21,7 @@ import me.sjtumeow.meow.model.form.UpdateMomentForm;
 import me.sjtumeow.meow.model.form.UpdateQuestionForm;
 import me.sjtumeow.meow.model.result.ArticleSummaryResult;
 import me.sjtumeow.meow.model.result.CreateResult;
+import me.sjtumeow.meow.model.result.QuestionSummaryResult;
 import me.sjtumeow.meow.model.result.AnswerSummaryResult;
 import me.sjtumeow.meow.service.ItemService;
 import me.sjtumeow.meow.util.StringUtil;
@@ -58,13 +59,13 @@ public class ItemServiceImpl implements ItemService {
 	public Moment filterMomentComments(Moment moment) {
 		if (moment == null)
 			return null;
-		moment.filterDeletedComments();
+		moment.filterComments();
 		return moment;
 	}
 	
 	public Iterable<Moment> filterMomentComments(Iterable<Moment> moments) {
 		for (Moment moment: moments) {
-			moment.filterDeletedComments();
+			moment.filterComments();
 		}
 		return moments;
 	}
@@ -154,14 +155,14 @@ public class ItemServiceImpl implements ItemService {
 	public Article filterArticleComments(Article article) {
 		if (article == null)
 			return null;
-		article.filterDeletedComments();
+		article.filterComments();
 		return article;
 	}
 	
 
 	public Iterable<Article> filterArticleComments(Iterable<Article> articles) {
 		for (Article article: articles) {
-			article.filterDeletedComments();
+			article.filterComments();
 		}
 		return articles;
 	}
@@ -236,6 +237,16 @@ public class ItemServiceImpl implements ItemService {
 	
 	// Question
 	
+	public Iterable<QuestionSummaryResult> getQuestionSummary(Iterable<Question> questions) {
+		List<QuestionSummaryResult> result = new ArrayList<QuestionSummaryResult>();
+		
+		for (Question question: questions) {
+			result.add(new QuestionSummaryResult(question));
+		}
+		
+		return result;
+	}
+	
 	public Iterable<Question> findAllQuestions(String keyword, boolean isAdmin) {
 		return isAdmin ? questionRepository.findByTitleContaining(keyword)
 				: questionRepository.findByTitleContainingAndDeletedAtIsNull(keyword, new Sort(Direction.DESC, "createdAt"));
@@ -245,6 +256,14 @@ public class ItemServiceImpl implements ItemService {
 		return isAdmin ?
 			questionRepository.findByTitleContaining(keyword, new PageRequest(page, size))
 			: questionRepository.findByTitleContainingAndDeletedAtIsNull(keyword, new PageRequest(page, size, Direction.DESC, "createdAt"));
+	}
+	
+	public Iterable<QuestionSummaryResult> findQuestionsByUser(Long userId) {
+		return getQuestionSummary(questionRepository.findByProfileIdAndDeletedAtIsNull(userId, new Sort(Direction.DESC, "createdAt")));
+	}
+	
+	public Iterable<QuestionSummaryResult> findQuestionsByUser(Integer page, Integer size, Long userId)	{
+		return getQuestionSummary(questionRepository.findByProfileIdAndDeletedAtIsNull(userId, new PageRequest(page, size, Direction.DESC, "createdAt")));
 	}
 	
 	public Question findQuestionById(Long id, boolean isAdmin) {
@@ -298,14 +317,14 @@ public class ItemServiceImpl implements ItemService {
 	public Answer filterAnswerComments(Answer answer) {
 		if (answer == null)
 			return null;
-		answer.filterDeletedComments();
+		answer.filterComments();
 		return answer;
 	}
 	
 	
 	public Iterable<Answer> filterAnswerComments(Iterable<Answer> answers) {
 		for (Answer answer: answers) {
-			answer.filterDeletedComments();
+			answer.filterComments();
 		}
 		return answers;
 	}
@@ -328,6 +347,14 @@ public class ItemServiceImpl implements ItemService {
 	public Iterable<?> findAllAnswersPageable(Integer page, Integer size, boolean isAdmin) {
 		return isAdmin ? answerRepository.findAll(new PageRequest(page, size)) :
 			getAnswerSummary(filterAnswerComments(answerRepository.findAllActive(new PageRequest(page, size, Direction.DESC, "createdAt"))));
+	}
+	
+	public Iterable<AnswerSummaryResult> findAnswersByUser(Long userId) {
+		return getAnswerSummary(answerRepository.findByProfileIdAndDeletedAtIsNull(userId, new Sort(Direction.DESC, "createdAt")));
+	}
+
+	public Iterable<AnswerSummaryResult> findAnswersByUser(Integer page, Integer size, Long userId) {
+		return getAnswerSummary(answerRepository.findByProfileIdAndDeletedAtIsNull(userId, new PageRequest(page, size, Direction.DESC, "createdAt")));
 	}
 	
 	public Answer findAnswerById(Long id, boolean isAdmin) {
