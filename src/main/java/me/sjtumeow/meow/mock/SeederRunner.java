@@ -60,7 +60,7 @@ public class SeederRunner implements ApplicationRunner {
     	
     	// Add two users
     	
-    	Long userId1 = userService.create("13344445555", "meow233", true, "喵喵喵的伙伴", "Web 开发专家", "http://lorempixel.com/50/50");
+    	Long userId1 = userService.create("13333333333", "meow233", true, "喵喵喵的伙伴", "Web 开发专家", "http://lorempixel.com/50/50");
     	User user1 = userService.findById(userId1, false);
     	Profile profile1 = user1.getProfile();
     	
