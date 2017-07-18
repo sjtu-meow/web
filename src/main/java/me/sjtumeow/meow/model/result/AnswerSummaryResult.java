@@ -16,12 +16,12 @@ public class AnswerSummaryResult extends TimeComparableObject {
     protected String updateTime;
     protected boolean isDeleted;
     
-    public AnswerSummaryResult(Answer answer, AnswerDetailResult answerDetail) {
+    public AnswerSummaryResult(Answer answer) {
     	this.questionId = answer.getQuestion().getId();
     	this.questionTitle = answer.getQuestion().getTitle();
     	this.questionProfile = answer.getQuestion().getProfile();
     	this.type = Item.ITEM_TYPE_ANSWER;
-    	this.answer = answerDetail;
+    	this.answer = new AnswerDetailResult(answer);
     	this.answer.setContent(StringUtil.extractHTMLSummary(answer.getContent()));
     	this.createTime = answer.getCreateTime();
         this.updateTime = answer.getUpdateTime();

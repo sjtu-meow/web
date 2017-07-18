@@ -115,9 +115,7 @@ public class SeederRunner implements ApplicationRunner {
         	question.setProfile(i % 2 == 0 ? profile1 : profile2);
         	questionRepository.save(question);
         	
-        	Comment comment3 = new Comment(question, profile1, String.format("神奇问题评论%d", i + 1));
-            commentRepository.save(comment3);
-            commentRepository.save(new Comment(question, profile2, String.format("神奇问题又一个评论%d", i + 1)));
+        	// A question has no comments
         	
             
             // Add an answer
@@ -147,7 +145,6 @@ public class SeederRunner implements ApplicationRunner {
         	if (i >= 8) {
         		commentRepository.softDelete(comment1);
         		commentRepository.softDelete(comment2);
-        		commentRepository.softDelete(comment3);
         		commentRepository.softDelete(comment4);
         	}
         	
@@ -158,7 +155,6 @@ public class SeederRunner implements ApplicationRunner {
         		moment.setContent("<script>alert('xss!')</script>");
         		comment1.setContent("<script>alert('xss!')</script>");
         		comment2.setContent("<script>alert('xss!')</script>");
-        		comment3.setContent("<script>alert('xss!')</script>");
         		comment4.setContent("<script>alert('xss!')</script>");
         		article.setTitle("<script>alert('xss!')</script>");
         		article.setSummary("<script>alert('xss!')</script>");
@@ -167,7 +163,6 @@ public class SeederRunner implements ApplicationRunner {
         		momentRepository.save(moment);
         		commentRepository.save(comment1);
         		commentRepository.save(comment2);
-        		commentRepository.save(comment3);
         		commentRepository.save(comment4);
         		articleRepository.save(article);
         		questionRepository.save(question);

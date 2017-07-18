@@ -16,7 +16,7 @@ public class QuestionDetailResult {
 	protected Profile profile;
 	protected String title;
 	protected String content;
-	protected List<Answer> answers;
+	protected List<AnswerDetailResult> answers;
 	protected String createTime;
 	protected String updateTime;
 	protected boolean isDeleted;
@@ -30,17 +30,17 @@ public class QuestionDetailResult {
 		this.createTime = question.getCreateTime();
 		this.updateTime = question.getUpdateTime();
 		this.isDeleted = question.isDeleted();
-		this.answers = new ArrayList<Answer>();
+		this.answers = new ArrayList<AnswerDetailResult>();
 		
 		for (Answer answer: question.getAnswers()) {
 			if (!answer.isDeleted())
-				answers.add(answer);
+				answers.add(new AnswerDetailResult(answer));
 		}
 		
-		Collections.sort(answers, new Comparator<Answer>() {
+		Collections.sort(answers, new Comparator<AnswerDetailResult>() {
             @Override
-            public int compare(Answer lhs, Answer rhs) {
-                Integer res = lhs.getCreatedAt().compareTo(rhs.getCreatedAt());
+            public int compare(AnswerDetailResult lhs, AnswerDetailResult rhs) {
+                Integer res = lhs.getCreateTime().compareTo(rhs.getCreateTime());
                 return res == 0 ? 0 : -res / Math.abs(res);
             }
         });
@@ -66,7 +66,7 @@ public class QuestionDetailResult {
 		return content;
 	}
 
-	public List<Answer> getAnswers() {
+	public List<AnswerDetailResult> getAnswers() {
 		return answers;
 	}
 
@@ -102,7 +102,7 @@ public class QuestionDetailResult {
 		this.content = content;
 	}
 
-	public void setAnswers(List<Answer> answers) {
+	public void setAnswers(List<AnswerDetailResult> answers) {
 		this.answers = answers;
 	}
 

@@ -335,7 +335,7 @@ public class ItemServiceImpl implements ItemService {
 		List<AnswerSummaryResult> result = new ArrayList<AnswerSummaryResult>();
 		
 		for (Answer answer: answers) {
-			result.add(new AnswerSummaryResult(answer, getAnswerDetail(answer)));
+			result.add(new AnswerSummaryResult(answer));
 		}
 		
 		return result;
@@ -425,7 +425,7 @@ public class ItemServiceImpl implements ItemService {
 		}
 		
 		for (Answer answer: answerRepository.findByContentContainingAndDeletedAtIsNull(keyword)) {
-			result.add(new AnswerSummaryResult(answer, getAnswerDetail(answer)));
+			result.add(new AnswerSummaryResult(answer));
 		}
 		
 		Collections.sort(result, new Comparator<TimeComparableObject>() {
