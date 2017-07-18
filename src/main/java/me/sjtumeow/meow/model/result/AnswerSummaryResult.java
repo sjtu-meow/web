@@ -3,22 +3,29 @@ package me.sjtumeow.meow.model.result;
 import me.sjtumeow.meow.model.Answer;
 import me.sjtumeow.meow.model.Item;
 import me.sjtumeow.meow.model.Profile;
+import me.sjtumeow.meow.model.util.TimeComparableObject;
 import me.sjtumeow.meow.util.StringUtil;
 
-public class AnswerSummaryResult {
+public class AnswerSummaryResult extends TimeComparableObject {
 	protected Long questionId;
 	protected String questionTitle;
 	protected Profile questionProfile;
 	protected Integer type;
-	protected Answer answer;
+	protected AnswerDetailResult answer;
+	protected String createTime;
+    protected String updateTime;
+    protected boolean isDeleted;
     
-    public AnswerSummaryResult(Answer answer) {
+    public AnswerSummaryResult(Answer answer, AnswerDetailResult answerDetail) {
     	this.questionId = answer.getQuestion().getId();
     	this.questionTitle = answer.getQuestion().getTitle();
     	this.questionProfile = answer.getQuestion().getProfile();
     	this.type = Item.ITEM_TYPE_ANSWER;
-    	this.answer = answer;
+    	this.answer = answerDetail;
     	this.answer.setContent(StringUtil.extractHTMLSummary(answer.getContent()));
+    	this.createTime = answer.getCreateTime();
+        this.updateTime = answer.getUpdateTime();
+        this.isDeleted = answer.isDeleted();
     }
     
 	public Long getQuestionId() {
@@ -53,12 +60,36 @@ public class AnswerSummaryResult {
 		this.type = type;
 	}
 
-	public Answer getAnswer() {
+	public AnswerDetailResult getAnswer() {
 		return answer;
 	}
 
-	public void setAnswer(Answer answer) {
+	public void setAnswer(AnswerDetailResult answer) {
 		this.answer = answer;
+	}
+
+	public String getCreateTime() {
+		return createTime;
+	}
+
+	public String getUpdateTime() {
+		return updateTime;
+	}
+
+	public boolean isDeleted() {
+		return isDeleted;
+	}
+
+	public void setCreateTime(String createTime) {
+		this.createTime = createTime;
+	}
+
+	public void setUpdateTime(String updateTime) {
+		this.updateTime = updateTime;
+	}
+
+	public void setDeleted(boolean isDeleted) {
+		this.isDeleted = isDeleted;
 	}
     
 }

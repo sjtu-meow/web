@@ -25,7 +25,7 @@ public class AdminQuestionController {
     private ItemService itemService;
 	
 	@GetMapping
-	Iterable<Question> getQuestions(@RequestParam(required = false) Integer page, @RequestParam(required = false) Integer size, @RequestParam(required = false) String keyword) {
+	Iterable<?> getQuestions(@RequestParam(required = false) Integer page, @RequestParam(required = false) Integer size, @RequestParam(required = false) String keyword) {
 		return (!FormatValidator.checkNonNegativeInt(page) || !FormatValidator.checkPositiveInt(size)) ? 
 				itemService.findAllQuestions(StringUtil.replaceNull(keyword), true) : itemService.findAllQuestionsPageable(page, size, StringUtil.replaceNull(keyword), true);
 	}

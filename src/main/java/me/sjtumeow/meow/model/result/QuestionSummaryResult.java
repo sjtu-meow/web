@@ -4,8 +4,9 @@ import me.sjtumeow.meow.model.Answer;
 import me.sjtumeow.meow.model.Item;
 import me.sjtumeow.meow.model.Profile;
 import me.sjtumeow.meow.model.Question;
+import me.sjtumeow.meow.model.util.TimeComparableObject;
 
-public class QuestionSummaryResult {
+public class QuestionSummaryResult extends TimeComparableObject {
 	protected Long id;
 	protected Integer type;
 	protected Profile profile;

@@ -25,7 +25,7 @@ public class AdminMomentController {
     private ItemService itemService;
 	
 	@GetMapping
-	Iterable<Moment> getMoments(@RequestParam(required = false) Integer page, @RequestParam(required = false) Integer size, @RequestParam(required = false) String keyword) {
+	Iterable<?> getMoments(@RequestParam(required = false) Integer page, @RequestParam(required = false) Integer size, @RequestParam(required = false) String keyword) {
 		return (!FormatValidator.checkNonNegativeInt(page) || !FormatValidator.checkPositiveInt(size)) ? 
 				itemService.findAllMoments(StringUtil.replaceNull(keyword), true) : itemService.findAllMomentsPageable(page, size, StringUtil.replaceNull(keyword), true);
 	}

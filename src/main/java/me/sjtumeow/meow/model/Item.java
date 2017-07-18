@@ -1,9 +1,7 @@
 package me.sjtumeow.meow.model;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -42,7 +40,7 @@ public abstract class Item extends BaseEntity {
     Profile profile;
     
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "item")
-    private List<Comment> comments;
+    private Set<Comment> comments;
     
     @Formula("0") // TODO: edit this query
     Integer likeCount;
@@ -74,11 +72,11 @@ public abstract class Item extends BaseEntity {
         this.profile = profile;
     }
 
-	public List<Comment> getComments() {
+	public Set<Comment> getComments() {
 		return comments;
 	}
 
-	public void setComments(List<Comment> comments) {
+	public void setComments(Set<Comment> comments) {
 		this.comments = comments;
 	}
 
@@ -96,23 +94,5 @@ public abstract class Item extends BaseEntity {
 
 	public void setCommentCount(Integer commentCount) {
 		this.commentCount = commentCount;
-	}
-	
-	public void filterComments() {
-		List<Comment> filteredComments = new ArrayList<Comment>();
-		for (Comment comment: comments) {
-			if (!comment.isDeleted())
-				filteredComments.add(comment);
-		}
-		
-		Collections.sort(filteredComments, new Comparator<Comment>() {
-            @Override
-            public int compare(Comment lhs, Comment rhs) {
-                Integer res = lhs.getCreatedAt().compareTo(rhs.getCreatedAt());
-                return res == 0 ? 0 : res / Math.abs(res);
-            }
-        });
-		
-		comments = filteredComments;
 	}
 }

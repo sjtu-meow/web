@@ -2,7 +2,6 @@ package me.sjtumeow.meow.controller.api.app;
 
 import me.sjtumeow.meow.authorization.annotation.Authorization;
 import me.sjtumeow.meow.authorization.annotation.CurrentUser;
-import me.sjtumeow.meow.model.Moment;
 import me.sjtumeow.meow.model.Profile;
 import me.sjtumeow.meow.model.User;
 import me.sjtumeow.meow.model.form.ChangePasswordForm;
@@ -11,6 +10,7 @@ import me.sjtumeow.meow.model.form.RegisterForm;
 import me.sjtumeow.meow.model.result.AnswerSummaryResult;
 import me.sjtumeow.meow.model.result.ArticleSummaryResult;
 import me.sjtumeow.meow.model.result.FailureMessageResult;
+import me.sjtumeow.meow.model.result.MomentSummaryResult;
 import me.sjtumeow.meow.model.result.NewEntityIdResult;
 import me.sjtumeow.meow.model.result.QuestionSummaryResult;
 import me.sjtumeow.meow.service.AuthService;
@@ -105,9 +105,9 @@ public class UserController {
     
     @GetMapping("/user/moments")
     @Authorization
-    Iterable<Moment> getMoments(@CurrentUser User user, @RequestParam(required = false) Integer page, @RequestParam(required = false) Integer size) {
+    Iterable<MomentSummaryResult> getMoments(@CurrentUser User user, @RequestParam(required = false) Integer page, @RequestParam(required = false) Integer size) {
     	return (!FormatValidator.checkNonNegativeInt(page) || !FormatValidator.checkPositiveInt(size)) ? 
-				itemService.findMomentsByUser(user.getId()) : itemService.findMomentsByUser(page, size, user.getId());
+				itemService.findMomentsByUser(user.getId()) : itemService.findMomentsByUserPageable(page, size, user.getId());
     }
     
     @GetMapping("/users/{id}/moments")
@@ -115,14 +115,14 @@ public class UserController {
     	if (userService.findById(id, false) == null)
     		return ResponseEntity.notFound().build();
     	return ResponseEntity.ok((!FormatValidator.checkNonNegativeInt(page) || !FormatValidator.checkPositiveInt(size)) ? 
-    			itemService.findMomentsByUser(id) : itemService.findMomentsByUser(page, size, id));
+    			itemService.findMomentsByUser(id) : itemService.findMomentsByUserPageable(page, size, id));
     }
     
     @GetMapping("/user/articles")
     @Authorization
     Iterable<ArticleSummaryResult> getArticles(@CurrentUser User user, @RequestParam(required = false) Integer page, @RequestParam(required = false) Integer size) {
     	return (!FormatValidator.checkNonNegativeInt(page) || !FormatValidator.checkPositiveInt(size)) ? 
-				itemService.findArticlesByUser(user.getId()) : itemService.findArticlesByUser(page, size, user.getId());
+				itemService.findArticlesByUser(user.getId()) : itemService.findArticlesByUserPageable(page, size, user.getId());
     }
     
     @GetMapping("/users/{id}/articles")
@@ -130,14 +130,14 @@ public class UserController {
     	if (userService.findById(id, false) == null)
     		return ResponseEntity.notFound().build();
     	return ResponseEntity.ok((!FormatValidator.checkNonNegativeInt(page) || !FormatValidator.checkPositiveInt(size)) ? 
-    			itemService.findArticlesByUser(id) : itemService.findArticlesByUser(page, size, id));
+    			itemService.findArticlesByUser(id) : itemService.findArticlesByUserPageable(page, size, id));
     }
     
     @GetMapping("/user/questions")
     @Authorization
     Iterable<QuestionSummaryResult> getQuestions(@CurrentUser User user, @RequestParam(required = false) Integer page, @RequestParam(required = false) Integer size) {
     	return (!FormatValidator.checkNonNegativeInt(page) || !FormatValidator.checkPositiveInt(size)) ? 
-				itemService.findQuestionsByUser(user.getId()) : itemService.findQuestionsByUser(page, size, user.getId());
+				itemService.findQuestionsByUser(user.getId()) : itemService.findQuestionsByUserPageable(page, size, user.getId());
     }
     
     @GetMapping("/users/{id}/questions")
@@ -145,14 +145,14 @@ public class UserController {
     	if (userService.findById(id, false) == null)
     		return ResponseEntity.notFound().build();
     	return ResponseEntity.ok((!FormatValidator.checkNonNegativeInt(page) || !FormatValidator.checkPositiveInt(size)) ? 
-    			itemService.findQuestionsByUser(id) : itemService.findQuestionsByUser(page, size, id));
+    			itemService.findQuestionsByUser(id) : itemService.findQuestionsByUserPageable(page, size, id));
     }
     
     @GetMapping("/user/answers")
     @Authorization
     Iterable<AnswerSummaryResult> getAnswers(@CurrentUser User user, @RequestParam(required = false) Integer page, @RequestParam(required = false) Integer size) {
     	return (!FormatValidator.checkNonNegativeInt(page) || !FormatValidator.checkPositiveInt(size)) ? 
-				itemService.findAnswersByUser(user.getId()) : itemService.findAnswersByUser(page, size, user.getId());
+				itemService.findAnswersByUser(user.getId()) : itemService.findAnswersByUserPageable(page, size, user.getId());
     }
     
     @GetMapping("/users/{id}/answers")
@@ -160,6 +160,6 @@ public class UserController {
     	if (userService.findById(id, false) == null)
     		return ResponseEntity.notFound().build();
     	return ResponseEntity.ok((!FormatValidator.checkNonNegativeInt(page) || !FormatValidator.checkPositiveInt(size)) ? 
-    			itemService.findAnswersByUser(id) : itemService.findAnswersByUser(page, size, id));
+    			itemService.findAnswersByUser(id) : itemService.findAnswersByUserPageable(page, size, id));
     }
 }

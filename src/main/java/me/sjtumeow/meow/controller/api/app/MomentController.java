@@ -14,11 +14,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import me.sjtumeow.meow.authorization.annotation.Authorization;
 import me.sjtumeow.meow.authorization.annotation.CurrentUser;
-import me.sjtumeow.meow.model.Moment;
 import me.sjtumeow.meow.model.User;
 import me.sjtumeow.meow.model.form.AddMomentForm;
 import me.sjtumeow.meow.model.result.CreateResult;
 import me.sjtumeow.meow.model.result.FailureMessageResult;
+import me.sjtumeow.meow.model.result.MomentDetailResult;
 import me.sjtumeow.meow.model.result.NewEntityIdResult;
 import me.sjtumeow.meow.service.ItemService;
 import me.sjtumeow.meow.util.FormatValidator;
@@ -31,14 +31,14 @@ public class MomentController {
     private ItemService itemService;
 	
 	@GetMapping
-	Iterable<Moment> getMoments(@RequestParam(required = false) Integer page, @RequestParam(required = false) Integer size, @RequestParam(required = false) String keyword) {
+	Iterable<?> getMoments(@RequestParam(required = false) Integer page, @RequestParam(required = false) Integer size, @RequestParam(required = false) String keyword) {
 		return (!FormatValidator.checkNonNegativeInt(page) || !FormatValidator.checkPositiveInt(size)) ? 
 				itemService.findAllMoments(StringUtil.replaceNull(keyword), false) : itemService.findAllMomentsPageable(page, size, StringUtil.replaceNull(keyword), false);
 	}
 	
 	@GetMapping("/{id}")
 	ResponseEntity<?> getMoment(@PathVariable("id") Long id) {
-		Moment moment = itemService.findMomentById(id, false);
+		MomentDetailResult moment = itemService.showMomentById(id);
         return moment == null ? ResponseEntity.notFound().build() : ResponseEntity.ok(moment);
 	}
 	

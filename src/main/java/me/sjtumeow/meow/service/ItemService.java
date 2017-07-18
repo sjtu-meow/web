@@ -14,29 +14,36 @@ import me.sjtumeow.meow.model.form.UpdateAnswerForm;
 import me.sjtumeow.meow.model.form.UpdateArticleForm;
 import me.sjtumeow.meow.model.form.UpdateMomentForm;
 import me.sjtumeow.meow.model.form.UpdateQuestionForm;
+import me.sjtumeow.meow.model.result.AnswerDetailResult;
 import me.sjtumeow.meow.model.result.AnswerSummaryResult;
+import me.sjtumeow.meow.model.result.ArticleDetailResult;
 import me.sjtumeow.meow.model.result.ArticleSummaryResult;
 import me.sjtumeow.meow.model.result.CreateResult;
+import me.sjtumeow.meow.model.result.MomentDetailResult;
+import me.sjtumeow.meow.model.result.MomentSummaryResult;
+import me.sjtumeow.meow.model.result.QuestionDetailResult;
 import me.sjtumeow.meow.model.result.QuestionSummaryResult;
+import me.sjtumeow.meow.model.util.TimeComparableObject;
 
 public interface ItemService {
 	
 	// Moment
 	
-	Moment filterMomentComments(Moment moment);
+	MomentDetailResult getMomentDetail(Moment moment);
 	
-	Iterable<Moment> filterMomentComments(Iterable<Moment> moment);
+	Iterable<MomentSummaryResult> getMomentSummary(Iterable<Moment> moments);
 	
-	Iterable<Moment> findAllMoments(String keyword, boolean isAdmin);
+	Iterable<?> findAllMoments(String keyword, boolean isAdmin);
 	
-	Iterable<Moment> findAllMomentsPageable(Integer page, Integer size, String keyword, boolean isAdmin);
+	Iterable<?> findAllMomentsPageable(Integer page, Integer size, String keyword, boolean isAdmin);
 	
-	Iterable<Moment> findMomentsByUser(Long userId);
+	Iterable<MomentSummaryResult> findMomentsByUser(Long userId);
 	
-	Iterable<Moment> findMomentsByUser(Integer page, Integer size, Long userId);
+	Iterable<MomentSummaryResult> findMomentsByUserPageable(Integer page, Integer size, Long userId);
 	
 	Moment findMomentById(Long id, boolean isAdmin);
 	
+	MomentDetailResult showMomentById(Long id);
 	
 	User getMomentCreator(Long id);
 	
@@ -49,9 +56,7 @@ public interface ItemService {
 	
 	// Article
 	
-	Article filterArticleComments(Article article);
-	
-	Iterable<Article> filterArticleComments(Iterable<Article> articles);
+	ArticleDetailResult getArticleDetail(Article article);
 	
 	Iterable<ArticleSummaryResult> getArticleSummary(Iterable<Article> articles);
 	
@@ -61,9 +66,11 @@ public interface ItemService {
 	
 	Iterable<ArticleSummaryResult> findArticlesByUser(Long userId);
 	
-	Iterable<ArticleSummaryResult> findArticlesByUser(Integer page, Integer size, Long userId);
+	Iterable<ArticleSummaryResult> findArticlesByUserPageable(Integer page, Integer size, Long userId);
 	
 	Article findArticleById(Long id, boolean isAdmin);
+	
+	ArticleDetailResult showArticleById(Long id);
 	
 	User getArticleCreator(Long id);
 	
@@ -76,17 +83,21 @@ public interface ItemService {
 	
 	// Question
 	
+	QuestionDetailResult getQuestionDetail(Question question);
+	
 	Iterable<QuestionSummaryResult> getQuestionSummary(Iterable<Question> questions);
 	
-	Iterable<Question> findAllQuestions(String keyword, boolean isAdmin);
+	Iterable<?> findAllQuestions(String keyword, boolean isAdmin);
 	
-	Iterable<Question> findAllQuestionsPageable(Integer page, Integer size, String keyword, boolean isAdmin);
+	Iterable<?> findAllQuestionsPageable(Integer page, Integer size, String keyword, boolean isAdmin);
 	
 	Iterable<QuestionSummaryResult> findQuestionsByUser(Long userId);
 	
-	Iterable<QuestionSummaryResult> findQuestionsByUser(Integer page, Integer size, Long userId);
+	Iterable<QuestionSummaryResult> findQuestionsByUserPageable(Integer page, Integer size, Long userId);
 	
 	Question findQuestionById(Long id, boolean isAdmin);
+	
+	QuestionDetailResult showQuestionById(Long id);
 	
 	User getQuestionCreator(Long id);
 	
@@ -99,9 +110,7 @@ public interface ItemService {
 	
 	// Answer
 	
-	Answer filterAnswerComments(Answer answer);
-	
-	Iterable<Answer> filterAnswerComments(Iterable<Answer> answers);
+	AnswerDetailResult getAnswerDetail(Answer answer);
 	
 	Iterable<AnswerSummaryResult> getAnswerSummary(Iterable<Answer> answers);
 	
@@ -111,9 +120,11 @@ public interface ItemService {
 	
 	Iterable<AnswerSummaryResult> findAnswersByUser(Long userId);
 	
-	Iterable<AnswerSummaryResult> findAnswersByUser(Integer page, Integer size, Long userId);
+	Iterable<AnswerSummaryResult> findAnswersByUserPageable(Integer page, Integer size, Long userId);
 	
 	Answer findAnswerById(Long id, boolean isAdmin);
+	
+	AnswerDetailResult showAnswerById(Long id);
 	
 	User getAnswerCreator(Long id);
 	
@@ -124,8 +135,8 @@ public interface ItemService {
 	boolean deleteAnswer(Long id);
 	
 	
-	// Comprehensive
+	// Comprehensive Search
 	
-	List<Object> comprehensiveSearch(String keyword);
+	List<TimeComparableObject> comprehensiveSearch(String keyword);
 	
 }

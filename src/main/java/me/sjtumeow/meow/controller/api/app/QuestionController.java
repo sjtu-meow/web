@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import me.sjtumeow.meow.authorization.annotation.Authorization;
 import me.sjtumeow.meow.authorization.annotation.CurrentUser;
-import me.sjtumeow.meow.model.Question;
 import me.sjtumeow.meow.model.User;
 import me.sjtumeow.meow.model.form.AddQuestionForm;
 import me.sjtumeow.meow.model.result.FailureMessageResult;
@@ -30,8 +29,8 @@ public class QuestionController {
 	
 	@GetMapping("/{id}")
 	ResponseEntity<?> getQuestion(@PathVariable("id") Long id) {
-		Question question = itemService.findQuestionById(id, false);
-        return question == null ? ResponseEntity.notFound().build() : ResponseEntity.ok(new QuestionDetailResult(question));
+		QuestionDetailResult question = itemService.showQuestionById(id);
+        return question == null ? ResponseEntity.notFound().build() : ResponseEntity.ok(question);
 	}
 	
 	@PostMapping(consumes = "application/json")

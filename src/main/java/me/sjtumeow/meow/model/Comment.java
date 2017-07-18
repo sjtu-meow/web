@@ -19,7 +19,7 @@ public class Comment extends BaseEntity {
     private Long id;
 
 	@Column(nullable = false)
-    private Long parent = 0L;
+    private Long parent;
     
     @JsonBackReference
     @ManyToOne
@@ -37,6 +37,7 @@ public class Comment extends BaseEntity {
     
     public Comment(Item item, Profile profile, String content) {
     	this.item = item;
+    	this.parent = 0L;
     	this.profile = profile;
     	this.content = content;
     }
