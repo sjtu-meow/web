@@ -69,7 +69,7 @@ public class SeederRunner implements ApplicationRunner {
     	Profile profile2 = user2.getProfile();
         
         for (int i = 0; i < 10; i++) {
-        	userService.create(String.format("188%d", 88888001 + i), "111111", false,
+        	Long userId = userService.create(String.format("188%d", 88888001 + i), "111111", false,
         			String.format("吃瓜群众%d", i + 1), i % 2 == 0 ? "不存在的" : null, "http://lorempixel.com/50/50");
         	
         	// Add a moment
@@ -136,6 +136,7 @@ public class SeederRunner implements ApplicationRunner {
         	// Soft delete test
         	
         	if (i == 0) {
+        		userService.delete(userId);
         		articleRepository.softDelete(article);
         		questionRepository.softDelete(question);
         		answerRepository.softDelete(answer);

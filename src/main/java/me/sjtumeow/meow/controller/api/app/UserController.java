@@ -98,7 +98,7 @@ public class UserController {
     }
     
     @GetMapping("/users/{id}/profile")
-    ResponseEntity<?> getProfile(@PathVariable("id") Long id) {
+    ResponseEntity<?> getProfileByUser(@PathVariable("id") Long id) {
     	Profile profile = userService.getProfile(id, false);
     	return profile == null ? ResponseEntity.notFound().build() : ResponseEntity.ok(profile);
     }
@@ -110,11 +110,27 @@ public class UserController {
 				itemService.findMomentsByUser(user.getId()) : itemService.findMomentsByUser(page, size, user.getId());
     }
     
+    @GetMapping("/users/{id}/moments")
+    ResponseEntity<?> getMomentsByUser(@PathVariable("id") Long id, @RequestParam(required = false) Integer page, @RequestParam(required = false) Integer size) {
+    	if (userService.findById(id, false) == null)
+    		return ResponseEntity.notFound().build();
+    	return ResponseEntity.ok((!FormatValidator.checkNonNegativeInt(page) || !FormatValidator.checkPositiveInt(size)) ? 
+    			itemService.findMomentsByUser(id) : itemService.findMomentsByUser(page, size, id));
+    }
+    
     @GetMapping("/user/articles")
     @Authorization
     Iterable<ArticleSummaryResult> getArticles(@CurrentUser User user, @RequestParam(required = false) Integer page, @RequestParam(required = false) Integer size) {
     	return (!FormatValidator.checkNonNegativeInt(page) || !FormatValidator.checkPositiveInt(size)) ? 
 				itemService.findArticlesByUser(user.getId()) : itemService.findArticlesByUser(page, size, user.getId());
+    }
+    
+    @GetMapping("/users/{id}/articles")
+    ResponseEntity<?> getArticlesByUser(@PathVariable("id") Long id, @RequestParam(required = false) Integer page, @RequestParam(required = false) Integer size) {
+    	if (userService.findById(id, false) == null)
+    		return ResponseEntity.notFound().build();
+    	return ResponseEntity.ok((!FormatValidator.checkNonNegativeInt(page) || !FormatValidator.checkPositiveInt(size)) ? 
+    			itemService.findArticlesByUser(id) : itemService.findArticlesByUser(page, size, id));
     }
     
     @GetMapping("/user/questions")
@@ -124,10 +140,26 @@ public class UserController {
 				itemService.findQuestionsByUser(user.getId()) : itemService.findQuestionsByUser(page, size, user.getId());
     }
     
+    @GetMapping("/users/{id}/questions")
+    ResponseEntity<?> getQuestionsByUser(@PathVariable("id") Long id, @RequestParam(required = false) Integer page, @RequestParam(required = false) Integer size) {
+    	if (userService.findById(id, false) == null)
+    		return ResponseEntity.notFound().build();
+    	return ResponseEntity.ok((!FormatValidator.checkNonNegativeInt(page) || !FormatValidator.checkPositiveInt(size)) ? 
+    			itemService.findQuestionsByUser(id) : itemService.findQuestionsByUser(page, size, id));
+    }
+    
     @GetMapping("/user/answers")
     @Authorization
     Iterable<AnswerSummaryResult> getAnswers(@CurrentUser User user, @RequestParam(required = false) Integer page, @RequestParam(required = false) Integer size) {
     	return (!FormatValidator.checkNonNegativeInt(page) || !FormatValidator.checkPositiveInt(size)) ? 
 				itemService.findAnswersByUser(user.getId()) : itemService.findAnswersByUser(page, size, user.getId());
+    }
+    
+    @GetMapping("/users/{id}/answers")
+    ResponseEntity<?> getAnswersByUser(@PathVariable("id") Long id, @RequestParam(required = false) Integer page, @RequestParam(required = false) Integer size) {
+    	if (userService.findById(id, false) == null)
+    		return ResponseEntity.notFound().build();
+    	return ResponseEntity.ok((!FormatValidator.checkNonNegativeInt(page) || !FormatValidator.checkPositiveInt(size)) ? 
+    			itemService.findAnswersByUser(id) : itemService.findAnswersByUser(page, size, id));
     }
 }
