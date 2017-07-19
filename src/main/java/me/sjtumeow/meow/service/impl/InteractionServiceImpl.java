@@ -13,12 +13,14 @@ import org.springframework.stereotype.Service;
 import me.sjtumeow.meow.dao.FavoriteRepository;
 import me.sjtumeow.meow.dao.FollowQuestionRepository;
 import me.sjtumeow.meow.dao.FollowUserRepository;
+import me.sjtumeow.meow.dao.LikeRepository;
 import me.sjtumeow.meow.model.Answer;
 import me.sjtumeow.meow.model.Article;
 import me.sjtumeow.meow.model.Favorite;
 import me.sjtumeow.meow.model.FollowQuestion;
 import me.sjtumeow.meow.model.FollowUser;
 import me.sjtumeow.meow.model.Item;
+import me.sjtumeow.meow.model.Like;
 import me.sjtumeow.meow.model.Moment;
 import me.sjtumeow.meow.model.Profile;
 import me.sjtumeow.meow.model.Question;
@@ -34,6 +36,9 @@ import me.sjtumeow.meow.service.InteractionService;
 public class InteractionServiceImpl implements InteractionService {
 	
 	@Autowired
+	private LikeRepository likeRepository;
+	
+	@Autowired
 	private FavoriteRepository favoriteRepository;
 	
 	@Autowired
@@ -41,6 +46,29 @@ public class InteractionServiceImpl implements InteractionService {
 	
 	@Autowired
 	private FollowUserRepository followUserRepository;
+	
+	
+	// Like
+	
+	public boolean checkLike(User user, Item item) {
+		List<Like> result = likeRepository.findByUserAndItem(user, item);
+		return result != null && !result.isEmpty();
+	}
+	
+	@Transactional
+	public void doLike(User user, Item item) {
+		if (checkLike(user, item))
+			return;
+		likeRepository.save(new Like(user, item));
+	}
+	
+	@Transactional
+	public void cancelLike(User user, Item item) {
+		likeRepository.deleteByUserAndItem(user, item);
+	}
+	
+	
+	// Favorite
 	
 	public List<BaseSummaryResult> getUserFavorites(User user) {
 		List<BaseSummaryResult> result = new ArrayList<BaseSummaryResult>();
@@ -96,6 +124,9 @@ public class InteractionServiceImpl implements InteractionService {
 	public void cancelFavorite(User user, Item item) {
 		favoriteRepository.deleteByUserAndItem(user, item);
 	}
+	
+	
+	// Follow
 	
 	public List<QuestionSummaryResult> getUserFollowingQuestions(User user) {
 		List<QuestionSummaryResult> result = new ArrayList<QuestionSummaryResult>();

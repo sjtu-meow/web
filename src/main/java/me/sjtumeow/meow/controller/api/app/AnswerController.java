@@ -21,6 +21,7 @@ import me.sjtumeow.meow.model.form.AddAnswerForm;
 import me.sjtumeow.meow.model.result.AnswerDetailResult;
 import me.sjtumeow.meow.model.result.FailureMessageResult;
 import me.sjtumeow.meow.model.result.FavoriteStatusResult;
+import me.sjtumeow.meow.model.result.LikeStatusResult;
 import me.sjtumeow.meow.model.result.NewEntityIdResult;
 import me.sjtumeow.meow.service.InteractionService;
 import me.sjtumeow.meow.service.ItemService;
@@ -74,6 +75,34 @@ public class AnswerController {
         itemService.deleteAnswer(id);
         return ResponseEntity.noContent().build();
     }
+	
+	@GetMapping("/answers/{id}/like")
+	@Authorization
+	ResponseEntity<?> checkLikeAnswer(@CurrentUser User user, @PathVariable("id") Long id) {
+		Answer answer = itemService.findAnswerById(id, false);
+        return answer == null ? ResponseEntity.notFound().build() :
+        	ResponseEntity.ok(new LikeStatusResult(interactionService.checkLike(user, answer)));
+	}
+	
+	@PostMapping("/answers/{id}/like")
+	@Authorization
+	ResponseEntity<?> doLikeAnswer(@CurrentUser User user, @PathVariable("id") Long id) {
+		Answer answer = itemService.findAnswerById(id, false);
+        if (answer == null)
+        	return ResponseEntity.notFound().build();
+        interactionService.doLike(user, answer);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+	}
+	
+	@DeleteMapping("/answers/{id}/like")
+	@Authorization
+	ResponseEntity<?> cancelLikeAnswer(@CurrentUser User user, @PathVariable("id") Long id) {
+		Answer answer = itemService.findAnswerById(id, false);
+        if (answer == null)
+        	return ResponseEntity.notFound().build();
+        interactionService.cancelLike(user, answer);
+        return ResponseEntity.noContent().build();
+	}
 	
 	@GetMapping("/answers/{id}/favorite")
 	@Authorization

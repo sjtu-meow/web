@@ -11,6 +11,14 @@ import me.sjtumeow.meow.model.result.QuestionSummaryResult;
 
 public interface InteractionService {
 	
+	// Like
+		
+	boolean checkLike(User user, Item item);
+		
+	void doLike(User user, Item item);
+		
+	void cancelLike(User user, Item item);
+	
 	// Favorite
 	
 	List<BaseSummaryResult> getUserFavorites(User user);

@@ -44,11 +44,15 @@ public abstract class Item extends BaseEntity {
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "item")
     private Set<Comment> comments;
     
-    @Formula("0") // TODO: edit this query
+    @Formula("(SELECT COUNT(*) FROM likeitem l WHERE l.item_id = id)")
     Integer likeCount;
     
     @Formula("(SELECT COUNT(*) FROM comment c WHERE c.item_id = id AND c.deleted_at IS NULL)")
     Integer commentCount;
+    
+    @JsonIgnore
+    @OneToMany(mappedBy = "item")
+    private Set<Like> likes;
     
     @JsonIgnore
     @OneToMany(mappedBy = "item")
@@ -100,6 +104,14 @@ public abstract class Item extends BaseEntity {
 
 	public void setCommentCount(Integer commentCount) {
 		this.commentCount = commentCount;
+	}
+	
+	public Set<Like> getLikes() {
+		return likes;
+	}
+
+	public void setLikes(Set<Like> likes) {
+		this.likes = likes;
 	}
 
 	public Set<Favorite> getFavorite() {

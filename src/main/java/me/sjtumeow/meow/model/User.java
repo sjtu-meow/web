@@ -31,6 +31,10 @@ public class User extends BaseEntity {
     
     @JsonIgnore
     @OneToMany(mappedBy = "user")
+    private Set<Like> likes;
+    
+    @JsonIgnore
+    @OneToMany(mappedBy = "user")
     private Set<Favorite> favorite;
     
     @JsonIgnore
@@ -91,6 +95,14 @@ public class User extends BaseEntity {
     public void setProfile(Profile profile) {
         this.profile = profile;
     }
+    
+    public Set<Like> getLikes() {
+		return likes;
+	}
+
+	public void setLikes(Set<Like> likes) {
+		this.likes = likes;
+	}
 
 	public Set<Favorite> getFavorite() {
 		return favorite;

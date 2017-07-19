@@ -9,6 +9,7 @@ import me.sjtumeow.meow.dao.CommentRepository;
 import me.sjtumeow.meow.dao.FavoriteRepository;
 import me.sjtumeow.meow.dao.FollowQuestionRepository;
 import me.sjtumeow.meow.dao.FollowUserRepository;
+import me.sjtumeow.meow.dao.LikeRepository;
 import me.sjtumeow.meow.dao.MediaRepository;
 import me.sjtumeow.meow.dao.MomentRepository;
 import me.sjtumeow.meow.dao.QuestionRepository;
@@ -19,6 +20,7 @@ import me.sjtumeow.meow.model.Comment;
 import me.sjtumeow.meow.model.Favorite;
 import me.sjtumeow.meow.model.FollowQuestion;
 import me.sjtumeow.meow.model.FollowUser;
+import me.sjtumeow.meow.model.Like;
 import me.sjtumeow.meow.model.Media;
 import me.sjtumeow.meow.model.Media.MediaType;
 import me.sjtumeow.meow.model.Moment;
@@ -55,6 +57,9 @@ public class SeederRunner implements ApplicationRunner {
     
     @Autowired
     private BannerRepository bannerRepository;
+    
+    @Autowired
+    private LikeRepository likeRepository;
     
     @Autowired
     private FavoriteRepository favoriteRepository;
@@ -148,6 +153,12 @@ public class SeederRunner implements ApplicationRunner {
             // Interaction test
             
             if (i == 5) {
+            	
+            	// Like
+            	
+            	likeRepository.save(new Like(user1, moment));
+            	likeRepository.save(new Like(user2, article));
+            	likeRepository.save(new Like(user1, answer));
             	
             	// Favorite
             	

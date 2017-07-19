@@ -20,6 +20,7 @@ import me.sjtumeow.meow.model.form.AddArticleForm;
 import me.sjtumeow.meow.model.result.ArticleDetailResult;
 import me.sjtumeow.meow.model.result.FailureMessageResult;
 import me.sjtumeow.meow.model.result.FavoriteStatusResult;
+import me.sjtumeow.meow.model.result.LikeStatusResult;
 import me.sjtumeow.meow.model.result.NewEntityIdResult;
 import me.sjtumeow.meow.service.InteractionService;
 import me.sjtumeow.meow.service.ItemService;
@@ -80,6 +81,34 @@ public class ArticleController {
         itemService.deleteArticle(id);
         return ResponseEntity.noContent().build();
     }
+	
+	@GetMapping("/{id}/like")
+	@Authorization
+	ResponseEntity<?> checkLikeArticle(@CurrentUser User user, @PathVariable("id") Long id) {
+		Article article = itemService.findArticleById(id, false);
+        return article == null ? ResponseEntity.notFound().build() :
+        	ResponseEntity.ok(new LikeStatusResult(interactionService.checkLike(user, article)));
+	}
+	
+	@PostMapping("/{id}/like")
+	@Authorization
+	ResponseEntity<?> doLikeArticle(@CurrentUser User user, @PathVariable("id") Long id) {
+		Article article = itemService.findArticleById(id, false);
+        if (article == null)
+        	return ResponseEntity.notFound().build();
+        interactionService.doLike(user, article);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+	}
+	
+	@DeleteMapping("/{id}/like")
+	@Authorization
+	ResponseEntity<?> cancelLikeArticle(@CurrentUser User user, @PathVariable("id") Long id) {
+		Article article = itemService.findArticleById(id, false);
+        if (article == null)
+        	return ResponseEntity.notFound().build();
+        interactionService.cancelLike(user, article);
+        return ResponseEntity.noContent().build();
+	}
 	
 	@GetMapping("/{id}/favorite")
 	@Authorization

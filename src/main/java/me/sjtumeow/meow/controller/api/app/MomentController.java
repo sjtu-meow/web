@@ -20,6 +20,7 @@ import me.sjtumeow.meow.model.form.AddMomentForm;
 import me.sjtumeow.meow.model.result.CreateResult;
 import me.sjtumeow.meow.model.result.FailureMessageResult;
 import me.sjtumeow.meow.model.result.FavoriteStatusResult;
+import me.sjtumeow.meow.model.result.LikeStatusResult;
 import me.sjtumeow.meow.model.result.MomentDetailResult;
 import me.sjtumeow.meow.model.result.NewEntityIdResult;
 import me.sjtumeow.meow.service.InteractionService;
@@ -68,6 +69,34 @@ public class MomentController {
         itemService.deleteMoment(id);
         return ResponseEntity.noContent().build();
     }
+	
+	@GetMapping("/{id}/like")
+	@Authorization
+	ResponseEntity<?> checkLikeMoment(@CurrentUser User user, @PathVariable("id") Long id) {
+		Moment moment = itemService.findMomentById(id, false);
+        return moment == null ? ResponseEntity.notFound().build() :
+        	ResponseEntity.ok(new LikeStatusResult(interactionService.checkLike(user, moment)));
+	}
+	
+	@PostMapping("/{id}/like")
+	@Authorization
+	ResponseEntity<?> doLikeMoment(@CurrentUser User user, @PathVariable("id") Long id) {
+		Moment moment = itemService.findMomentById(id, false);
+        if (moment == null)
+        	return ResponseEntity.notFound().build();
+        interactionService.doLike(user, moment);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+	}
+	
+	@DeleteMapping("/{id}/like")
+	@Authorization
+	ResponseEntity<?> cancelLikeMoment(@CurrentUser User user, @PathVariable("id") Long id) {
+		Moment moment = itemService.findMomentById(id, false);
+        if (moment == null)
+        	return ResponseEntity.notFound().build();
+        interactionService.cancelLike(user, moment);
+        return ResponseEntity.noContent().build();
+	}
 	
 	@GetMapping("/{id}/favorite")
 	@Authorization
