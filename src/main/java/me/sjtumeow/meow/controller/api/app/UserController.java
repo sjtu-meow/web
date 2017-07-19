@@ -7,9 +7,14 @@ import me.sjtumeow.meow.model.User;
 import me.sjtumeow.meow.model.form.ChangePasswordForm;
 import me.sjtumeow.meow.model.form.ProfileForm;
 import me.sjtumeow.meow.model.form.RegisterForm;
+import me.sjtumeow.meow.model.result.AnswerSummaryResult;
+import me.sjtumeow.meow.model.result.ArticleSummaryResult;
 import me.sjtumeow.meow.model.result.FailureMessageResult;
+import me.sjtumeow.meow.model.result.MomentSummaryResult;
 import me.sjtumeow.meow.model.result.NewEntityIdResult;
+import me.sjtumeow.meow.model.result.QuestionSummaryResult;
 import me.sjtumeow.meow.service.AuthService;
+import me.sjtumeow.meow.service.ItemService;
 import me.sjtumeow.meow.service.UserService;
 import me.sjtumeow.meow.util.FormatValidator;
 
@@ -22,16 +27,21 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api")
 public class UserController {
+	
     @Autowired
     private UserService userService;
     
     @Autowired
     private AuthService authService;
+    
+    @Autowired
+    private ItemService itemService;
     
 
     @PostMapping(path = "/users", consumes = "application/json")
@@ -88,8 +98,68 @@ public class UserController {
     }
     
     @GetMapping("/users/{id}/profile")
-    ResponseEntity<?> getProfile(@PathVariable("id") Long id) {
+    ResponseEntity<?> getProfileByUser(@PathVariable("id") Long id) {
     	Profile profile = userService.getProfile(id, false);
     	return profile == null ? ResponseEntity.notFound().build() : ResponseEntity.ok(profile);
+    }
+    
+    @GetMapping("/user/moments")
+    @Authorization
+    Iterable<MomentSummaryResult> getMoments(@CurrentUser User user, @RequestParam(required = false) Integer page, @RequestParam(required = false) Integer size) {
+    	return (!FormatValidator.checkNonNegativeInt(page) || !FormatValidator.checkPositiveInt(size)) ? 
+				itemService.findMomentsByUser(user.getId()) : itemService.findMomentsByUserPageable(page, size, user.getId());
+    }
+    
+    @GetMapping("/users/{id}/moments")
+    ResponseEntity<?> getMomentsByUser(@PathVariable("id") Long id, @RequestParam(required = false) Integer page, @RequestParam(required = false) Integer size) {
+    	if (userService.findById(id, false) == null)
+    		return ResponseEntity.notFound().build();
+    	return ResponseEntity.ok((!FormatValidator.checkNonNegativeInt(page) || !FormatValidator.checkPositiveInt(size)) ? 
+    			itemService.findMomentsByUser(id) : itemService.findMomentsByUserPageable(page, size, id));
+    }
+    
+    @GetMapping("/user/articles")
+    @Authorization
+    Iterable<ArticleSummaryResult> getArticles(@CurrentUser User user, @RequestParam(required = false) Integer page, @RequestParam(required = false) Integer size) {
+    	return (!FormatValidator.checkNonNegativeInt(page) || !FormatValidator.checkPositiveInt(size)) ? 
+				itemService.findArticlesByUser(user.getId()) : itemService.findArticlesByUserPageable(page, size, user.getId());
+    }
+    
+    @GetMapping("/users/{id}/articles")
+    ResponseEntity<?> getArticlesByUser(@PathVariable("id") Long id, @RequestParam(required = false) Integer page, @RequestParam(required = false) Integer size) {
+    	if (userService.findById(id, false) == null)
+    		return ResponseEntity.notFound().build();
+    	return ResponseEntity.ok((!FormatValidator.checkNonNegativeInt(page) || !FormatValidator.checkPositiveInt(size)) ? 
+    			itemService.findArticlesByUser(id) : itemService.findArticlesByUserPageable(page, size, id));
+    }
+    
+    @GetMapping("/user/questions")
+    @Authorization
+    Iterable<QuestionSummaryResult> getQuestions(@CurrentUser User user, @RequestParam(required = false) Integer page, @RequestParam(required = false) Integer size) {
+    	return (!FormatValidator.checkNonNegativeInt(page) || !FormatValidator.checkPositiveInt(size)) ? 
+				itemService.findQuestionsByUser(user.getId()) : itemService.findQuestionsByUserPageable(page, size, user.getId());
+    }
+    
+    @GetMapping("/users/{id}/questions")
+    ResponseEntity<?> getQuestionsByUser(@PathVariable("id") Long id, @RequestParam(required = false) Integer page, @RequestParam(required = false) Integer size) {
+    	if (userService.findById(id, false) == null)
+    		return ResponseEntity.notFound().build();
+    	return ResponseEntity.ok((!FormatValidator.checkNonNegativeInt(page) || !FormatValidator.checkPositiveInt(size)) ? 
+    			itemService.findQuestionsByUser(id) : itemService.findQuestionsByUserPageable(page, size, id));
+    }
+    
+    @GetMapping("/user/answers")
+    @Authorization
+    Iterable<AnswerSummaryResult> getAnswers(@CurrentUser User user, @RequestParam(required = false) Integer page, @RequestParam(required = false) Integer size) {
+    	return (!FormatValidator.checkNonNegativeInt(page) || !FormatValidator.checkPositiveInt(size)) ? 
+				itemService.findAnswersByUser(user.getId()) : itemService.findAnswersByUserPageable(page, size, user.getId());
+    }
+    
+    @GetMapping("/users/{id}/answers")
+    ResponseEntity<?> getAnswersByUser(@PathVariable("id") Long id, @RequestParam(required = false) Integer page, @RequestParam(required = false) Integer size) {
+    	if (userService.findById(id, false) == null)
+    		return ResponseEntity.notFound().build();
+    	return ResponseEntity.ok((!FormatValidator.checkNonNegativeInt(page) || !FormatValidator.checkPositiveInt(size)) ? 
+    			itemService.findAnswersByUser(id) : itemService.findAnswersByUserPageable(page, size, id));
     }
 }

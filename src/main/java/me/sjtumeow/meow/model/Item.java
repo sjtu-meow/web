@@ -45,7 +45,7 @@ public abstract class Item extends BaseEntity {
     @Formula("0") // TODO: edit this query
     Integer likeCount;
     
-    @Formula("(SELECT COUNT(*) FROM comment c WHERE c.item_id = id)")
+    @Formula("(SELECT COUNT(*) FROM comment c WHERE c.item_id = id AND c.deleted_at IS NULL)")
     Integer commentCount;
 
     public Long getId() {

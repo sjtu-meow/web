@@ -20,6 +20,7 @@ import me.sjtumeow.meow.model.result.FailureMessageResult;
 import me.sjtumeow.meow.model.result.NewEntityIdResult;
 import me.sjtumeow.meow.service.UserService;
 import me.sjtumeow.meow.util.FormatValidator;
+import me.sjtumeow.meow.util.StringUtil;
 
 @RestController
 @RequestMapping("/api/admin/users")
@@ -29,9 +30,9 @@ public class AdminUserController {
     private UserService userService;
 	
     @GetMapping
-    Iterable<User> getUsers(@RequestParam(required = false) Integer page, @RequestParam(required = false) Integer size) {
+    Iterable<User> getUsers(@RequestParam(required = false) Integer page, @RequestParam(required = false) Integer size, @RequestParam(required = false) String keyword) {
     	return (!FormatValidator.checkNonNegativeInt(page) || !FormatValidator.checkPositiveInt(size)) ? 
-				userService.findAll(true) : userService.findAllPageable(page, size, true);
+				userService.findAll(StringUtil.replaceNull(keyword), true) : userService.findAllPageable(page, size, StringUtil.replaceNull(keyword), true);
     }
 	
     @GetMapping("/{id}")

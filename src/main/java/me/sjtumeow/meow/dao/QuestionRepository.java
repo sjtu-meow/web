@@ -22,4 +22,10 @@ public interface QuestionRepository extends SoftDeleteRepository<Question, Long>
 	
 	Page<Question> findByTitleContainingAndDeletedAtIsNull(String keyword, Pageable pageable);
 	
+	List<Question> findByProfileIdAndDeletedAtIsNull(Long id);
+	
+	List<Question> findByProfileIdAndDeletedAtIsNull(Long id, Sort sort);
+	
+	Page<Question> findByProfileIdAndDeletedAtIsNull(Long id, Pageable pageable);
+	
 }

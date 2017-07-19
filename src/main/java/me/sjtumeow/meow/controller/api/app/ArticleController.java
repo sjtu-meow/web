@@ -14,9 +14,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import me.sjtumeow.meow.authorization.annotation.Authorization;
 import me.sjtumeow.meow.authorization.annotation.CurrentUser;
-import me.sjtumeow.meow.model.Article;
 import me.sjtumeow.meow.model.User;
 import me.sjtumeow.meow.model.form.AddArticleForm;
+import me.sjtumeow.meow.model.result.ArticleDetailResult;
 import me.sjtumeow.meow.model.result.FailureMessageResult;
 import me.sjtumeow.meow.model.result.NewEntityIdResult;
 import me.sjtumeow.meow.service.ItemService;
@@ -38,7 +38,7 @@ public class ArticleController {
 	
 	@GetMapping("/{id}")
 	ResponseEntity<?> getArticle(@PathVariable("id") Long id) {
-		Article article = itemService.findArticleById(id, false);
+		ArticleDetailResult article = itemService.showArticleById(id);
         return article == null ? ResponseEntity.notFound().build() : ResponseEntity.ok(article);
 	}
 	

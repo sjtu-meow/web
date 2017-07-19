@@ -8,9 +8,9 @@ import me.sjtumeow.meow.model.form.AdminUpdateUserForm;
 
 public interface UserService {
 	
-	Iterable<User> findAll(boolean isAdmin);
+	Iterable<User> findAll(String keyword, boolean isAdmin);
 	
-	Iterable<User> findAllPageable(Integer page, Integer size, boolean isAdmin);
+	Iterable<User> findAllPageable(Integer page, Integer size, String keyword, boolean isAdmin);
 	
 	User findById(Long id, boolean isAdmin);
 	

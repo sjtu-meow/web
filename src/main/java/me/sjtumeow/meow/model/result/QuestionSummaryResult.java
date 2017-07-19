@@ -1,55 +1,41 @@
 package me.sjtumeow.meow.model.result;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-
 import me.sjtumeow.meow.model.Answer;
 import me.sjtumeow.meow.model.Item;
 import me.sjtumeow.meow.model.Profile;
 import me.sjtumeow.meow.model.Question;
+import me.sjtumeow.meow.model.util.TimeComparableObject;
 
-public class QuestionDetailResult {
+public class QuestionSummaryResult extends TimeComparableObject {
 	protected Long id;
 	protected Integer type;
 	protected Profile profile;
 	protected String title;
-	protected String content;
-	protected List<AnswerDetailResult> answers;
+	protected Integer answerCount;
 	protected String createTime;
 	protected String updateTime;
 	protected boolean isDeleted;
 	
-	public QuestionDetailResult(Question question) {
+	public QuestionSummaryResult(Question question) {
 		this.id = question.getId();
 		this.type = Item.ITEM_TYPE_QUESTION;
 		this.profile = question.getProfile();
 		this.title = question.getTitle();
-		this.content = question.getContent();
 		this.createTime = question.getCreateTime();
 		this.updateTime = question.getUpdateTime();
 		this.isDeleted = question.isDeleted();
-		this.answers = new ArrayList<AnswerDetailResult>();
+		this.answerCount = 0;
 		
 		for (Answer answer: question.getAnswers()) {
 			if (!answer.isDeleted())
-				answers.add(new AnswerDetailResult(answer));
+				++answerCount;
 		}
-		
-		Collections.sort(answers, new Comparator<AnswerDetailResult>() {
-            @Override
-            public int compare(AnswerDetailResult lhs, AnswerDetailResult rhs) {
-                Integer res = lhs.getCreateTime().compareTo(rhs.getCreateTime());
-                return res == 0 ? 0 : -res / Math.abs(res);
-            }
-        });
 	}
 
 	public Long getId() {
 		return id;
 	}
-	
+
 	public Integer getType() {
 		return type;
 	}
@@ -62,12 +48,8 @@ public class QuestionDetailResult {
 		return title;
 	}
 
-	public String getContent() {
-		return content;
-	}
-
-	public List<AnswerDetailResult> getAnswers() {
-		return answers;
+	public Integer getAnswerCount() {
+		return answerCount;
 	}
 
 	public String getCreateTime() {
@@ -85,7 +67,7 @@ public class QuestionDetailResult {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	
+
 	public void setType(Integer type) {
 		this.type = type;
 	}
@@ -98,12 +80,8 @@ public class QuestionDetailResult {
 		this.title = title;
 	}
 
-	public void setContent(String content) {
-		this.content = content;
-	}
-
-	public void setAnswers(List<AnswerDetailResult> answers) {
-		this.answers = answers;
+	public void setAnswerCount(Integer answerCount) {
+		this.answerCount = answerCount;
 	}
 
 	public void setCreateTime(String createTime) {
@@ -117,5 +95,4 @@ public class QuestionDetailResult {
 	public void setDeleted(boolean isDeleted) {
 		this.isDeleted = isDeleted;
 	}
-
 }
