@@ -99,23 +99,12 @@ export default {
   data() {
     return {
       loggedIn: true,
-      phone: '',
-      password: '',
       title: '',
       summary: '',
       coverUrl: 'https://i.ytimg.com/vi/prALrHUJ8Ns/hqdefault.jpg'
     }
   },
   created() {
-    this.$http.get('/api/web/auth')
-      .then(function (response) {
-        if (response.body.loggedIn) {
-          this.loggedIn = true;
-        } else {
-          this.loggedIn = false;
-        }
-      })
-
     const vueModule = this;
     // initialize editor
     $(function() {
@@ -168,17 +157,6 @@ export default {
     });
   },
   methods: {
-    login() {
-      this.$http.post('/api/web/auth', {
-        phone: this.phone,
-        password: this.password
-      }).then(function(response) {
-        this.loggedIn = true;
-      }, function(response) {
-        alert(response.body.message || '登录失败');
-      })
-      $('#loginModal').modal('hide')
-    },
     logout() {
       this.$http.delete('/api/web/auth')
         .then(function(response) {
