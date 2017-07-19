@@ -9,50 +9,50 @@ import org.hibernate.annotations.Formula;
 
 @Entity
 public class Answer extends Item {
-    
-	private static final long serialVersionUID = 1L;
 
-	private String content;
+    private static final long serialVersionUID = 1L;
 
-	@JsonBackReference
+    private String content;
+
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(nullable = false)
     Question question;
-	
-	@Formula("question_id")
-	Long questionId;
-	
-	public Answer() {
-		type = Item.ITEM_TYPE_ANSWER;
-	}
-	
-	public Answer(String content) {
-		type = Item.ITEM_TYPE_ANSWER;
-		this.content = content;
-	}
 
-	public String getContent() {
-		return content;
-	}
-	
-	public void setContent(String content) {
-		this.content = content;
-	}
+    @Formula("question_id")
+    Long questionId;
 
-	public Question getQuestion() {
-		return question;
-	}
+    public Answer() {
+        type = Item.ITEM_TYPE_ANSWER;
+    }
 
-	public void setQuestion(Question question) {
-		this.question = question;
-	}
+    public Answer(String content) {
+        type = Item.ITEM_TYPE_ANSWER;
+        this.content = content;
+    }
 
-	public Long getQuestionId() {
-		return questionId;
-	}
+    public String getContent() {
+        return content;
+    }
 
-	public void setQuestionId(Long questionId) {
-		this.questionId = questionId;
-	}
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public Question getQuestion() {
+        return question;
+    }
+
+    public void setQuestion(Question question) {
+        this.question = question;
+    }
+
+    public Long getQuestionId() {
+        return questionId;
+    }
+
+    public void setQuestionId(Long questionId) {
+        this.questionId = questionId;
+    }
 
 }

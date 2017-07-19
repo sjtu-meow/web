@@ -21,39 +21,39 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public abstract class Item extends BaseEntity {
-    
+
     private static final long serialVersionUID = 1L;
-    
+
     public static final int ITEM_TYPE_MOMENT = 0;
     public static final int ITEM_TYPE_ARTICLE = 1;
     public static final int ITEM_TYPE_QUESTION = 2;
     public static final int ITEM_TYPE_ANSWER = 3;
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.TABLE)
     @Column(nullable = false)
     Long id;
-    
+
     @Column(nullable = false)
     Integer type;
 
     @OneToOne
     @JoinColumn
     Profile profile;
-    
+
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "item")
     private Set<Comment> comments;
-    
+
     @Formula("(SELECT COUNT(*) FROM likeitem l WHERE l.item_id = id)")
     Integer likeCount;
-    
+
     @Formula("(SELECT COUNT(*) FROM comment c WHERE c.item_id = id AND c.deleted_at IS NULL)")
     Integer commentCount;
-    
+
     @JsonIgnore
     @OneToMany(mappedBy = "item")
     private Set<Like> likes;
-    
+
     @JsonIgnore
     @OneToMany(mappedBy = "item")
     private Set<Favorite> favorite;
@@ -65,14 +65,14 @@ public abstract class Item extends BaseEntity {
     public void setId(Long id) {
         this.id = id;
     }
-    
-    public Integer getType() {
-		return type;
-	}
 
-	public void setType(Integer type) {
-		this.type = type;
-	}
+    public Integer getType() {
+        return type;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
+    }
 
     public Profile getProfile() {
         return profile;
@@ -82,44 +82,44 @@ public abstract class Item extends BaseEntity {
         this.profile = profile;
     }
 
-	public Set<Comment> getComments() {
-		return comments;
-	}
+    public Set<Comment> getComments() {
+        return comments;
+    }
 
-	public void setComments(Set<Comment> comments) {
-		this.comments = comments;
-	}
+    public void setComments(Set<Comment> comments) {
+        this.comments = comments;
+    }
 
-	public Integer getLikeCount() {
-		return likeCount;
-	}
+    public Integer getLikeCount() {
+        return likeCount;
+    }
 
-	public void setLikeCount(Integer likeCount) {
-		this.likeCount = likeCount;
-	}
+    public void setLikeCount(Integer likeCount) {
+        this.likeCount = likeCount;
+    }
 
-	public Integer getCommentCount() {
-		return commentCount;
-	}
+    public Integer getCommentCount() {
+        return commentCount;
+    }
 
-	public void setCommentCount(Integer commentCount) {
-		this.commentCount = commentCount;
-	}
-	
-	public Set<Like> getLikes() {
-		return likes;
-	}
+    public void setCommentCount(Integer commentCount) {
+        this.commentCount = commentCount;
+    }
 
-	public void setLikes(Set<Like> likes) {
-		this.likes = likes;
-	}
+    public Set<Like> getLikes() {
+        return likes;
+    }
 
-	public Set<Favorite> getFavorite() {
-		return favorite;
-	}
+    public void setLikes(Set<Like> likes) {
+        this.likes = likes;
+    }
 
-	public void setFavorite(Set<Favorite> favorite) {
-		this.favorite = favorite;
-	}
+    public Set<Favorite> getFavorite() {
+        return favorite;
+    }
+
+    public void setFavorite(Set<Favorite> favorite) {
+        this.favorite = favorite;
+    }
 
 }

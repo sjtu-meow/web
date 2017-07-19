@@ -9,22 +9,22 @@ import org.springframework.data.domain.Sort;
 import me.sjtumeow.meow.model.Article;
 
 public interface ArticleRepository extends SoftDeleteRepository<Article, Long> {
-	
-	List<Article> findByTitleContaining(String keyword);
-	
-	List<Article> findByTitleContaining(String keyword, Sort sort);
-	
-	Page<Article> findByTitleContaining(String keyword, Pageable pageable);
-	
-	List<Article> findByTitleContainingAndDeletedAtIsNull(String keyword);
-	
-	List<Article> findByTitleContainingAndDeletedAtIsNull(String keyword, Sort sort);
-	
-	Page<Article> findByTitleContainingAndDeletedAtIsNull(String keyword, Pageable pageable);
-	
-	List<Article> findByProfileIdAndDeletedAtIsNull(Long id);
-	
-	List<Article> findByProfileIdAndDeletedAtIsNull(Long id, Sort sort);
-	
-	Page<Article> findByProfileIdAndDeletedAtIsNull(Long id, Pageable pageable);
+
+    List<Article> findByTitleContaining(String keyword);
+
+    List<Article> findByTitleContaining(String keyword, Sort sort);
+
+    Page<Article> findByTitleContaining(String keyword, Pageable pageable);
+
+    List<Article> findByTitleContainingAndDeletedAtIsNull(String keyword);
+
+    List<Article> findByTitleContainingAndDeletedAtIsNull(String keyword, Sort sort);
+
+    Page<Article> findByTitleContainingAndDeletedAtIsNull(String keyword, Pageable pageable);
+
+    List<Article> findByProfileIdAndDeletedAtIsNull(Long id);
+
+    List<Article> findByProfileIdAndDeletedAtIsNull(Long id, Sort sort);
+
+    Page<Article> findByProfileIdAndDeletedAtIsNull(Long id, Pageable pageable);
 }

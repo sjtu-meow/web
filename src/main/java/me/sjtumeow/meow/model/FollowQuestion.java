@@ -10,52 +10,53 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 public class FollowQuestion extends BaseEntity {
-	
-	private static final long serialVersionUID = 1L;
 
-	@Id
+    private static final long serialVersionUID = 1L;
+
+    @Id
     @GeneratedValue
     @Column(nullable = false)
     private Long id;
-	
-	@JsonBackReference
+
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(nullable = false)
     private User user;
-	
-	@JsonBackReference
+
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(nullable = false)
     private Question question;
-	
-	public FollowQuestion() {}
-	
-	public FollowQuestion(User user, Question question) {
-		this.user = user;
-		this.question = question;
-	}
 
-	public Long getId() {
-		return id;
-	}
+    public FollowQuestion() {
+    }
 
-	public User getUser() {
-		return user;
-	}
+    public FollowQuestion(User user, Question question) {
+        this.user = user;
+        this.question = question;
+    }
 
-	public Question getQuestion() {
-		return question;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    public User getUser() {
+        return user;
+    }
 
-	public void setUser(User user) {
-		this.user = user;
-	}
+    public Question getQuestion() {
+        return question;
+    }
 
-	public void setQuestion(Question question) {
-		this.question = question;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public void setQuestion(Question question) {
+        this.question = question;
+    }
 }

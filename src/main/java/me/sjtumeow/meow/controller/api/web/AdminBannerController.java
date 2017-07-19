@@ -18,20 +18,20 @@ import me.sjtumeow.meow.service.BannerService;
 @RestController
 @RequestMapping("/api/admin/banners")
 public class AdminBannerController {
-	
-	@Autowired
+
+    @Autowired
     private BannerService bannerService;
-	
-	@GetMapping
-	List<BannerResult> getBanners() {
-		return bannerService.findAll();
-	}
-	
-	@PutMapping(consumes = "application/json")
-	ResponseEntity<?> updateBanners(@RequestBody List<UpdateBannerForm> ubfl) {
-		String result = bannerService.update(ubfl);
-		return result.isEmpty() ? ResponseEntity.noContent().build()
-				: ResponseEntity.badRequest().body(new FailureMessageResult(result));
-	}
+
+    @GetMapping
+    List<BannerResult> getBanners() {
+        return bannerService.findAll();
+    }
+
+    @PutMapping(consumes = "application/json")
+    ResponseEntity<?> updateBanners(@RequestBody List<UpdateBannerForm> ubfl) {
+        String result = bannerService.update(ubfl);
+        return result.isEmpty() ? ResponseEntity.noContent().build()
+                : ResponseEntity.badRequest().body(new FailureMessageResult(result));
+    }
 
 }

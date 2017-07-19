@@ -10,52 +10,53 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 public class Favorite extends BaseEntity {
-	
-	private static final long serialVersionUID = 1L;
 
-	@Id
+    private static final long serialVersionUID = 1L;
+
+    @Id
     @GeneratedValue
     @Column(nullable = false)
     private Long id;
-	
-	@JsonBackReference
+
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(nullable = false)
     private User user;
-	
-	@JsonBackReference
+
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(nullable = false)
     private Item item;
-	
-	public Favorite() {}
-	
-	public Favorite(User user, Item item) {
-		this.user = user;
-		this.item = item;
-	}
 
-	public Long getId() {
-		return id;
-	}
+    public Favorite() {
+    }
 
-	public User getUser() {
-		return user;
-	}
+    public Favorite(User user, Item item) {
+        this.user = user;
+        this.item = item;
+    }
 
-	public Item getItem() {
-		return item;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    public User getUser() {
+        return user;
+    }
 
-	public void setUser(User user) {
-		this.user = user;
-	}
+    public Item getItem() {
+        return item;
+    }
 
-	public void setItem(Item item) {
-		this.item = item;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public void setItem(Item item) {
+        this.item = item;
+    }
 }

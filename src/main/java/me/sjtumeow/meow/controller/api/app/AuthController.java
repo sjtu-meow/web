@@ -20,28 +20,28 @@ import me.sjtumeow.meow.service.UserService;
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
-	
-	@Autowired
+
+    @Autowired
     private UserService userService;
-	
-	@Autowired
+
+    @Autowired
     private AuthService authService;
-	
-	@PostMapping(consumes = "application/json")
-	ResponseEntity<?> login(@RequestBody UserCredentialsForm cred) {
-		if (userService.checkPassword(cred)) {
-			return userService.isBanned(cred.getPhone()) ?
-					ResponseEntity.status(HttpStatus.FORBIDDEN).body(new FailureMessageResult("您的账号已被封禁!"))
-					: ResponseEntity.status(HttpStatus.CREATED).body(authService.generateUserToken(cred));
-		} else {
-			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new FailureMessageResult("手机号或密码错误"));
-		}
-	}
-	
-	@DeleteMapping
-	@Authorization
-	ResponseEntity<?> logout(@CurrentUser User user) {
-		authService.deleteUserToken(user);
-		return ResponseEntity.noContent().build();
-	}
+
+    @PostMapping(consumes = "application/json")
+    ResponseEntity<?> login(@RequestBody UserCredentialsForm cred) {
+        if (userService.checkPassword(cred)) {
+            return userService.isBanned(cred.getPhone())
+                    ? ResponseEntity.status(HttpStatus.FORBIDDEN).body(new FailureMessageResult("您的账号已被封禁!"))
+                    : ResponseEntity.status(HttpStatus.CREATED).body(authService.generateUserToken(cred));
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new FailureMessageResult("手机号或密码错误"));
+        }
+    }
+
+    @DeleteMapping
+    @Authorization
+    ResponseEntity<?> logout(@CurrentUser User user) {
+        authService.deleteUserToken(user);
+        return ResponseEntity.noContent().build();
+    }
 }

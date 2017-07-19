@@ -2,7 +2,7 @@ package me.sjtumeow.meow.model.result;
 
 public class LoginTokenResult {
     protected String token;
-    
+
     public LoginTokenResult(String token) {
         this.token = token;
     }
@@ -14,5 +14,5 @@ public class LoginTokenResult {
     public void setToken(String token) {
         this.token = token;
     }
-    
+
 }

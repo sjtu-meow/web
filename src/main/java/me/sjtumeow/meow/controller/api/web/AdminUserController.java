@@ -25,51 +25,53 @@ import me.sjtumeow.meow.util.StringUtil;
 @RestController
 @RequestMapping("/api/admin/users")
 public class AdminUserController {
-	
-	@Autowired
+
+    @Autowired
     private UserService userService;
-	
+
     @GetMapping
-    Iterable<User> getUsers(@RequestParam(required = false) Integer page, @RequestParam(required = false) Integer size, @RequestParam(required = false) String keyword) {
-    	return (!FormatValidator.checkNonNegativeInt(page) || !FormatValidator.checkPositiveInt(size)) ? 
-				userService.findAll(StringUtil.replaceNull(keyword), true) : userService.findAllPageable(page, size, StringUtil.replaceNull(keyword), true);
+    Iterable<User> getUsers(@RequestParam(required = false) Integer page, @RequestParam(required = false) Integer size,
+            @RequestParam(required = false) String keyword) {
+        return (!FormatValidator.checkNonNegativeInt(page) || !FormatValidator.checkPositiveInt(size))
+                ? userService.findAll(StringUtil.replaceNull(keyword), true)
+                : userService.findAllPageable(page, size, StringUtil.replaceNull(keyword), true);
     }
-	
+
     @GetMapping("/{id}")
     ResponseEntity<?> getUser(@PathVariable("id") Long id) {
         User user = userService.findById(id, true);
         return user == null ? ResponseEntity.notFound().build() : ResponseEntity.ok(user);
     }
-	
-	@PostMapping(consumes = "application/json")
-    ResponseEntity<?> createUser(@RequestBody AdminRegisterForm arp) {
-    	
-    	String phone = arp.getPhone();
-    	String password = arp.getPassword();
-    	
-    	if (!FormatValidator.checkPhone(phone))
-    		return ResponseEntity.badRequest().body(new FailureMessageResult("手机号格式不正确"));
-    	if (!FormatValidator.checkPassword(password))
-    		return ResponseEntity.badRequest().body(new FailureMessageResult("密码的长度至少为 6 个字符"));
-    	if (userService.findByPhone(phone, true) != null)
-			return ResponseEntity.badRequest().body(new FailureMessageResult("该手机号已被注册"));
 
-        return ResponseEntity.status(HttpStatus.CREATED)
-        		.body(new NewEntityIdResult(userService.create(phone, password, arp.isAdmin(), arp.getNickname(), arp.getBio(), arp.getAvatar())));
+    @PostMapping(consumes = "application/json")
+    ResponseEntity<?> createUser(@RequestBody AdminRegisterForm arp) {
+
+        String phone = arp.getPhone();
+        String password = arp.getPassword();
+
+        if (!FormatValidator.checkPhone(phone))
+            return ResponseEntity.badRequest().body(new FailureMessageResult("手机号格式不正确"));
+        if (!FormatValidator.checkPassword(password))
+            return ResponseEntity.badRequest().body(new FailureMessageResult("密码的长度至少为 6 个字符"));
+        if (userService.findByPhone(phone, true) != null)
+            return ResponseEntity.badRequest().body(new FailureMessageResult("该手机号已被注册"));
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(new NewEntityIdResult(
+                userService.create(phone, password, arp.isAdmin(), arp.getNickname(), arp.getBio(), arp.getAvatar())));
     }
-	
+
     @PatchMapping(path = "/{id}", consumes = "application/json")
     ResponseEntity<?> updateUser(@PathVariable("id") Long id, @RequestBody AdminUpdateUserForm auuf) {
-    	
-    	String password = auuf.getPassword();
-    	if (password != null && !FormatValidator.checkPassword(password))
-    		return ResponseEntity.badRequest().body(new FailureMessageResult("密码的长度至少为 6 个字符"));
-    	
-    	return userService.update(id, auuf) ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
-    	
+
+        String password = auuf.getPassword();
+        if (password != null && !FormatValidator.checkPassword(password))
+            return ResponseEntity.badRequest().body(new FailureMessageResult("密码的长度至少为 6 个字符"));
+
+        return userService.update(id, auuf) ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
+
     }
-	
-	@DeleteMapping("/{id}")
+
+    @DeleteMapping("/{id}")
     ResponseEntity<?> deleteUser(@PathVariable("id") Long id) {
         return userService.delete(id) ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
     }

@@ -28,94 +28,95 @@ import me.sjtumeow.meow.service.ItemService;
 @RequestMapping("/api/questions")
 public class QuestionController {
 
-	@Autowired
+    @Autowired
     private ItemService itemService;
-	
-	@Autowired
-	private InteractionService interactionService;
-	
-	@GetMapping("/{id}")
-	ResponseEntity<?> getQuestion(@PathVariable("id") Long id) {
-		QuestionDetailResult question = itemService.showQuestionById(id);
-        return question == null ? ResponseEntity.notFound().build() : ResponseEntity.ok(question);
-	}
-	
-	@PostMapping(consumes = "application/json")
-	@Authorization
-	ResponseEntity<?> addQuestion(@RequestBody AddQuestionForm aqf, @CurrentUser User user) {
-		String title = aqf.getTitle();
-		if (title == null || title.trim().isEmpty())
-			return ResponseEntity.badRequest().body(new FailureMessageResult("问题标题不能为空"));
 
-		return ResponseEntity.status(HttpStatus.CREATED).body(new NewEntityIdResult(itemService.addQuestion(aqf, user)));
-	}
-	
-	@DeleteMapping("/{id}")
-	@Authorization
-	ResponseEntity<?> deleteQuestion(@CurrentUser User user, @PathVariable("id") Long id) {
-		User creator = itemService.getQuestionCreator(id);
-		if (creator == null)
-			return ResponseEntity.notFound().build();
-		if (creator.getId() != user.getId())
-			return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-		
+    @Autowired
+    private InteractionService interactionService;
+
+    @GetMapping("/{id}")
+    ResponseEntity<?> getQuestion(@PathVariable("id") Long id) {
+        QuestionDetailResult question = itemService.showQuestionById(id);
+        return question == null ? ResponseEntity.notFound().build() : ResponseEntity.ok(question);
+    }
+
+    @PostMapping(consumes = "application/json")
+    @Authorization
+    ResponseEntity<?> addQuestion(@RequestBody AddQuestionForm aqf, @CurrentUser User user) {
+        String title = aqf.getTitle();
+        if (title == null || title.trim().isEmpty())
+            return ResponseEntity.badRequest().body(new FailureMessageResult("问题标题不能为空"));
+
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(new NewEntityIdResult(itemService.addQuestion(aqf, user)));
+    }
+
+    @DeleteMapping("/{id}")
+    @Authorization
+    ResponseEntity<?> deleteQuestion(@CurrentUser User user, @PathVariable("id") Long id) {
+        User creator = itemService.getQuestionCreator(id);
+        if (creator == null)
+            return ResponseEntity.notFound().build();
+        if (creator.getId() != user.getId())
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+
         itemService.deleteQuestion(id);
         return ResponseEntity.noContent().build();
     }
-	
-	@GetMapping("/{id}/favorite")
-	@Authorization
-	ResponseEntity<?> checkFavoriteQuestion(@CurrentUser User user, @PathVariable("id") Long id) {
-		Question question = itemService.findQuestionById(id, false);
-        return question == null ? ResponseEntity.notFound().build() :
-        	ResponseEntity.ok(new FavoriteStatusResult(interactionService.checkFavorite(user, question)));
-	}
-	
-	@PostMapping("/{id}/favorite")
-	@Authorization
-	ResponseEntity<?> doFavoriteQuestion(@CurrentUser User user, @PathVariable("id") Long id) {
-		Question question = itemService.findQuestionById(id, false);
+
+    @GetMapping("/{id}/favorite")
+    @Authorization
+    ResponseEntity<?> checkFavoriteQuestion(@CurrentUser User user, @PathVariable("id") Long id) {
+        Question question = itemService.findQuestionById(id, false);
+        return question == null ? ResponseEntity.notFound().build()
+                : ResponseEntity.ok(new FavoriteStatusResult(interactionService.checkFavorite(user, question)));
+    }
+
+    @PostMapping("/{id}/favorite")
+    @Authorization
+    ResponseEntity<?> doFavoriteQuestion(@CurrentUser User user, @PathVariable("id") Long id) {
+        Question question = itemService.findQuestionById(id, false);
         if (question == null)
-        	return ResponseEntity.notFound().build();
+            return ResponseEntity.notFound().build();
         interactionService.doFavorite(user, question);
         return ResponseEntity.status(HttpStatus.CREATED).build();
-	}
-	
-	@DeleteMapping("/{id}/favorite")
-	@Authorization
-	ResponseEntity<?> cancelFavoriteQuestion(@CurrentUser User user, @PathVariable("id") Long id) {
-		Question question = itemService.findQuestionById(id, false);
+    }
+
+    @DeleteMapping("/{id}/favorite")
+    @Authorization
+    ResponseEntity<?> cancelFavoriteQuestion(@CurrentUser User user, @PathVariable("id") Long id) {
+        Question question = itemService.findQuestionById(id, false);
         if (question == null)
-        	return ResponseEntity.notFound().build();
+            return ResponseEntity.notFound().build();
         interactionService.cancelFavorite(user, question);
         return ResponseEntity.noContent().build();
-	}
-	
-	@GetMapping("/{id}/follow")
-	@Authorization
-	ResponseEntity<?> checkFollowQuestion(@CurrentUser User user, @PathVariable("id") Long id) {
-		Question question = itemService.findQuestionById(id, false);
-        return question == null ? ResponseEntity.notFound().build() :
-        	ResponseEntity.ok(new FollowStatusResult(interactionService.checkFollowQuestion(user, question)));
-	}
-	
-	@PostMapping("/{id}/follow")
-	@Authorization
-	ResponseEntity<?> doFollowQuestion(@CurrentUser User user, @PathVariable("id") Long id) {
-		Question question = itemService.findQuestionById(id, false);
+    }
+
+    @GetMapping("/{id}/follow")
+    @Authorization
+    ResponseEntity<?> checkFollowQuestion(@CurrentUser User user, @PathVariable("id") Long id) {
+        Question question = itemService.findQuestionById(id, false);
+        return question == null ? ResponseEntity.notFound().build()
+                : ResponseEntity.ok(new FollowStatusResult(interactionService.checkFollowQuestion(user, question)));
+    }
+
+    @PostMapping("/{id}/follow")
+    @Authorization
+    ResponseEntity<?> doFollowQuestion(@CurrentUser User user, @PathVariable("id") Long id) {
+        Question question = itemService.findQuestionById(id, false);
         if (question == null)
-        	return ResponseEntity.notFound().build();
+            return ResponseEntity.notFound().build();
         interactionService.doFollowQuestion(user, question);
         return ResponseEntity.status(HttpStatus.CREATED).build();
-	}
-	
-	@DeleteMapping("/{id}/follow")
-	@Authorization
-	ResponseEntity<?> cancelFollowQuestion(@CurrentUser User user, @PathVariable("id") Long id) {
-		Question question = itemService.findQuestionById(id, false);
+    }
+
+    @DeleteMapping("/{id}/follow")
+    @Authorization
+    ResponseEntity<?> cancelFollowQuestion(@CurrentUser User user, @PathVariable("id") Long id) {
+        Question question = itemService.findQuestionById(id, false);
         if (question == null)
-        	return ResponseEntity.notFound().build();
+            return ResponseEntity.notFound().build();
         interactionService.cancelFollowQuestion(user, question);
         return ResponseEntity.noContent().build();
-	}
+    }
 }

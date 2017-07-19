@@ -10,17 +10,17 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 public class Comment extends BaseEntity {
-    
-	private static final long serialVersionUID = 1L;
 
-	@Id
+    private static final long serialVersionUID = 1L;
+
+    @Id
     @GeneratedValue
     @Column(nullable = false)
     private Long id;
 
-	@Column(nullable = false)
+    @Column(nullable = false)
     private Long parent;
-    
+
     @JsonBackReference
     @ManyToOne
     @JoinColumn(nullable = false)
@@ -32,16 +32,16 @@ public class Comment extends BaseEntity {
 
     @Column(nullable = false)
     private String content;
-    
+
     public Comment() {
-    	this.parent = 0L;
+        this.parent = 0L;
     }
-    
+
     public Comment(Item item, Profile profile, String content) {
-    	this.item = item;
-    	this.parent = 0L;
-    	this.profile = profile;
-    	this.content = content;
+        this.item = item;
+        this.parent = 0L;
+        this.profile = profile;
+        this.content = content;
     }
 
     public Long getId() {
@@ -59,14 +59,14 @@ public class Comment extends BaseEntity {
     public void setParent(Long parent) {
         this.parent = parent;
     }
-    
-    public Item getItem() {
-		return item;
-	}
 
-	public void setItem(Item item) {
-		this.item = item;
-	}
+    public Item getItem() {
+        return item;
+    }
+
+    public void setItem(Item item) {
+        this.item = item;
+    }
 
     public Profile getProfile() {
         return profile;

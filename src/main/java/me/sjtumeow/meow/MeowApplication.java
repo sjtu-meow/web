@@ -10,7 +10,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @EnableJpaRepositories(repositoryBaseClass = SoftDeleteRepositoryImpl.class, repositoryFactoryBeanClass = SoftDeleteRepositoryFactoryBean.class)
 public class MeowApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(MeowApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(MeowApplication.class, args);
+    }
 }

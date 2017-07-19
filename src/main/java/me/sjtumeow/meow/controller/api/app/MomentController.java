@@ -31,98 +31,101 @@ import me.sjtumeow.meow.util.StringUtil;
 @RestController
 @RequestMapping("/api/moments")
 public class MomentController {
-	
-	@Autowired
+
+    @Autowired
     private ItemService itemService;
-	
-	@Autowired
+
+    @Autowired
     private InteractionService interactionService;
-	
-	@GetMapping
-	Iterable<?> getMoments(@RequestParam(required = false) Integer page, @RequestParam(required = false) Integer size, @RequestParam(required = false) String keyword) {
-		return (!FormatValidator.checkNonNegativeInt(page) || !FormatValidator.checkPositiveInt(size)) ? 
-				itemService.findAllMoments(StringUtil.replaceNull(keyword), false) : itemService.findAllMomentsPageable(page, size, StringUtil.replaceNull(keyword), false);
-	}
-	
-	@GetMapping("/{id}")
-	ResponseEntity<?> getMoment(@PathVariable("id") Long id) {
-		MomentDetailResult moment = itemService.showMomentById(id);
+
+    @GetMapping
+    Iterable<?> getMoments(@RequestParam(required = false) Integer page, @RequestParam(required = false) Integer size,
+            @RequestParam(required = false) String keyword) {
+        return (!FormatValidator.checkNonNegativeInt(page) || !FormatValidator.checkPositiveInt(size))
+                ? itemService.findAllMoments(StringUtil.replaceNull(keyword), false)
+                : itemService.findAllMomentsPageable(page, size, StringUtil.replaceNull(keyword), false);
+    }
+
+    @GetMapping("/{id}")
+    ResponseEntity<?> getMoment(@PathVariable("id") Long id) {
+        MomentDetailResult moment = itemService.showMomentById(id);
         return moment == null ? ResponseEntity.notFound().build() : ResponseEntity.ok(moment);
-	}
-	
-	@PostMapping(consumes = "application/json")
-	@Authorization
-	ResponseEntity<?> addMoment(@RequestBody AddMomentForm amf, @CurrentUser User user) {
-		CreateResult cr = itemService.addMoment(amf, user);
-		return cr.isResult() ? ResponseEntity.status(HttpStatus.CREATED).body(new NewEntityIdResult(cr.getId())) : ResponseEntity.badRequest().body(new FailureMessageResult("点滴格式不正确"));
-	}
-	
-	@DeleteMapping("/{id}")
-	@Authorization
-	ResponseEntity<?> deleteMoment(@CurrentUser User user, @PathVariable("id") Long id) {
-		User creator = itemService.getMomentCreator(id);
-		if (creator == null)
-			return ResponseEntity.notFound().build();
-		if (creator.getId() != user.getId())
-			return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-		
+    }
+
+    @PostMapping(consumes = "application/json")
+    @Authorization
+    ResponseEntity<?> addMoment(@RequestBody AddMomentForm amf, @CurrentUser User user) {
+        CreateResult cr = itemService.addMoment(amf, user);
+        return cr.isResult() ? ResponseEntity.status(HttpStatus.CREATED).body(new NewEntityIdResult(cr.getId()))
+                : ResponseEntity.badRequest().body(new FailureMessageResult("点滴格式不正确"));
+    }
+
+    @DeleteMapping("/{id}")
+    @Authorization
+    ResponseEntity<?> deleteMoment(@CurrentUser User user, @PathVariable("id") Long id) {
+        User creator = itemService.getMomentCreator(id);
+        if (creator == null)
+            return ResponseEntity.notFound().build();
+        if (creator.getId() != user.getId())
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+
         itemService.deleteMoment(id);
         return ResponseEntity.noContent().build();
     }
-	
-	@GetMapping("/{id}/like")
-	@Authorization
-	ResponseEntity<?> checkLikeMoment(@CurrentUser User user, @PathVariable("id") Long id) {
-		Moment moment = itemService.findMomentById(id, false);
-        return moment == null ? ResponseEntity.notFound().build() :
-        	ResponseEntity.ok(new LikeStatusResult(interactionService.checkLike(user, moment)));
-	}
-	
-	@PostMapping("/{id}/like")
-	@Authorization
-	ResponseEntity<?> doLikeMoment(@CurrentUser User user, @PathVariable("id") Long id) {
-		Moment moment = itemService.findMomentById(id, false);
+
+    @GetMapping("/{id}/like")
+    @Authorization
+    ResponseEntity<?> checkLikeMoment(@CurrentUser User user, @PathVariable("id") Long id) {
+        Moment moment = itemService.findMomentById(id, false);
+        return moment == null ? ResponseEntity.notFound().build()
+                : ResponseEntity.ok(new LikeStatusResult(interactionService.checkLike(user, moment)));
+    }
+
+    @PostMapping("/{id}/like")
+    @Authorization
+    ResponseEntity<?> doLikeMoment(@CurrentUser User user, @PathVariable("id") Long id) {
+        Moment moment = itemService.findMomentById(id, false);
         if (moment == null)
-        	return ResponseEntity.notFound().build();
+            return ResponseEntity.notFound().build();
         interactionService.doLike(user, moment);
         return ResponseEntity.status(HttpStatus.CREATED).build();
-	}
-	
-	@DeleteMapping("/{id}/like")
-	@Authorization
-	ResponseEntity<?> cancelLikeMoment(@CurrentUser User user, @PathVariable("id") Long id) {
-		Moment moment = itemService.findMomentById(id, false);
+    }
+
+    @DeleteMapping("/{id}/like")
+    @Authorization
+    ResponseEntity<?> cancelLikeMoment(@CurrentUser User user, @PathVariable("id") Long id) {
+        Moment moment = itemService.findMomentById(id, false);
         if (moment == null)
-        	return ResponseEntity.notFound().build();
+            return ResponseEntity.notFound().build();
         interactionService.cancelLike(user, moment);
         return ResponseEntity.noContent().build();
-	}
-	
-	@GetMapping("/{id}/favorite")
-	@Authorization
-	ResponseEntity<?> checkFavoriteMoment(@CurrentUser User user, @PathVariable("id") Long id) {
-		Moment moment = itemService.findMomentById(id, false);
-        return moment == null ? ResponseEntity.notFound().build() :
-        	ResponseEntity.ok(new FavoriteStatusResult(interactionService.checkFavorite(user, moment)));
-	}
-	
-	@PostMapping("/{id}/favorite")
-	@Authorization
-	ResponseEntity<?> doFavoriteMoment(@CurrentUser User user, @PathVariable("id") Long id) {
-		Moment moment = itemService.findMomentById(id, false);
+    }
+
+    @GetMapping("/{id}/favorite")
+    @Authorization
+    ResponseEntity<?> checkFavoriteMoment(@CurrentUser User user, @PathVariable("id") Long id) {
+        Moment moment = itemService.findMomentById(id, false);
+        return moment == null ? ResponseEntity.notFound().build()
+                : ResponseEntity.ok(new FavoriteStatusResult(interactionService.checkFavorite(user, moment)));
+    }
+
+    @PostMapping("/{id}/favorite")
+    @Authorization
+    ResponseEntity<?> doFavoriteMoment(@CurrentUser User user, @PathVariable("id") Long id) {
+        Moment moment = itemService.findMomentById(id, false);
         if (moment == null)
-        	return ResponseEntity.notFound().build();
+            return ResponseEntity.notFound().build();
         interactionService.doFavorite(user, moment);
         return ResponseEntity.status(HttpStatus.CREATED).build();
-	}
-	
-	@DeleteMapping("/{id}/favorite")
-	@Authorization
-	ResponseEntity<?> cancelFavoriteMoment(@CurrentUser User user, @PathVariable("id") Long id) {
-		Moment moment = itemService.findMomentById(id, false);
+    }
+
+    @DeleteMapping("/{id}/favorite")
+    @Authorization
+    ResponseEntity<?> cancelFavoriteMoment(@CurrentUser User user, @PathVariable("id") Long id) {
+        Moment moment = itemService.findMomentById(id, false);
         if (moment == null)
-        	return ResponseEntity.notFound().build();
+            return ResponseEntity.notFound().build();
         interactionService.cancelFavorite(user, moment);
         return ResponseEntity.noContent().build();
-	}
+    }
 }

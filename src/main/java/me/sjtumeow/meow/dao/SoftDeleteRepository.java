@@ -12,10 +12,12 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * @param <T> the class of the entity
- * @param <ID> the ID class of the entity
+ * @param <T>
+ *            the class of the entity
+ * @param <ID>
+ *            the ID class of the entity
  *
- * NoRepositoryBean interface for the soft delete functionality
+ *            NoRepositoryBean interface for the soft delete functionality
  */
 
 @Transactional

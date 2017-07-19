@@ -1,58 +1,58 @@
 package me.sjtumeow.meow.model.form;
 
 public class AdminUpdateUserForm {
-	protected String password;
-	protected Boolean isAdmin;
-	protected Boolean isDeleted;
-	protected String nickname;
-	protected String bio;
-	protected String avatar;
-	
-	public String getPassword() {
-		return password;
-	}
-	
-	public void setPassword(String password) {
-		this.password = password;
-	}
+    protected String password;
+    protected Boolean isAdmin;
+    protected Boolean isDeleted;
+    protected String nickname;
+    protected String bio;
+    protected String avatar;
 
-	public Boolean getIsAdmin() {
-		return isAdmin;
-	}
+    public String getPassword() {
+        return password;
+    }
 
-	public void setIsAdmin(Boolean isAdmin) {
-		this.isAdmin = isAdmin;
-	}
-	
-	public Boolean getIsDeleted() {
-		return isDeleted;
-	}
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
-	public void setIsDeleted(Boolean isDeleted) {
-		this.isDeleted = isDeleted;
-	}
+    public Boolean getIsAdmin() {
+        return isAdmin;
+    }
 
-	public String getNickname() {
-		return nickname;
-	}
+    public void setIsAdmin(Boolean isAdmin) {
+        this.isAdmin = isAdmin;
+    }
 
-	public void setNickname(String nickname) {
-		this.nickname = nickname;
-	}
+    public Boolean getIsDeleted() {
+        return isDeleted;
+    }
 
-	public String getBio() {
-		return bio;
-	}
+    public void setIsDeleted(Boolean isDeleted) {
+        this.isDeleted = isDeleted;
+    }
 
-	public void setBio(String bio) {
-		this.bio = bio;
-	}
+    public String getNickname() {
+        return nickname;
+    }
 
-	public String getAvatar() {
-		return avatar;
-	}
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
 
-	public void setAvatar(String avatar) {
-		this.avatar = avatar;
-	}
+    public String getBio() {
+        return bio;
+    }
+
+    public void setBio(String bio) {
+        this.bio = bio;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
 }

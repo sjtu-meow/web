@@ -7,6 +7,7 @@ import java.lang.annotation.Target;
 
 /**
  * 在Controller的方法参数中使用此注解，该方法在映射时会注入当前登录的User对象
+ * 
  * @see me.sjtumeow.meow.authorization.resolvers.CurrentUserMethodArgumentResolver
  */
 @Target(ElementType.PARAMETER)

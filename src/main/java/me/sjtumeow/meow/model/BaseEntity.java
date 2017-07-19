@@ -34,16 +34,16 @@ public abstract class BaseEntity implements Serializable {
 
     @JsonIgnore
     protected LocalDateTime deletedAt;
-    
+
     @Formula("created_at")
     protected String createTime;
-    
+
     @Formula("updated_at")
     protected String updateTime;
-    
+
     @Formula("deleted_at IS NOT NULL")
     protected boolean isDeleted;
-    
+
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }
@@ -51,7 +51,7 @@ public abstract class BaseEntity implements Serializable {
     public LocalDateTime getUpdatedAt() {
         return updatedAt;
     }
-    
+
     public LocalDateTime getDeletedAt() {
         return deletedAt;
     }
@@ -59,33 +59,33 @@ public abstract class BaseEntity implements Serializable {
     public void setDeletedAt(LocalDateTime deletedAt) {
         this.deletedAt = deletedAt;
     }
-    
+
     public void recover() {
         deletedAt = null;
     }
 
-	public String getCreateTime() {
-		return createTime;
-	}
+    public String getCreateTime() {
+        return createTime;
+    }
 
-	public void setCreateTime(String createTime) {
-		this.createTime = createTime;
-	}
+    public void setCreateTime(String createTime) {
+        this.createTime = createTime;
+    }
 
-	public String getUpdateTime() {
-		return updateTime;
-	}
+    public String getUpdateTime() {
+        return updateTime;
+    }
 
-	public void setUpdateTime(String updateTime) {
-		this.updateTime = updateTime;
-	}
-	
-	public boolean isDeleted() {
-		return isDeleted;
-	}
+    public void setUpdateTime(String updateTime) {
+        this.updateTime = updateTime;
+    }
 
-	public void setDeleted(boolean isDeleted) {
-		this.isDeleted = isDeleted;
-	}
+    public boolean isDeleted() {
+        return isDeleted;
+    }
+
+    public void setDeleted(boolean isDeleted) {
+        this.isDeleted = isDeleted;
+    }
 
 }

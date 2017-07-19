@@ -10,10 +10,12 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 public class Media extends BaseEntity {
-    
-	private static final long serialVersionUID = 1L;
 
-	public enum MediaType {Image, Video}
+    private static final long serialVersionUID = 1L;
+
+    public enum MediaType {
+        Image, Video
+    }
 
     @Id
     @GeneratedValue
@@ -21,18 +23,19 @@ public class Media extends BaseEntity {
 
     MediaType type;
     String url;
-    
+
     @JsonBackReference
     @ManyToOne
     @JoinColumn(nullable = false)
     Moment moment;
-    
-    public Media() {}
-    
+
+    public Media() {
+    }
+
     public Media(MediaType type, String url, Moment moment) {
-    	this.type = type;
-    	this.url = url;
-    	this.moment = moment;
+        this.type = type;
+        this.url = url;
+        this.moment = moment;
     }
 
     public Long getId() {
@@ -59,11 +62,11 @@ public class Media extends BaseEntity {
         this.url = url;
     }
 
-	public Moment getMoment() {
-		return moment;
-	}
+    public Moment getMoment() {
+        return moment;
+    }
 
-	public void setMoment(Moment moment) {
-		this.moment = moment;
-	}
+    public void setMoment(Moment moment) {
+        this.moment = moment;
+    }
 }
