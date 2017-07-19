@@ -48,7 +48,7 @@ public class AnswerController {
         return answer == null ? ResponseEntity.notFound().build() : ResponseEntity.ok(answer);
 	}
 	
-	@PostMapping("/questions/{id}/answers")
+	@PostMapping(path = "/questions/{id}/answers", consumes = "application/json")
 	@Authorization
 	ResponseEntity<?> addAnswer(@RequestBody AddAnswerForm aaf, @CurrentUser User user, @PathVariable("id") Long id) {
 		Question question = itemService.findQuestionById(id, false);
@@ -75,7 +75,7 @@ public class AnswerController {
         return ResponseEntity.noContent().build();
     }
 	
-	@GetMapping("/{id}/favorite")
+	@GetMapping("/answers/{id}/favorite")
 	@Authorization
 	ResponseEntity<?> checkFavoriteAnswer(@CurrentUser User user, @PathVariable("id") Long id) {
 		Answer answer = itemService.findAnswerById(id, false);
@@ -83,7 +83,7 @@ public class AnswerController {
         	ResponseEntity.ok(new FavoriteStatusResult(interactionService.checkFavorite(user, answer)));
 	}
 	
-	@PostMapping("/{id}/favorite")
+	@PostMapping("/answers/{id}/favorite")
 	@Authorization
 	ResponseEntity<?> doFavoriteAnswer(@CurrentUser User user, @PathVariable("id") Long id) {
 		Answer answer = itemService.findAnswerById(id, false);
@@ -93,7 +93,7 @@ public class AnswerController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
 	}
 	
-	@DeleteMapping("/{id}/favorite")
+	@DeleteMapping("/answers/{id}/favorite")
 	@Authorization
 	ResponseEntity<?> cancelFavoriteAnswer(@CurrentUser User user, @PathVariable("id") Long id) {
 		Answer answer = itemService.findAnswerById(id, false);

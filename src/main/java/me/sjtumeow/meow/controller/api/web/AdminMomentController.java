@@ -36,7 +36,7 @@ public class AdminMomentController {
         return moment == null ? ResponseEntity.notFound().build() : ResponseEntity.ok(moment);
 	}
 	
-	@PatchMapping("/{id}")
+	@PatchMapping(path = "/{id}", consumes = "application/json")
 	ResponseEntity<?> updateMoment(@RequestBody UpdateMomentForm umf, @PathVariable("id") Long id) {
 		return itemService.updateMoment(id, umf) ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
 	}

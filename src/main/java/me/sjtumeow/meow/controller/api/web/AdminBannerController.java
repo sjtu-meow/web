@@ -27,7 +27,7 @@ public class AdminBannerController {
 		return bannerService.findAll();
 	}
 	
-	@PutMapping
+	@PutMapping(consumes = "application/json")
 	ResponseEntity<?> updateBanners(@RequestBody List<UpdateBannerForm> ubfl) {
 		String result = bannerService.update(ubfl);
 		return result.isEmpty() ? ResponseEntity.noContent().build()

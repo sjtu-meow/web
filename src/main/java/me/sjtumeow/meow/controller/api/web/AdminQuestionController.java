@@ -36,7 +36,7 @@ public class AdminQuestionController {
         return question == null ? ResponseEntity.notFound().build() : ResponseEntity.ok(question);
 	}
 	
-	@PatchMapping("/{id}")
+	@PatchMapping(path = "/{id}", consumes = "application/json")
 	ResponseEntity<?> updateQuestion(@RequestBody UpdateQuestionForm uqf, @PathVariable("id") Long id) {
 		return itemService.updateQuestion(id, uqf) ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
 	}

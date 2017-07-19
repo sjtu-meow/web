@@ -36,7 +36,7 @@ public class AdminArticleController {
         return article == null ? ResponseEntity.notFound().build() : ResponseEntity.ok(article);
 	}
 	
-	@PatchMapping("/{id}")
+	@PatchMapping(path = "/{id}", consumes = "application/json")
 	ResponseEntity<?> updateArticle(@RequestBody UpdateArticleForm uaf, @PathVariable("id") Long id) {
 		return itemService.updateArticle(id, uaf) ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
 	}
