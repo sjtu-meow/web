@@ -3,10 +3,9 @@ package me.sjtumeow.meow.model.result;
 import me.sjtumeow.meow.model.Answer;
 import me.sjtumeow.meow.model.Item;
 import me.sjtumeow.meow.model.Profile;
-import me.sjtumeow.meow.model.util.TimeComparableObject;
 import me.sjtumeow.meow.util.StringUtil;
 
-public class AnswerSummaryResult extends TimeComparableObject {
+public class AnswerSummaryResult extends BaseSummaryResult {
 	protected Long questionId;
 	protected String questionTitle;
 	protected Profile questionProfile;

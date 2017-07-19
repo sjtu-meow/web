@@ -1,6 +1,6 @@
-package me.sjtumeow.meow.model.util;
+package me.sjtumeow.meow.model.result;
 
-public class TimeComparableObject {
+public class BaseSummaryResult {
 	protected String createTime;
 
 	public String getCreateTime() {

@@ -3,9 +3,8 @@ package me.sjtumeow.meow.model.result;
 import me.sjtumeow.meow.model.Article;
 import me.sjtumeow.meow.model.Item;
 import me.sjtumeow.meow.model.Profile;
-import me.sjtumeow.meow.model.util.TimeComparableObject;
 
-public class ArticleSummaryResult extends TimeComparableObject {
+public class ArticleSummaryResult extends BaseSummaryResult {
 	protected Long id;
 	protected Integer type;
 	protected String title;

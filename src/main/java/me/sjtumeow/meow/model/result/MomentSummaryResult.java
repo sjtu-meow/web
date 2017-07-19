@@ -9,9 +9,8 @@ import me.sjtumeow.meow.model.Item;
 import me.sjtumeow.meow.model.Media;
 import me.sjtumeow.meow.model.Moment;
 import me.sjtumeow.meow.model.Profile;
-import me.sjtumeow.meow.model.util.TimeComparableObject;
 
-public class MomentSummaryResult extends TimeComparableObject {
+public class MomentSummaryResult extends BaseSummaryResult {
 	protected Long id;
 	protected Integer type;
 	protected String content;

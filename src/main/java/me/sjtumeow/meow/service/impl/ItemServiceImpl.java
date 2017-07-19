@@ -20,12 +20,12 @@ import me.sjtumeow.meow.model.form.UpdateArticleForm;
 import me.sjtumeow.meow.model.form.UpdateMomentForm;
 import me.sjtumeow.meow.model.form.UpdateQuestionForm;
 import me.sjtumeow.meow.model.result.ArticleSummaryResult;
+import me.sjtumeow.meow.model.result.BaseSummaryResult;
 import me.sjtumeow.meow.model.result.CreateResult;
 import me.sjtumeow.meow.model.result.MomentDetailResult;
 import me.sjtumeow.meow.model.result.MomentSummaryResult;
 import me.sjtumeow.meow.model.result.QuestionDetailResult;
 import me.sjtumeow.meow.model.result.QuestionSummaryResult;
-import me.sjtumeow.meow.model.util.TimeComparableObject;
 import me.sjtumeow.meow.model.result.AnswerDetailResult;
 import me.sjtumeow.meow.model.result.AnswerSummaryResult;
 import me.sjtumeow.meow.model.result.ArticleDetailResult;
@@ -409,8 +409,8 @@ public class ItemServiceImpl implements ItemService {
 	
 	// Comprehensive Search
 	
-	public List<TimeComparableObject> comprehensiveSearch(String keyword) {
-		List<TimeComparableObject> result = new ArrayList<TimeComparableObject>();
+	public List<BaseSummaryResult> comprehensiveSearch(String keyword) {
+		List<BaseSummaryResult> result = new ArrayList<BaseSummaryResult>();
 		
 		for (Moment moment: momentRepository.findByContentContainingAndDeletedAtIsNull(keyword)) {
 			result.add(new MomentSummaryResult(moment));
@@ -428,9 +428,9 @@ public class ItemServiceImpl implements ItemService {
 			result.add(new AnswerSummaryResult(answer));
 		}
 		
-		Collections.sort(result, new Comparator<TimeComparableObject>() {
+		Collections.sort(result, new Comparator<BaseSummaryResult>() {
             @Override
-            public int compare(TimeComparableObject lhs, TimeComparableObject rhs) {
+            public int compare(BaseSummaryResult lhs, BaseSummaryResult rhs) {
                 Integer res = lhs.getCreateTime().compareTo(rhs.getCreateTime());
                 return res == 0 ? 0 : -res / Math.abs(res);
             }

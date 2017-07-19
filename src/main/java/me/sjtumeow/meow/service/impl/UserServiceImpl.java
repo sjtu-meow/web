@@ -87,7 +87,7 @@ public class UserServiceImpl implements UserService {
 	@Transactional
 	public Long create(String phone, String password, boolean isAdmin, String nickname, String bio, String avatar) {
 		User user = new User(phone, BCrypt.hashpw(password, BCrypt.gensalt()));
-    	user.setAdmin(isAdmin);
+    	user.setIsAdmin(isAdmin);
         userRepository.save(user);
         Profile profile = new Profile();
         profile.setUser(user);
@@ -118,7 +118,7 @@ public class UserServiceImpl implements UserService {
 		if (auuf.getPassword() != null)
 			user.setPassword(BCrypt.hashpw(auuf.getPassword(), BCrypt.gensalt()));
 		if (auuf.getIsAdmin() != null)
-			user.setAdmin(auuf.getIsAdmin());
+			user.setIsAdmin(auuf.getIsAdmin());
 		if (auuf.getIsDeleted() != null && !auuf.getIsDeleted())
 			user.recover();
 		

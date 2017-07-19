@@ -18,12 +18,12 @@ import me.sjtumeow.meow.model.result.AnswerDetailResult;
 import me.sjtumeow.meow.model.result.AnswerSummaryResult;
 import me.sjtumeow.meow.model.result.ArticleDetailResult;
 import me.sjtumeow.meow.model.result.ArticleSummaryResult;
+import me.sjtumeow.meow.model.result.BaseSummaryResult;
 import me.sjtumeow.meow.model.result.CreateResult;
 import me.sjtumeow.meow.model.result.MomentDetailResult;
 import me.sjtumeow.meow.model.result.MomentSummaryResult;
 import me.sjtumeow.meow.model.result.QuestionDetailResult;
 import me.sjtumeow.meow.model.result.QuestionSummaryResult;
-import me.sjtumeow.meow.model.util.TimeComparableObject;
 
 public interface ItemService {
 	
@@ -137,6 +137,6 @@ public interface ItemService {
 	
 	// Comprehensive Search
 	
-	List<TimeComparableObject> comprehensiveSearch(String keyword);
+	List<BaseSummaryResult> comprehensiveSearch(String keyword);
 	
 }

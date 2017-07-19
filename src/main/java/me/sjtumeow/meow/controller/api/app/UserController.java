@@ -9,11 +9,13 @@ import me.sjtumeow.meow.model.form.ProfileForm;
 import me.sjtumeow.meow.model.form.RegisterForm;
 import me.sjtumeow.meow.model.result.AnswerSummaryResult;
 import me.sjtumeow.meow.model.result.ArticleSummaryResult;
+import me.sjtumeow.meow.model.result.BaseSummaryResult;
 import me.sjtumeow.meow.model.result.FailureMessageResult;
 import me.sjtumeow.meow.model.result.MomentSummaryResult;
 import me.sjtumeow.meow.model.result.NewEntityIdResult;
 import me.sjtumeow.meow.model.result.QuestionSummaryResult;
 import me.sjtumeow.meow.service.AuthService;
+import me.sjtumeow.meow.service.InteractionService;
 import me.sjtumeow.meow.service.ItemService;
 import me.sjtumeow.meow.service.UserService;
 import me.sjtumeow.meow.util.FormatValidator;
@@ -42,6 +44,9 @@ public class UserController {
     
     @Autowired
     private ItemService itemService;
+    
+    @Autowired
+    private InteractionService interactionService;
     
 
     @PostMapping(path = "/users", consumes = "application/json")
@@ -161,5 +166,17 @@ public class UserController {
     		return ResponseEntity.notFound().build();
     	return ResponseEntity.ok((!FormatValidator.checkNonNegativeInt(page) || !FormatValidator.checkPositiveInt(size)) ? 
     			itemService.findAnswersByUser(id) : itemService.findAnswersByUserPageable(page, size, id));
+    }
+    
+    @GetMapping("/user/favorite")
+    @Authorization
+    Iterable<BaseSummaryResult> getFavorite(@CurrentUser User user) {
+    	return interactionService.getUserFavorites(user);
+    }
+    
+    @GetMapping("/users/{id}/favorite")
+    ResponseEntity<?> getFavoriteByUser(@PathVariable("id") Long id) {
+    	User user = userService.findById(id, false);
+    	return user == null ? ResponseEntity.notFound().build() : ResponseEntity.ok(interactionService.getUserFavorites(user));
     }
 }

@@ -2,6 +2,8 @@ package me.sjtumeow.meow.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import java.util.Set;
+
 import javax.persistence.*;
 
 @Entity
@@ -27,6 +29,10 @@ public class User extends BaseEntity {
     @OneToOne(fetch = FetchType.EAGER, mappedBy = "user")
     private Profile profile;
     
+    @JsonIgnore
+    @OneToMany(mappedBy = "user")
+    private Set<Favorite> favorite;
+    
     public User() {}
     
     public User(String phone, String password) {
@@ -50,13 +56,13 @@ public class User extends BaseEntity {
         this.password = password;
     }
     
-    public Boolean isAdmin() {
-        return isAdmin;
-    }
-
-    public void setAdmin(Boolean isAdmin) {
-        this.isAdmin = isAdmin;
-    }
+    public Boolean getIsAdmin() {
+		return isAdmin;
+	}
+    
+    public void setIsAdmin(Boolean isAdmin) {
+		this.isAdmin = isAdmin;
+	}
 
     public String getPhone() {
         return phone;
@@ -73,5 +79,14 @@ public class User extends BaseEntity {
     public void setProfile(Profile profile) {
         this.profile = profile;
     }
+
+	public Set<Favorite> getFavorite() {
+		return favorite;
+	}
+	
+	public void setFavorite(Set<Favorite> favorite) {
+		this.favorite = favorite;
+	}
+	
 }
 

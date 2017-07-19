@@ -6,6 +6,7 @@ import me.sjtumeow.meow.dao.AnswerRepository;
 import me.sjtumeow.meow.dao.ArticleRepository;
 import me.sjtumeow.meow.dao.BannerRepository;
 import me.sjtumeow.meow.dao.CommentRepository;
+import me.sjtumeow.meow.dao.FavoriteRepository;
 import me.sjtumeow.meow.dao.MediaRepository;
 import me.sjtumeow.meow.dao.MomentRepository;
 import me.sjtumeow.meow.dao.QuestionRepository;
@@ -13,6 +14,7 @@ import me.sjtumeow.meow.model.Answer;
 import me.sjtumeow.meow.model.Article;
 import me.sjtumeow.meow.model.Banner;
 import me.sjtumeow.meow.model.Comment;
+import me.sjtumeow.meow.model.Favorite;
 import me.sjtumeow.meow.model.Media;
 import me.sjtumeow.meow.model.Media.MediaType;
 import me.sjtumeow.meow.model.Moment;
@@ -49,6 +51,9 @@ public class SeederRunner implements ApplicationRunner {
     
     @Autowired
     private BannerRepository bannerRepository;
+    
+    @Autowired
+    private FavoriteRepository favoriteRepository;
     
     @Autowired
     private UserService userService;
@@ -129,6 +134,16 @@ public class SeederRunner implements ApplicationRunner {
         	Comment comment4 = new Comment(answer, profile2, String.format("神奇回答评论%d", i + 1));
             commentRepository.save(comment4);
             commentRepository.save(new Comment(answer, profile1, String.format("神奇回答又一个评论%d", i + 1)));
+            
+            // Interaction test
+            
+            if (i == 5) {
+            	favoriteRepository.save(new Favorite(user1, moment));
+            	favoriteRepository.save(new Favorite(user1, article));
+            	favoriteRepository.save(new Favorite(user1, question));
+            	favoriteRepository.save(new Favorite(user2, article));
+            	favoriteRepository.save(new Favorite(user2, answer));
+            }
         	
         	
         	// Soft delete test

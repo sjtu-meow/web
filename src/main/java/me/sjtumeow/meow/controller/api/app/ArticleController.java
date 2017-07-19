@@ -14,11 +14,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import me.sjtumeow.meow.authorization.annotation.Authorization;
 import me.sjtumeow.meow.authorization.annotation.CurrentUser;
+import me.sjtumeow.meow.model.Article;
 import me.sjtumeow.meow.model.User;
 import me.sjtumeow.meow.model.form.AddArticleForm;
 import me.sjtumeow.meow.model.result.ArticleDetailResult;
 import me.sjtumeow.meow.model.result.FailureMessageResult;
+import me.sjtumeow.meow.model.result.FavoriteStatusResult;
 import me.sjtumeow.meow.model.result.NewEntityIdResult;
+import me.sjtumeow.meow.service.InteractionService;
 import me.sjtumeow.meow.service.ItemService;
 import me.sjtumeow.meow.util.FormatValidator;
 import me.sjtumeow.meow.util.StringUtil;
@@ -29,6 +32,9 @@ public class ArticleController {
 	
 	@Autowired
     private ItemService itemService;
+	
+	@Autowired
+	private InteractionService interactionService;
 	
 	@GetMapping
 	Iterable<?> getArticles(@RequestParam(required = false) Integer page, @RequestParam(required = false) Integer size, @RequestParam(required = false) String keyword) {
@@ -74,4 +80,32 @@ public class ArticleController {
         itemService.deleteArticle(id);
         return ResponseEntity.noContent().build();
     }
+	
+	@GetMapping("/{id}/favorite")
+	@Authorization
+	ResponseEntity<?> checkFavoriteArticle(@CurrentUser User user, @PathVariable("id") Long id) {
+		Article article = itemService.findArticleById(id, false);
+        return article == null ? ResponseEntity.notFound().build() :
+        	ResponseEntity.ok(new FavoriteStatusResult(interactionService.checkFavorite(user, article)));
+	}
+	
+	@PostMapping("/{id}/favorite")
+	@Authorization
+	ResponseEntity<?> doFavoriteArticle(@CurrentUser User user, @PathVariable("id") Long id) {
+		Article article = itemService.findArticleById(id, false);
+        if (article == null)
+        	return ResponseEntity.notFound().build();
+        interactionService.doFavorite(user, article);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+	}
+	
+	@DeleteMapping("/{id}/favorite")
+	@Authorization
+	ResponseEntity<?> cancelFavoriteArticle(@CurrentUser User user, @PathVariable("id") Long id) {
+		Article article = itemService.findArticleById(id, false);
+        if (article == null)
+        	return ResponseEntity.notFound().build();
+        interactionService.cancelFavorite(user, article);
+        return ResponseEntity.noContent().build();
+	}
 }

@@ -14,12 +14,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 import me.sjtumeow.meow.authorization.annotation.Authorization;
 import me.sjtumeow.meow.authorization.annotation.CurrentUser;
+import me.sjtumeow.meow.model.Answer;
 import me.sjtumeow.meow.model.Question;
 import me.sjtumeow.meow.model.User;
 import me.sjtumeow.meow.model.form.AddAnswerForm;
 import me.sjtumeow.meow.model.result.AnswerDetailResult;
 import me.sjtumeow.meow.model.result.FailureMessageResult;
+import me.sjtumeow.meow.model.result.FavoriteStatusResult;
 import me.sjtumeow.meow.model.result.NewEntityIdResult;
+import me.sjtumeow.meow.service.InteractionService;
 import me.sjtumeow.meow.service.ItemService;
 import me.sjtumeow.meow.util.FormatValidator;
 
@@ -29,6 +32,9 @@ public class AnswerController {
 	
 	@Autowired
     private ItemService itemService;
+	
+	@Autowired
+	private InteractionService interactionService;
 	
 	@GetMapping("/answers")
 	Iterable<?> getAnswers(@RequestParam(required = false) Integer page, @RequestParam(required = false) Integer size) {
@@ -68,6 +74,34 @@ public class AnswerController {
         itemService.deleteAnswer(id);
         return ResponseEntity.noContent().build();
     }
+	
+	@GetMapping("/{id}/favorite")
+	@Authorization
+	ResponseEntity<?> checkFavoriteAnswer(@CurrentUser User user, @PathVariable("id") Long id) {
+		Answer answer = itemService.findAnswerById(id, false);
+        return answer == null ? ResponseEntity.notFound().build() :
+        	ResponseEntity.ok(new FavoriteStatusResult(interactionService.checkFavorite(user, answer)));
+	}
+	
+	@PostMapping("/{id}/favorite")
+	@Authorization
+	ResponseEntity<?> doFavoriteAnswer(@CurrentUser User user, @PathVariable("id") Long id) {
+		Answer answer = itemService.findAnswerById(id, false);
+        if (answer == null)
+        	return ResponseEntity.notFound().build();
+        interactionService.doFavorite(user, answer);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+	}
+	
+	@DeleteMapping("/{id}/favorite")
+	@Authorization
+	ResponseEntity<?> cancelFavoriteAnswer(@CurrentUser User user, @PathVariable("id") Long id) {
+		Answer answer = itemService.findAnswerById(id, false);
+        if (answer == null)
+        	return ResponseEntity.notFound().build();
+        interactionService.cancelFavorite(user, answer);
+        return ResponseEntity.noContent().build();
+	}
 }
 	
 

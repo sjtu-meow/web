@@ -16,6 +16,8 @@ import javax.persistence.OneToOne;
 
 import org.hibernate.annotations.Formula;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public abstract class Item extends BaseEntity {
@@ -47,6 +49,10 @@ public abstract class Item extends BaseEntity {
     
     @Formula("(SELECT COUNT(*) FROM comment c WHERE c.item_id = id AND c.deleted_at IS NULL)")
     Integer commentCount;
+    
+    @JsonIgnore
+    @OneToMany(mappedBy = "item")
+    private Set<Favorite> favorite;
 
     public Long getId() {
         return id;
@@ -95,4 +101,13 @@ public abstract class Item extends BaseEntity {
 	public void setCommentCount(Integer commentCount) {
 		this.commentCount = commentCount;
 	}
+
+	public Set<Favorite> getFavorite() {
+		return favorite;
+	}
+
+	public void setFavorite(Set<Favorite> favorite) {
+		this.favorite = favorite;
+	}
+
 }

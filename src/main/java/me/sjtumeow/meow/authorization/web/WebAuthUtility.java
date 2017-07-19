@@ -26,7 +26,7 @@ public class WebAuthUtility {
 		if (id == null)
 			return false;
 		User user = userRepository.findOneActive(id);
-		return user != null && user.isAdmin();
+		return user != null && user.getIsAdmin();
 	}
 	
 	public User getCurrentUser(HttpSession session) {

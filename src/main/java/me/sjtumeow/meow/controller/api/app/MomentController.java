@@ -14,12 +14,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 import me.sjtumeow.meow.authorization.annotation.Authorization;
 import me.sjtumeow.meow.authorization.annotation.CurrentUser;
+import me.sjtumeow.meow.model.Moment;
 import me.sjtumeow.meow.model.User;
 import me.sjtumeow.meow.model.form.AddMomentForm;
 import me.sjtumeow.meow.model.result.CreateResult;
 import me.sjtumeow.meow.model.result.FailureMessageResult;
+import me.sjtumeow.meow.model.result.FavoriteStatusResult;
 import me.sjtumeow.meow.model.result.MomentDetailResult;
 import me.sjtumeow.meow.model.result.NewEntityIdResult;
+import me.sjtumeow.meow.service.InteractionService;
 import me.sjtumeow.meow.service.ItemService;
 import me.sjtumeow.meow.util.FormatValidator;
 import me.sjtumeow.meow.util.StringUtil;
@@ -27,8 +30,12 @@ import me.sjtumeow.meow.util.StringUtil;
 @RestController
 @RequestMapping("/api/moments")
 public class MomentController {
+	
 	@Autowired
     private ItemService itemService;
+	
+	@Autowired
+    private InteractionService interactionService;
 	
 	@GetMapping
 	Iterable<?> getMoments(@RequestParam(required = false) Integer page, @RequestParam(required = false) Integer size, @RequestParam(required = false) String keyword) {
@@ -61,4 +68,32 @@ public class MomentController {
         itemService.deleteMoment(id);
         return ResponseEntity.noContent().build();
     }
+	
+	@GetMapping("/{id}/favorite")
+	@Authorization
+	ResponseEntity<?> checkFavoriteMoment(@CurrentUser User user, @PathVariable("id") Long id) {
+		Moment moment = itemService.findMomentById(id, false);
+        return moment == null ? ResponseEntity.notFound().build() :
+        	ResponseEntity.ok(new FavoriteStatusResult(interactionService.checkFavorite(user, moment)));
+	}
+	
+	@PostMapping("/{id}/favorite")
+	@Authorization
+	ResponseEntity<?> doFavoriteMoment(@CurrentUser User user, @PathVariable("id") Long id) {
+		Moment moment = itemService.findMomentById(id, false);
+        if (moment == null)
+        	return ResponseEntity.notFound().build();
+        interactionService.doFavorite(user, moment);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+	}
+	
+	@DeleteMapping("/{id}/favorite")
+	@Authorization
+	ResponseEntity<?> cancelFavoriteMoment(@CurrentUser User user, @PathVariable("id") Long id) {
+		Moment moment = itemService.findMomentById(id, false);
+        if (moment == null)
+        	return ResponseEntity.notFound().build();
+        interactionService.cancelFavorite(user, moment);
+        return ResponseEntity.noContent().build();
+	}
 }

@@ -13,11 +13,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import me.sjtumeow.meow.authorization.annotation.Authorization;
 import me.sjtumeow.meow.authorization.annotation.CurrentUser;
+import me.sjtumeow.meow.model.Question;
 import me.sjtumeow.meow.model.User;
 import me.sjtumeow.meow.model.form.AddQuestionForm;
 import me.sjtumeow.meow.model.result.FailureMessageResult;
+import me.sjtumeow.meow.model.result.FavoriteStatusResult;
 import me.sjtumeow.meow.model.result.NewEntityIdResult;
 import me.sjtumeow.meow.model.result.QuestionDetailResult;
+import me.sjtumeow.meow.service.InteractionService;
 import me.sjtumeow.meow.service.ItemService;
 
 @RestController
@@ -26,6 +29,9 @@ public class QuestionController {
 
 	@Autowired
     private ItemService itemService;
+	
+	@Autowired
+	private InteractionService interactionService;
 	
 	@GetMapping("/{id}")
 	ResponseEntity<?> getQuestion(@PathVariable("id") Long id) {
@@ -55,4 +61,32 @@ public class QuestionController {
         itemService.deleteQuestion(id);
         return ResponseEntity.noContent().build();
     }
+	
+	@GetMapping("/{id}/favorite")
+	@Authorization
+	ResponseEntity<?> checkFavoriteQuestion(@CurrentUser User user, @PathVariable("id") Long id) {
+		Question question = itemService.findQuestionById(id, false);
+        return question == null ? ResponseEntity.notFound().build() :
+        	ResponseEntity.ok(new FavoriteStatusResult(interactionService.checkFavorite(user, question)));
+	}
+	
+	@PostMapping("/{id}/favorite")
+	@Authorization
+	ResponseEntity<?> doFavoriteQuestion(@CurrentUser User user, @PathVariable("id") Long id) {
+		Question question = itemService.findQuestionById(id, false);
+        if (question == null)
+        	return ResponseEntity.notFound().build();
+        interactionService.doFavorite(user, question);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+	}
+	
+	@DeleteMapping("/{id}/favorite")
+	@Authorization
+	ResponseEntity<?> cancelFavoriteQuestion(@CurrentUser User user, @PathVariable("id") Long id) {
+		Question question = itemService.findQuestionById(id, false);
+        if (question == null)
+        	return ResponseEntity.notFound().build();
+        interactionService.cancelFavorite(user, question);
+        return ResponseEntity.noContent().build();
+	}
 }
