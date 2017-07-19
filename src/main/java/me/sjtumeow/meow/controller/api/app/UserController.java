@@ -179,4 +179,16 @@ public class UserController {
     	User user = userService.findById(id, false);
     	return user == null ? ResponseEntity.notFound().build() : ResponseEntity.ok(interactionService.getUserFavorites(user));
     }
+    
+    @GetMapping("/user/following/questions")
+    @Authorization
+    Iterable<QuestionSummaryResult> getFollowingQuestions(@CurrentUser User user) {
+    	return interactionService.getUserFollowingQuestions(user);
+    }
+    
+    @GetMapping("/users/{id}/following/questions")
+    ResponseEntity<?> getFollowingQuestionsByUser(@PathVariable("id") Long id) {
+    	User user = userService.findById(id, false);
+    	return user == null ? ResponseEntity.notFound().build() : ResponseEntity.ok(interactionService.getUserFollowingQuestions(user));
+    }
 }

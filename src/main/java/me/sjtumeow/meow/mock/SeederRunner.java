@@ -7,6 +7,7 @@ import me.sjtumeow.meow.dao.ArticleRepository;
 import me.sjtumeow.meow.dao.BannerRepository;
 import me.sjtumeow.meow.dao.CommentRepository;
 import me.sjtumeow.meow.dao.FavoriteRepository;
+import me.sjtumeow.meow.dao.FollowQuestionRepository;
 import me.sjtumeow.meow.dao.MediaRepository;
 import me.sjtumeow.meow.dao.MomentRepository;
 import me.sjtumeow.meow.dao.QuestionRepository;
@@ -15,6 +16,7 @@ import me.sjtumeow.meow.model.Article;
 import me.sjtumeow.meow.model.Banner;
 import me.sjtumeow.meow.model.Comment;
 import me.sjtumeow.meow.model.Favorite;
+import me.sjtumeow.meow.model.FollowQuestion;
 import me.sjtumeow.meow.model.Media;
 import me.sjtumeow.meow.model.Media.MediaType;
 import me.sjtumeow.meow.model.Moment;
@@ -54,6 +56,9 @@ public class SeederRunner implements ApplicationRunner {
     
     @Autowired
     private FavoriteRepository favoriteRepository;
+    
+    @Autowired
+    private FollowQuestionRepository followQuestionRepository;
     
     @Autowired
     private UserService userService;
@@ -138,11 +143,18 @@ public class SeederRunner implements ApplicationRunner {
             // Interaction test
             
             if (i == 5) {
+            	
+            	// Favorite
+            	
             	favoriteRepository.save(new Favorite(user1, moment));
             	favoriteRepository.save(new Favorite(user1, article));
             	favoriteRepository.save(new Favorite(user1, question));
             	favoriteRepository.save(new Favorite(user2, article));
             	favoriteRepository.save(new Favorite(user2, answer));
+            	
+            	// Follow
+            	
+            	followQuestionRepository.save(new FollowQuestion(user1, question));
             }
         	
         	

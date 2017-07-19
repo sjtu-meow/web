@@ -6,6 +6,8 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class Question extends Item {
     
@@ -17,6 +19,10 @@ public class Question extends Item {
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "question")
     private Set<Answer> answers;
+    
+    @JsonIgnore
+    @OneToMany(mappedBy = "question")
+    private Set<FollowQuestion> followers;
     
     public Question() {
     	type = Item.ITEM_TYPE_QUESTION;
@@ -51,4 +57,12 @@ public class Question extends Item {
     public void setAnswers(Set<Answer> answers) {
         this.answers = answers;
     }
+
+	public Set<FollowQuestion> getFollowers() {
+		return followers;
+	}
+
+	public void setFollowers(Set<FollowQuestion> followers) {
+		this.followers = followers;
+	}
 }

@@ -33,6 +33,10 @@ public class User extends BaseEntity {
     @OneToMany(mappedBy = "user")
     private Set<Favorite> favorite;
     
+    @JsonIgnore
+    @OneToMany(mappedBy = "user")
+    private Set<FollowQuestion> followingQuestions;
+    
     public User() {}
     
     public User(String phone, String password) {
@@ -86,6 +90,14 @@ public class User extends BaseEntity {
 	
 	public void setFavorite(Set<Favorite> favorite) {
 		this.favorite = favorite;
+	}
+
+	public Set<FollowQuestion> getFollowingQuestions() {
+		return followingQuestions;
+	}
+
+	public void setFollowingQuestions(Set<FollowQuestion> followingQuestions) {
+		this.followingQuestions = followingQuestions;
 	}
 	
 }

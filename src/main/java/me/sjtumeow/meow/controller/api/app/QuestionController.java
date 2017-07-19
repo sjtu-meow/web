@@ -18,6 +18,7 @@ import me.sjtumeow.meow.model.User;
 import me.sjtumeow.meow.model.form.AddQuestionForm;
 import me.sjtumeow.meow.model.result.FailureMessageResult;
 import me.sjtumeow.meow.model.result.FavoriteStatusResult;
+import me.sjtumeow.meow.model.result.FollowStatusResult;
 import me.sjtumeow.meow.model.result.NewEntityIdResult;
 import me.sjtumeow.meow.model.result.QuestionDetailResult;
 import me.sjtumeow.meow.service.InteractionService;
@@ -87,6 +88,34 @@ public class QuestionController {
         if (question == null)
         	return ResponseEntity.notFound().build();
         interactionService.cancelFavorite(user, question);
+        return ResponseEntity.noContent().build();
+	}
+	
+	@GetMapping("/{id}/follow")
+	@Authorization
+	ResponseEntity<?> checkFollowQuestion(@CurrentUser User user, @PathVariable("id") Long id) {
+		Question question = itemService.findQuestionById(id, false);
+        return question == null ? ResponseEntity.notFound().build() :
+        	ResponseEntity.ok(new FollowStatusResult(interactionService.checkFollowQuestion(user, question)));
+	}
+	
+	@PostMapping("/{id}/follow")
+	@Authorization
+	ResponseEntity<?> doFollowQuestion(@CurrentUser User user, @PathVariable("id") Long id) {
+		Question question = itemService.findQuestionById(id, false);
+        if (question == null)
+        	return ResponseEntity.notFound().build();
+        interactionService.doFollowQuestion(user, question);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+	}
+	
+	@DeleteMapping("/{id}/follow")
+	@Authorization
+	ResponseEntity<?> cancelFollowQuestion(@CurrentUser User user, @PathVariable("id") Long id) {
+		Question question = itemService.findQuestionById(id, false);
+        if (question == null)
+        	return ResponseEntity.notFound().build();
+        interactionService.cancelFollowQuestion(user, question);
         return ResponseEntity.noContent().build();
 	}
 }

@@ -11,9 +11,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import me.sjtumeow.meow.dao.FavoriteRepository;
+import me.sjtumeow.meow.dao.FollowQuestionRepository;
 import me.sjtumeow.meow.model.Answer;
 import me.sjtumeow.meow.model.Article;
 import me.sjtumeow.meow.model.Favorite;
+import me.sjtumeow.meow.model.FollowQuestion;
 import me.sjtumeow.meow.model.Item;
 import me.sjtumeow.meow.model.Moment;
 import me.sjtumeow.meow.model.Question;
@@ -30,6 +32,9 @@ public class InteractionServiceImpl implements InteractionService {
 	
 	@Autowired
 	private FavoriteRepository favoriteRepository;
+	
+	@Autowired
+	private FollowQuestionRepository followQuestionRepository;
 	
 	public List<BaseSummaryResult> getUserFavorites(User user) {
 		List<BaseSummaryResult> result = new ArrayList<BaseSummaryResult>();
@@ -85,4 +90,46 @@ public class InteractionServiceImpl implements InteractionService {
 	public void cancelFavorite(User user, Item item) {
 		favoriteRepository.deleteByUserAndItem(user, item);
 	}
+	
+	public List<QuestionSummaryResult> getUserFollowingQuestions(User user) {
+		List<QuestionSummaryResult> result = new ArrayList<QuestionSummaryResult>();
+		List<FollowQuestion> following = new ArrayList<FollowQuestion>();
+		
+		for (FollowQuestion fq: user.getFollowingQuestions()) {
+			if (!fq.getQuestion().isDeleted())
+				following.add(fq);
+		}
+		
+		Collections.sort(following, new Comparator<FollowQuestion>() {
+            @Override
+            public int compare(FollowQuestion lhs, FollowQuestion rhs) {
+                Integer res = lhs.getCreatedAt().compareTo(rhs.getCreatedAt());
+                return res == 0 ? 0 : -res / Math.abs(res);
+            }
+        });
+		
+		for (FollowQuestion fq: following) {
+			result.add(new QuestionSummaryResult(fq.getQuestion()));	
+		}
+		
+		return result;
+	}
+	
+	public boolean checkFollowQuestion(User user, Question question) {
+		List<FollowQuestion> result = followQuestionRepository.findByUserAndQuestion(user, question);
+		return result != null && !result.isEmpty();
+	}
+	
+	@Transactional
+	public void doFollowQuestion(User user, Question question) {
+		if (checkFollowQuestion(user, question))
+			return;
+		followQuestionRepository.save(new FollowQuestion(user, question));
+	}
+	
+	@Transactional
+	public void cancelFollowQuestion(User user, Question question) {
+		followQuestionRepository.deleteByUserAndQuestion(user, question);
+	}
+	
 }
