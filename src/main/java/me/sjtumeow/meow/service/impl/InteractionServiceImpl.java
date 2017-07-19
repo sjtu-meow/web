@@ -12,12 +12,15 @@ import org.springframework.stereotype.Service;
 
 import me.sjtumeow.meow.dao.FavoriteRepository;
 import me.sjtumeow.meow.dao.FollowQuestionRepository;
+import me.sjtumeow.meow.dao.FollowUserRepository;
 import me.sjtumeow.meow.model.Answer;
 import me.sjtumeow.meow.model.Article;
 import me.sjtumeow.meow.model.Favorite;
 import me.sjtumeow.meow.model.FollowQuestion;
+import me.sjtumeow.meow.model.FollowUser;
 import me.sjtumeow.meow.model.Item;
 import me.sjtumeow.meow.model.Moment;
+import me.sjtumeow.meow.model.Profile;
 import me.sjtumeow.meow.model.Question;
 import me.sjtumeow.meow.model.User;
 import me.sjtumeow.meow.model.result.AnswerSummaryResult;
@@ -35,6 +38,9 @@ public class InteractionServiceImpl implements InteractionService {
 	
 	@Autowired
 	private FollowQuestionRepository followQuestionRepository;
+	
+	@Autowired
+	private FollowUserRepository followUserRepository;
 	
 	public List<BaseSummaryResult> getUserFavorites(User user) {
 		List<BaseSummaryResult> result = new ArrayList<BaseSummaryResult>();
@@ -130,6 +136,47 @@ public class InteractionServiceImpl implements InteractionService {
 	@Transactional
 	public void cancelFollowQuestion(User user, Question question) {
 		followQuestionRepository.deleteByUserAndQuestion(user, question);
+	}
+	
+	public List<Profile> getUserFollowees(User user) {
+		List<Profile> result = new ArrayList<Profile>();
+		List<FollowUser> followees = new ArrayList<FollowUser>();
+		
+		for (FollowUser followee: user.getFollowees()) {
+			if (!followee.getFollowee().isDeleted())
+				followees.add(followee);
+		}
+		
+		Collections.sort(followees, new Comparator<FollowUser>() {
+            @Override
+            public int compare(FollowUser lhs, FollowUser rhs) {
+                Integer res = lhs.getCreatedAt().compareTo(rhs.getCreatedAt());
+                return res == 0 ? 0 : -res / Math.abs(res);
+            }
+        });
+		
+		for (FollowUser followee: followees) {
+			result.add(followee.getFollowee().getProfile());	
+		}
+		
+		return result;
+	}
+	
+	public boolean checkFollowUser(User follower, User followee) {
+		List<FollowUser> result = followUserRepository.findByFollowerAndFollowee(follower, followee);
+		return result != null && !result.isEmpty();
+	}
+	
+	@Transactional
+	public void doFollowUser(User follower, User followee) {
+		if (checkFollowUser(follower, followee))
+			return;
+		followUserRepository.save(new FollowUser(follower, followee));
+	}
+	
+	@Transactional
+	public void cancelFollowUser(User follower, User followee) {
+		followUserRepository.deleteByFollowerAndFollowee(follower, followee);
 	}
 	
 }

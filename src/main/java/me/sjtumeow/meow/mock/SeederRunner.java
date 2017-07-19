@@ -8,6 +8,7 @@ import me.sjtumeow.meow.dao.BannerRepository;
 import me.sjtumeow.meow.dao.CommentRepository;
 import me.sjtumeow.meow.dao.FavoriteRepository;
 import me.sjtumeow.meow.dao.FollowQuestionRepository;
+import me.sjtumeow.meow.dao.FollowUserRepository;
 import me.sjtumeow.meow.dao.MediaRepository;
 import me.sjtumeow.meow.dao.MomentRepository;
 import me.sjtumeow.meow.dao.QuestionRepository;
@@ -17,6 +18,7 @@ import me.sjtumeow.meow.model.Banner;
 import me.sjtumeow.meow.model.Comment;
 import me.sjtumeow.meow.model.Favorite;
 import me.sjtumeow.meow.model.FollowQuestion;
+import me.sjtumeow.meow.model.FollowUser;
 import me.sjtumeow.meow.model.Media;
 import me.sjtumeow.meow.model.Media.MediaType;
 import me.sjtumeow.meow.model.Moment;
@@ -59,6 +61,9 @@ public class SeederRunner implements ApplicationRunner {
     
     @Autowired
     private FollowQuestionRepository followQuestionRepository;
+    
+    @Autowired
+    private FollowUserRepository followUserRepository;
     
     @Autowired
     private UserService userService;
@@ -155,6 +160,7 @@ public class SeederRunner implements ApplicationRunner {
             	// Follow
             	
             	followQuestionRepository.save(new FollowQuestion(user1, question));
+            	followUserRepository.save(new FollowUser(user1, userService.findById(userId, false)));
             }
         	
         	

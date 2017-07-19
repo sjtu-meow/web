@@ -11,6 +11,7 @@ import me.sjtumeow.meow.model.result.AnswerSummaryResult;
 import me.sjtumeow.meow.model.result.ArticleSummaryResult;
 import me.sjtumeow.meow.model.result.BaseSummaryResult;
 import me.sjtumeow.meow.model.result.FailureMessageResult;
+import me.sjtumeow.meow.model.result.FollowStatusResult;
 import me.sjtumeow.meow.model.result.MomentSummaryResult;
 import me.sjtumeow.meow.model.result.NewEntityIdResult;
 import me.sjtumeow.meow.model.result.QuestionSummaryResult;
@@ -23,6 +24,7 @@ import me.sjtumeow.meow.util.FormatValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -191,4 +193,44 @@ public class UserController {
     	User user = userService.findById(id, false);
     	return user == null ? ResponseEntity.notFound().build() : ResponseEntity.ok(interactionService.getUserFollowingQuestions(user));
     }
+    
+    @GetMapping("/user/following/users")
+    @Authorization
+    Iterable<Profile> getFollowees(@CurrentUser User user) {
+    	return interactionService.getUserFollowees(user);
+    }
+    
+    @GetMapping("/users/{id}/following/users")
+    ResponseEntity<?> getFolloweesByUser(@PathVariable("id") Long id) {
+    	User user = userService.findById(id, false);
+    	return user == null ? ResponseEntity.notFound().build() : ResponseEntity.ok(interactionService.getUserFollowees(user));
+    }
+    
+    @GetMapping("/users/{id}/follow")
+	@Authorization
+	ResponseEntity<?> checkFollowUser(@CurrentUser User user, @PathVariable("id") Long id) {
+    	User followee = userService.findById(id, false);
+        return followee == null ? ResponseEntity.notFound().build() :
+        	ResponseEntity.ok(new FollowStatusResult(interactionService.checkFollowUser(user, followee)));
+	}
+	
+	@PostMapping("/users/{id}/follow")
+	@Authorization
+	ResponseEntity<?> doFollowUser(@CurrentUser User user, @PathVariable("id") Long id) {
+		User followee = userService.findById(id, false);
+        if (followee == null)
+        	return ResponseEntity.notFound().build();
+        interactionService.doFollowUser(user, followee);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+	}
+	
+	@DeleteMapping("/users/{id}/follow")
+	@Authorization
+	ResponseEntity<?> cancelFollowUser(@CurrentUser User user, @PathVariable("id") Long id) {
+		User followee = userService.findById(id, false);
+        if (followee == null)
+        	return ResponseEntity.notFound().build();
+        interactionService.cancelFollowUser(user, followee);
+        return ResponseEntity.noContent().build();
+	}
 }

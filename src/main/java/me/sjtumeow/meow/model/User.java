@@ -37,6 +37,14 @@ public class User extends BaseEntity {
     @OneToMany(mappedBy = "user")
     private Set<FollowQuestion> followingQuestions;
     
+    @JsonIgnore
+    @OneToMany(mappedBy = "follower")
+    private Set<FollowUser> followees;
+    
+    @JsonIgnore
+    @OneToMany(mappedBy = "followee")
+    private Set<FollowUser> followers;
+    
     public User() {}
     
     public User(String phone, String password) {
@@ -98,6 +106,22 @@ public class User extends BaseEntity {
 
 	public void setFollowingQuestions(Set<FollowQuestion> followingQuestions) {
 		this.followingQuestions = followingQuestions;
+	}
+
+	public Set<FollowUser> getFollowees() {
+		return followees;
+	}
+	
+	public void setFollowees(Set<FollowUser> followees) {
+		this.followees = followees;
+	}
+
+	public Set<FollowUser> getFollowers() {
+		return followers;
+	}
+
+	public void setFollowers(Set<FollowUser> followers) {
+		this.followers = followers;
 	}
 	
 }
