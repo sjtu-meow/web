@@ -70,7 +70,7 @@ public class AnswerController {
         User creator = itemService.getAnswerCreator(id);
         if (creator == null)
             return ResponseEntity.notFound().build();
-        if (creator.getId() != user.getId())
+        if (!creator.getId().equals(user.getId()))
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
 
         itemService.deleteAnswer(id);

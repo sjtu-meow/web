@@ -10,12 +10,14 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import me.sjtumeow.meow.dao.CommentRepository;
 import me.sjtumeow.meow.dao.FavoriteRepository;
 import me.sjtumeow.meow.dao.FollowQuestionRepository;
 import me.sjtumeow.meow.dao.FollowUserRepository;
 import me.sjtumeow.meow.dao.LikeRepository;
 import me.sjtumeow.meow.model.Answer;
 import me.sjtumeow.meow.model.Article;
+import me.sjtumeow.meow.model.Comment;
 import me.sjtumeow.meow.model.Favorite;
 import me.sjtumeow.meow.model.FollowQuestion;
 import me.sjtumeow.meow.model.FollowUser;
@@ -46,6 +48,9 @@ public class InteractionServiceImpl implements InteractionService {
 
     @Autowired
     private FollowUserRepository followUserRepository;
+
+    @Autowired
+    private CommentRepository commentRepository;
 
     // Like
 
@@ -209,6 +214,28 @@ public class InteractionServiceImpl implements InteractionService {
     @Transactional
     public void cancelFollowUser(User follower, User followee) {
         followUserRepository.deleteByFollowerAndFollowee(follower, followee);
+    }
+
+    // Comment
+
+    public User getCommentCreator(Long id) {
+        Comment comment = commentRepository.findOneActive(id);
+        return comment == null ? null : comment.getProfile().getUser();
+    }
+
+    @Transactional
+    public Long addComment(Item item, User user, String content) {
+        Comment comment = new Comment(item, user.getProfile(), content);
+        commentRepository.save(comment);
+        return comment.getId();
+    }
+
+    @Transactional
+    public boolean deleteComment(Long id) {
+        if (!commentRepository.existsActive(id))
+            return false;
+        commentRepository.softDelete(id);
+        return true;
     }
 
 }

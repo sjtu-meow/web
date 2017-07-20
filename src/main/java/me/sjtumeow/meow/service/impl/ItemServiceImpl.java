@@ -1,5 +1,17 @@
 package me.sjtumeow.meow.service.impl;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import me.sjtumeow.meow.dao.AnswerRepository;
 import me.sjtumeow.meow.dao.ArticleRepository;
 import me.sjtumeow.meow.dao.MediaRepository;
@@ -19,6 +31,9 @@ import me.sjtumeow.meow.model.form.UpdateAnswerForm;
 import me.sjtumeow.meow.model.form.UpdateArticleForm;
 import me.sjtumeow.meow.model.form.UpdateMomentForm;
 import me.sjtumeow.meow.model.form.UpdateQuestionForm;
+import me.sjtumeow.meow.model.result.AnswerDetailResult;
+import me.sjtumeow.meow.model.result.AnswerSummaryResult;
+import me.sjtumeow.meow.model.result.ArticleDetailResult;
 import me.sjtumeow.meow.model.result.ArticleSummaryResult;
 import me.sjtumeow.meow.model.result.BaseSummaryResult;
 import me.sjtumeow.meow.model.result.CreateResult;
@@ -26,23 +41,8 @@ import me.sjtumeow.meow.model.result.MomentDetailResult;
 import me.sjtumeow.meow.model.result.MomentSummaryResult;
 import me.sjtumeow.meow.model.result.QuestionDetailResult;
 import me.sjtumeow.meow.model.result.QuestionSummaryResult;
-import me.sjtumeow.meow.model.result.AnswerDetailResult;
-import me.sjtumeow.meow.model.result.AnswerSummaryResult;
-import me.sjtumeow.meow.model.result.ArticleDetailResult;
 import me.sjtumeow.meow.service.ItemService;
 import me.sjtumeow.meow.util.StringUtil;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.Sort.Direction;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class ItemServiceImpl implements ItemService {
@@ -110,9 +110,7 @@ public class ItemServiceImpl implements ItemService {
 
     public User getMomentCreator(Long id) {
         Moment moment = momentRepository.findOneActive(id);
-        if (moment == null)
-            return null;
-        return moment.getProfile().getUser();
+        return moment == null ? null : moment.getProfile().getUser();
     }
 
     @Transactional
@@ -213,9 +211,7 @@ public class ItemServiceImpl implements ItemService {
 
     public User getArticleCreator(Long id) {
         Article article = articleRepository.findOneActive(id);
-        if (article == null)
-            return null;
-        return article.getProfile().getUser();
+        return article == null ? null : article.getProfile().getUser();
     }
 
     @Transactional
@@ -295,9 +291,7 @@ public class ItemServiceImpl implements ItemService {
 
     public User getQuestionCreator(Long id) {
         Question question = questionRepository.findOneActive(id);
-        if (question == null)
-            return null;
-        return question.getProfile().getUser();
+        return question == null ? null : question.getProfile().getUser();
     }
 
     @Transactional
@@ -381,9 +375,7 @@ public class ItemServiceImpl implements ItemService {
 
     public User getAnswerCreator(Long id) {
         Answer answer = answerRepository.findOneActive(id);
-        if (answer == null)
-            return null;
-        return answer.getProfile().getUser();
+        return answer == null ? null : answer.getProfile().getUser();
     }
 
     @Transactional

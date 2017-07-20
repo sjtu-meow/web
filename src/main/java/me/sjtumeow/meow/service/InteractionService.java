@@ -46,4 +46,12 @@ public interface InteractionService {
     boolean doFollowUser(User follower, User followee);
 
     void cancelFollowUser(User follower, User followee);
+
+    // Comment
+
+    User getCommentCreator(Long id);
+
+    Long addComment(Item item, User user, String content);
+
+    boolean deleteComment(Long id);
 }

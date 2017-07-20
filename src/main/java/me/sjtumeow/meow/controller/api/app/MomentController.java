@@ -66,7 +66,7 @@ public class MomentController {
         User creator = itemService.getMomentCreator(id);
         if (creator == null)
             return ResponseEntity.notFound().build();
-        if (creator.getId() != user.getId())
+        if (!creator.getId().equals(user.getId()))
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
 
         itemService.deleteMoment(id);

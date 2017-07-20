@@ -67,7 +67,7 @@ public class QuestionController {
         User creator = itemService.getQuestionCreator(id);
         if (creator == null)
             return ResponseEntity.notFound().build();
-        if (creator.getId() != user.getId())
+        if (!creator.getId().equals(user.getId()))
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
 
         itemService.deleteQuestion(id);
