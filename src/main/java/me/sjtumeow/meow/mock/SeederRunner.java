@@ -17,6 +17,7 @@ import me.sjtumeow.meow.dao.FollowUserRepository;
 import me.sjtumeow.meow.dao.LikeRepository;
 import me.sjtumeow.meow.dao.MediaRepository;
 import me.sjtumeow.meow.dao.MomentRepository;
+import me.sjtumeow.meow.dao.PushArchiveRepository;
 import me.sjtumeow.meow.dao.QuestionRepository;
 import me.sjtumeow.meow.dao.ReportRepository;
 import me.sjtumeow.meow.model.Answer;
@@ -31,6 +32,7 @@ import me.sjtumeow.meow.model.Media;
 import me.sjtumeow.meow.model.Media.MediaType;
 import me.sjtumeow.meow.model.Moment;
 import me.sjtumeow.meow.model.Profile;
+import me.sjtumeow.meow.model.PushArchive;
 import me.sjtumeow.meow.model.Question;
 import me.sjtumeow.meow.model.Report;
 import me.sjtumeow.meow.model.User;
@@ -74,6 +76,9 @@ public class SeederRunner implements ApplicationRunner {
 
     @Autowired
     private ReportRepository reportRepository;
+
+    @Autowired
+    private PushArchiveRepository pushArchiveRepository;
 
     @Autowired
     private UserService userService;
@@ -228,6 +233,16 @@ public class SeederRunner implements ApplicationRunner {
                 bannerRepository.save(new Banner(1, "http://lorempixel.com/400/200", question));
             else if (i == 4)
                 bannerRepository.save(new Banner(0, "http://lorempixel.com/400/200", answer));
+
+            // Push Archive
+
+            if (i == 5) {
+                pushArchiveRepository.save(new PushArchive(moment, "99% 的人都没注意到的点滴！删前速看！"));
+                pushArchiveRepository.save(new PushArchive(article, "99% 的人都没看过的深度好文！删前速看！"));
+                pushArchiveRepository.save(new PushArchive(question, "99% 的人都答不出的问题！删前速看！"));
+                pushArchiveRepository.save(new PushArchive(answer, "99% 的人都意想不到的回答！删前速看！"));
+            }
+
         }
 
     }
