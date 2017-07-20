@@ -1,7 +1,7 @@
 <template>
 <div class="box">
   <div class="box-header">
-    <h3 class="box-title">问题举报</h3>
+    <h3 class="box-title">回答举报</h3>
 
     <div class="box-tools">
       <div class="input-group input-group-sm" style="width: 150px;">
@@ -20,32 +20,35 @@
           <th>#</th>
           <th>举报人</th>
           <th>举报信息</th>
-          <th>问题ID</th>
-          <th>问题预览</th>
+          <th>回答ID</th>
+          <th>回答预览</th>
           <th></th>
         </tr>
       </thead>
       <tbody>
-        <question-report-list-row v-for="report in reports" :key="report.id" :report="report" @deleteQuestion="deleteQuestion" @recoverQuestion="recoverQuestion" @expandContent="expandContent" @closeReport="closeReport" @openReport="openReport" />
+        <answer-report-list-row v-for="report in reports" :key="report.id" :report="report"
+          @deleteAnswer="deleteAnswer" @recoverAnswer="recoverAnswer" @expandContent="expandContent"
+          @closeReport="closeReport" @openReport="openReport" />
       </tbody>
     </table>
   </div>
   <!-- /.box-body -->
 
   <div v-if="pagination.totalPages > 1" class="box-footer clearfix">
-    <pagination :pagination="pagination" @changePage="fetchQuestionReports" />
+    <pagination :pagination="pagination" @changePage="fetchAnswerReports" />
   </div>
 </div>
 </template>
 
 <script>
-import QuestionReportListRow from './QuestionReportListRow.vue'
+import AnswerReportListRow from './AnswerReportListRow.vue'
 import Pagination from '../Pagination.vue'
 
+
 export default {
-  name: 'QuestionReportBox',
+  name: 'AnswerBox',
   components: {
-    QuestionReportListRow,
+    AnswerReportListRow,
     Pagination
   },
   data() {
@@ -56,9 +59,9 @@ export default {
           nickname: '小蛤蛤',
           id: 3
         },
-        reason: '吓死我了这个问题',
-        itemId: 7,
-        itemType: 2,
+        reason: '吓死我了这个回答',
+        itemId: 8,
+        itemType: 3,
         closed: false
       }],
       pagination: {
@@ -71,15 +74,15 @@ export default {
     }
   },
   created() {
-    this.fetchQuestionReports(0)
+    this.fetchAnswerReports(0)
   },
   methods: {
-    fetchQuestionReports(page) {
+    fetchAnswerReports(page) {
       let url = ''
       if (this.keywordOfResult) {
-        url = '/api/admin/reports/questions?' + 'page=' + page + '&size=' + this.pageSize + '&keyword=' + this.keywordOfResult
+        url = '/api/admin/reports/answers?' + 'page=' + page + '&size=' + this.pageSize + '&keyword=' + this.keywordOfResult
       } else {
-        url = '/api/admin/reports/questions?' + 'page=' + page + '&size=' + this.pageSize
+        url = '/api/admin/reports/answers?' + 'page=' + page + '&size=' + this.pageSize
       }
 
       this.$http.get(url)
@@ -88,7 +91,7 @@ export default {
           this.pagination.currentPage = response.body.number;
           this.pagination.totalPages = response.body.totalPages;
         }, function(response) {
-          alert(response.body.message || '获取问题举报失败');
+          alert(response.body.message || '获取回答举报失败');
         })
     },
     closeReport(report) {
@@ -99,18 +102,18 @@ export default {
       // TODO
       alert('还没实现呢')
     },
-    deleteQuestion(question) {
-      this.$emit('deleteQuestion', question)
+    deleteAnswer(answer) {
+      this.$emit('deleteAnswer', answer)
     },
-    recoverQuestion(question) {
-      this.$emit('recoverQuestion', question)
+    recoverAnswer(answer) {
+      this.$emit('recoverAnswer', answer)
     },
-    expandContent(question) {
-      this.$emit('expandContent', question)
+    expandContent(answer) {
+      this.$emit('expandContent', answer)
     },
     search() {
       this.keywordOfResult = this.keywordFromInput;
-      this.fetchQuestionReports(0);
+      this.fetchAnswerReports(0);
     }
   }
 }

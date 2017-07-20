@@ -6,14 +6,20 @@
   <section class="content">
     <div class="row">
       <div class="col-md-12">
-        <question-box @deleteQuestion="promptDeleteQuestion" @recoverQuestion="promptRecoverQuestion" @expandQuestionContent="expandQuestionContent"
-          @deleteAnswer="promptDeleteAnswer" @recoverAnswer="promptRecoverAnswer" @expandAnswerContent="expandAnswerContent"/>
+        <question-box @deleteQuestion="promptDeleteQuestion" @recoverQuestion="promptRecoverQuestion" @expandQuestionContent="expandQuestionContent" @deleteAnswer="promptDeleteAnswer" @recoverAnswer="promptRecoverAnswer" @expandAnswerContent="expandAnswerContent"
+        />
       </div>
     </div>
 
     <div class="row">
       <div class="col-md-12">
         <question-report-box @deleteQuestion="promptDeleteQuestion" @recoverQuestion="promptRecoverQuestion" @expandContent="expandQuestionContent" />
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-12">
+        <answer-report-box @deleteAnswer="promptDeleteAnswer" @recoverAnswer="promptRecoverAnswer" @expandContent="expandAnswerContent" />
       </div>
     </div>
 
@@ -138,12 +144,14 @@
 <script>
 import QuestionBox from './QuestionBox.vue'
 import QuestionReportBox from './QuestionReportBox.vue'
+import AnswerReportBox from './AnswerReportBox.vue'
 
 export default {
   name: 'Questions',
   components: {
     QuestionBox,
-    QuestionReportBox
+    QuestionReportBox,
+    AnswerReportBox
   },
   data() {
     return {
@@ -224,6 +232,10 @@ export default {
         alert(response.body.message || '修改失败');
       });
     },
+    expandQuestionContent(question) {
+      this.questionToShow = question;
+      $('#question-content-detail-modal').modal('show');
+    },
     promptDeleteAnswer(answer) {
       this.answerToDelete = answer;
       $('#delete-answer-modal').modal('show');
@@ -239,7 +251,9 @@ export default {
     },
     promptRecoverAnswer(answer, question) {
       this.answerToRecover = answer;
-      this.questionToRecover = question;
+      if (question) {
+        this.questionToRecover = question;  
+      }
       $('#recover-answer-modal').modal('show');
     },
     recoverAnswer() {
@@ -247,7 +261,9 @@ export default {
         isDeleted: false
       }).then(function(response) {
         this.answerToRecover.deleted = false;
-        this.questionToRecover.deleted = false;
+        if (this.questionToRecover) {
+          this.questionToRecover.deleted = false;
+        }
         $('#recover-answer-modal').modal('hide');
       }, function(response) {
         alert(response.body.message || '修改失败');
@@ -256,10 +272,6 @@ export default {
     expandAnswerContent(answer) {
       $('#answer-content-detail-modal .modal-body').html(answer.content);
       $('#answer-content-detail-modal').modal('show');
-    },
-    expandQuestionContent(question) {
-      this.questionToShow = question;
-      $('#question-content-detail-modal').modal('show');
     }
   }
 }
