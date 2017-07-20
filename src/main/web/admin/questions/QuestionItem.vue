@@ -56,7 +56,7 @@ export default {
   props: ['question'],
   data() {
     return {
-      contentPreviewLength: 200
+      contentPreviewLength: 20
     }
   },
   methods: {
@@ -70,9 +70,9 @@ export default {
       this.$emit('recoverQuestion', this.question)
     },
     recoverAnswer(answer) {
-      this.$emit('recoverAnswer', answer)
+      this.$emit('recoverAnswer', answer, this.question)
     },
-    expanQuetiondContent() {
+    expandQuestionContent() {
       this.$emit('expandQuestionContent', this.question)
     },
     expandAnswerContent(answer) {

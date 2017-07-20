@@ -6,33 +6,8 @@
   <section class="content">
     <div class="row">
       <div class="col-md-12">
-        <div class="box">
-          <div class="box-header">
-            <h3 class="box-title">所有问答</h3>
-
-            <div class="box-tools">
-              <div class="input-group input-group-sm" style="width: 150px;">
-                <input type="text" class="form-control pull-right" placeholder="搜索" v-model="keywordFromInput">
-                <div class="input-group-btn">
-                  <button type="button" class="btn btn-default" @click="search"><i class="fa fa-search"></i></button>
-                </div>
-              </div>
-            </div>
-          </div>
-          <!-- /.box-header -->
-          <div class="box-body">
-            <question-item v-for="question in questions" :key="question" :question="question"
-              @deleteQuestion="promptDeleteQuestion" @recoverQuestion="promptRecoverQuestion"
-              @deleteAnswer="promptDeleteAnswer" @recoverAnswer="promptRecoverAnswer"
-              @expandAnswerContent="expandAnswerContent" @expandQuestionContent="expandQuestionContent" />
-          </div>
-          <!-- /.box-body -->
-
-          <div v-if="pagination.totalPages > 1" class="box-footer clearfix">
-            <pagination :pagination="pagination" @changePage="fetchQuestions"/>
-          </div>
-        </div>
-        <!-- /.box -->
+        <question-box @deleteQuestion="promptDeleteQuestion" @recoverQuestion="promptRecoverQuestion" @expandQuestionContent="expandQuestionContent"
+          @deleteAnswer="promptDeleteAnswer" @recoverAnswer="promptRecoverAnswer" @expandAnswerContent="expandAnswerContent"/>
       </div>
     </div>
 
@@ -155,25 +130,15 @@
 </template>
 
 <script>
-import QuestionItem from './QuestionItem.vue';
-import Pagination from '../Pagination.vue';
+import QuestionBox from './QuestionBox.vue'
 
 export default {
   name: 'Questions',
   components: {
-    QuestionItem,
-    Pagination
+    QuestionBox
   },
   data() {
     return {
-      questions: [],
-      pagination: {
-        currentPage: 0,
-        totalPages: 1
-      },
-      pageSize: 2,
-      keywordFromInput: '',
-      keywordOfResult: '',
       questionToDelete: {
         profile: {
           nickname: 'haha'
@@ -214,27 +179,7 @@ export default {
       return $(this.answerToRecover.content).text()
     }
   },
-  created() {
-    this.fetchQuestions(0)
-  },
   methods: {
-    fetchQuestions: function(page) {
-      let url = ''
-      if (this.keywordOfResult) {
-        url = '/api/admin/questions?' + 'page=' + page + '&size=' + this.pageSize + '&keyword=' + this.keywordOfResult
-      } else {
-        url = '/api/admin/questions?' + 'page=' + page + '&size=' + this.pageSize
-      }
-
-      this.$http.get(url)
-        .then(function(response) {
-          this.questions = response.body.content;
-          this.pagination.currentPage = response.body.number;
-          this.pagination.totalPages = response.body.totalPages;
-        }, function(response) {
-          alert(response.body.message || '获取问答失败');
-        })
-    },
     promptDeleteQuestion(question) {
       this.questionToDelete = question;
       $('#delete-question-modal').modal('show');
@@ -284,8 +229,9 @@ export default {
           alert(response.body.message || '修改失败');
         })
     },
-    promptRecoverAnswer(answer) {
+    promptRecoverAnswer(answer, question) {
       this.answerToRecover = answer;
+      this.questionToRecover = question;
       $('#recover-answer-modal').modal('show');
     },
     recoverAnswer() {
@@ -293,7 +239,7 @@ export default {
         isDeleted: false
       }).then(function(response) {
         this.answerToRecover.deleted = false;
-        this.fetchQuestions(this.pagination.currentPage);
+        this.questionToRecover.deleted = false;
         $('#recover-answer-modal').modal('hide');
       }, function(response) {
         alert(response.body.message || '修改失败');
@@ -304,12 +250,8 @@ export default {
       $('#answer-content-detail-modal').modal('show');
     },
     expandQuestionContent(question) {
-      this.quesitionToShow = question;
+      this.questionToShow = question;
       $('#question-content-detail-modal').modal('show');
-    },
-    search() {
-      this.keywordOfResult = this.keywordFromInput;
-      this.fetchQuestions(0);
     }
   }
 }
