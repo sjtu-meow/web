@@ -3,9 +3,6 @@
   <section class="content-header">
     <h1>
       吧呢管理
-      <button type="button" class="btn btn-default" data-toggle="modal" data-target="#add-banner-modal">
-        <span class="glyphicon glyphicon-plus"/>
-      </button>
     </h1>
   </section>
 
@@ -14,7 +11,12 @@
       <div class="col-md-12">
         <div class="box">
           <div class="box-header">
-            <h3 class="box-title">当前吧呢</h3>
+            <h3 class="box-title">
+              当前吧呢
+              <button type="button" class="btn btn-default btn-xs" data-toggle="modal" data-target="#add-banner-modal">
+                <span class="glyphicon glyphicon-plus"/>
+              </button>
+            </h3>
           </div>
           <!-- /.box-header -->
           <div class="box-body">
