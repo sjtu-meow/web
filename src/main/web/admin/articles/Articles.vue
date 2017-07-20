@@ -9,6 +9,12 @@
         <article-box @deleteArticle="promptDeleteArticle" @recoverArticle="promptRecoverArticle" @expandContent="expandContent"/>
       </div>
     </div>
+
+    <div class="row">
+      <div class="col-md-12">
+        <article-report-box @deleteArticle="promptDeleteArticle" @recoverArticle="promptRecoverArticle" @expandContent="expandContent" />
+      </div>
+    </div>
   </section>
 
   <!-- Delete Modal -->
@@ -70,11 +76,13 @@
 
 <script>
 import ArticleBox from './ArticleBox.vue'
+import ArticleReportBox from './ArticleReportBox.vue'
 
 export default {
   name: 'Articles',
   components: {
-    ArticleBox
+    ArticleBox,
+    ArticleReportBox
   },
   data() {
     return {
@@ -110,14 +118,6 @@ export default {
     }
   },
   methods: {
-    closeReport(report) {
-      // TODO
-      alert('还没实现呢')
-    },
-    openReport(report) {
-      // TODO
-      alert('还没实现呢')
-    },
     promptDeleteArticle(article) {
       this.articleToDelete = article;
       $('#delete-article-modal').modal('show');
