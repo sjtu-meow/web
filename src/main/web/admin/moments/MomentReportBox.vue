@@ -93,14 +93,16 @@ export default {
           this.pagination.currentPage = response.body.number;
           this.pagination.totalPages = response.body.totalPages;
         }, function(response) {
-          alert(response.body.message || '获取点滴失败');
+          alert(response.body.message || '获取点滴举报失败');
         })
     },
     closeReport(report) {
-      this.$emit('closeReport', report)
+      // TODO
+      alert('还没实现呢')
     },
     openReport(report) {
-      this.$emit('openReport', report)
+      // TODO
+      alert('还没实现呢')
     },
     deleteMoment(moment) {
       this.$emit('deleteMoment', moment)

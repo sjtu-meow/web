@@ -12,8 +12,7 @@
 
     <div class="row">
       <div class="col-md-12">
-        <moment-report-box @closeReport="closeReport" @openReport="openReport"
-          @deleteMoment="promptDeleteMoment" @recoverMoment="promptRecoverMoment" @expandContent="expandContent" />
+        <moment-report-box @deleteMoment="promptDeleteMoment" @recoverMoment="promptRecoverMoment" @expandContent="expandContent" />
       </div>
     </div>
   </section>
@@ -111,14 +110,6 @@ export default {
     }
   },
   methods: {
-    closeReport(report) {
-      // TODO
-      alert('还没实现呢')
-    },
-    openReport(report) {
-      // TODO
-      alert('还没实现呢')
-    },
     promptDeleteMoment(moment) {
       this.momentToDelete = moment;
       $('#delete-moment-modal').modal('show');
