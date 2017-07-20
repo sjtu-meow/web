@@ -14,13 +14,16 @@ import me.sjtumeow.meow.authorization.annotation.Authorization;
 import me.sjtumeow.meow.authorization.annotation.CurrentUser;
 import me.sjtumeow.meow.model.Answer;
 import me.sjtumeow.meow.model.Article;
+import me.sjtumeow.meow.model.Comment;
 import me.sjtumeow.meow.model.Moment;
 import me.sjtumeow.meow.model.User;
 import me.sjtumeow.meow.model.form.AddCommentForm;
+import me.sjtumeow.meow.model.form.ReportForm;
 import me.sjtumeow.meow.model.result.FailureMessageResult;
 import me.sjtumeow.meow.model.result.NewEntityIdResult;
 import me.sjtumeow.meow.service.InteractionService;
 import me.sjtumeow.meow.service.ItemService;
+import me.sjtumeow.meow.util.StringUtil;
 
 @RestController
 @RequestMapping("/api")
@@ -91,5 +94,15 @@ public class CommentController {
 
         interactionService.deleteComment(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping(path = "/comments/{id}/report", consumes = "application/json")
+    @Authorization
+    ResponseEntity<?> doReportComment(@RequestBody ReportForm rf, @CurrentUser User user, @PathVariable("id") Long id) {
+        Comment comment = interactionService.findCommentById(id, false);
+        if (comment == null)
+            return ResponseEntity.notFound().build();
+        interactionService.doReport(comment, user, StringUtil.replaceNull(rf.getReason()));
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 }

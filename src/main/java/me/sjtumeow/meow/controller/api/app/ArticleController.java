@@ -17,6 +17,7 @@ import me.sjtumeow.meow.authorization.annotation.CurrentUser;
 import me.sjtumeow.meow.model.Article;
 import me.sjtumeow.meow.model.User;
 import me.sjtumeow.meow.model.form.AddArticleForm;
+import me.sjtumeow.meow.model.form.ReportForm;
 import me.sjtumeow.meow.model.result.ArticleDetailResult;
 import me.sjtumeow.meow.model.result.FailureMessageResult;
 import me.sjtumeow.meow.model.result.FavoriteStatusResult;
@@ -138,5 +139,15 @@ public class ArticleController {
             return ResponseEntity.notFound().build();
         interactionService.cancelFavorite(user, article);
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping(path = "/{id}/report", consumes = "application/json")
+    @Authorization
+    ResponseEntity<?> doReportArticle(@RequestBody ReportForm rf, @CurrentUser User user, @PathVariable("id") Long id) {
+        Article article = itemService.findArticleById(id, false);
+        if (article == null)
+            return ResponseEntity.notFound().build();
+        interactionService.doReport(article, user, StringUtil.replaceNull(rf.getReason()));
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 }

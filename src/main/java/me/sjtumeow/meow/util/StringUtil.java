@@ -46,4 +46,15 @@ public class StringUtil {
             return 0L;
         }
     }
+
+    public static Boolean parseReportStatus(String status) {
+        switch (status.trim()) {
+            case "open":
+                return false;
+            case "closed":
+                return true;
+            default:
+                return null;
+        }
+    }
 }

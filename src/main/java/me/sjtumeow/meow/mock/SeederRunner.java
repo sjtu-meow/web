@@ -1,5 +1,10 @@
 package me.sjtumeow.meow.mock;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.ApplicationArguments;
+import org.springframework.boot.ApplicationRunner;
+import org.springframework.stereotype.Component;
+
 import com.github.javafaker.Faker;
 
 import me.sjtumeow.meow.dao.AnswerRepository;
@@ -13,6 +18,7 @@ import me.sjtumeow.meow.dao.LikeRepository;
 import me.sjtumeow.meow.dao.MediaRepository;
 import me.sjtumeow.meow.dao.MomentRepository;
 import me.sjtumeow.meow.dao.QuestionRepository;
+import me.sjtumeow.meow.dao.ReportRepository;
 import me.sjtumeow.meow.model.Answer;
 import me.sjtumeow.meow.model.Article;
 import me.sjtumeow.meow.model.Banner;
@@ -26,13 +32,9 @@ import me.sjtumeow.meow.model.Media.MediaType;
 import me.sjtumeow.meow.model.Moment;
 import me.sjtumeow.meow.model.Profile;
 import me.sjtumeow.meow.model.Question;
+import me.sjtumeow.meow.model.Report;
 import me.sjtumeow.meow.model.User;
 import me.sjtumeow.meow.service.UserService;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.ApplicationArguments;
-import org.springframework.boot.ApplicationRunner;
-import org.springframework.stereotype.Component;
 
 @Component
 public class SeederRunner implements ApplicationRunner {
@@ -69,6 +71,9 @@ public class SeederRunner implements ApplicationRunner {
 
     @Autowired
     private FollowUserRepository followUserRepository;
+
+    @Autowired
+    private ReportRepository reportRepository;
 
     @Autowired
     private UserService userService;
@@ -164,7 +169,6 @@ public class SeederRunner implements ApplicationRunner {
 
                 favoriteRepository.save(new Favorite(user1, moment));
                 favoriteRepository.save(new Favorite(user1, article));
-                favoriteRepository.save(new Favorite(user1, question));
                 favoriteRepository.save(new Favorite(user2, article));
                 favoriteRepository.save(new Favorite(user2, answer));
 
@@ -172,6 +176,10 @@ public class SeederRunner implements ApplicationRunner {
 
                 followQuestionRepository.save(new FollowQuestion(user1, question));
                 followUserRepository.save(new FollowUser(user1, userService.findById(userId, false)));
+
+                // Report
+
+                reportRepository.save(new Report(question, user2.getProfile(), "这问题不清真啊!"));
             }
 
             // Soft delete test

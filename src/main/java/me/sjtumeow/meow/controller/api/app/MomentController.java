@@ -17,6 +17,7 @@ import me.sjtumeow.meow.authorization.annotation.CurrentUser;
 import me.sjtumeow.meow.model.Moment;
 import me.sjtumeow.meow.model.User;
 import me.sjtumeow.meow.model.form.AddMomentForm;
+import me.sjtumeow.meow.model.form.ReportForm;
 import me.sjtumeow.meow.model.result.CreateResult;
 import me.sjtumeow.meow.model.result.FailureMessageResult;
 import me.sjtumeow.meow.model.result.FavoriteStatusResult;
@@ -127,5 +128,15 @@ public class MomentController {
             return ResponseEntity.notFound().build();
         interactionService.cancelFavorite(user, moment);
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping(path = "/{id}/report", consumes = "application/json")
+    @Authorization
+    ResponseEntity<?> doReportMoment(@RequestBody ReportForm rf, @CurrentUser User user, @PathVariable("id") Long id) {
+        Moment moment = itemService.findMomentById(id, false);
+        if (moment == null)
+            return ResponseEntity.notFound().build();
+        interactionService.doReport(moment, user, StringUtil.replaceNull(rf.getReason()));
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 }

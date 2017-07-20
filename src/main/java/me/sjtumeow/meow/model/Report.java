@@ -7,7 +7,9 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import org.hibernate.annotations.Formula;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class Report extends BaseEntity {
@@ -19,10 +21,15 @@ public class Report extends BaseEntity {
     @Column(nullable = false)
     private Long id;
 
-    @JsonBackReference
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(nullable = false)
     private Item item;
+
+    @Formula("item_id")
+    private Long itemId;
+
+    private Integer itemType;
 
     @ManyToOne(optional = false)
     private Profile profile;
@@ -38,6 +45,7 @@ public class Report extends BaseEntity {
 
     public Report(Item item, Profile profile, String reason) {
         this.item = item;
+        this.itemType = item.getType();
         this.profile = profile;
         this.reason = reason;
         this.closed = false;
@@ -49,6 +57,14 @@ public class Report extends BaseEntity {
 
     public Item getItem() {
         return item;
+    }
+
+    public Long getItemId() {
+        return itemId;
+    }
+
+    public Integer getItemType() {
+        return itemType;
     }
 
     public Profile getProfile() {
@@ -69,6 +85,15 @@ public class Report extends BaseEntity {
 
     public void setItem(Item item) {
         this.item = item;
+        this.itemType = item.getType();
+    }
+
+    public void setItemId(Long itemId) {
+        this.itemId = itemId;
+    }
+
+    public void setItemType(Integer itemType) {
+        this.itemType = itemType;
     }
 
     public void setProfile(Profile profile) {
@@ -82,4 +107,5 @@ public class Report extends BaseEntity {
     public void setClosed(Boolean closed) {
         this.closed = closed;
     }
+
 }

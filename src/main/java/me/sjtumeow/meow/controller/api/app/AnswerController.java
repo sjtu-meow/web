@@ -18,6 +18,7 @@ import me.sjtumeow.meow.model.Answer;
 import me.sjtumeow.meow.model.Question;
 import me.sjtumeow.meow.model.User;
 import me.sjtumeow.meow.model.form.AddAnswerForm;
+import me.sjtumeow.meow.model.form.ReportForm;
 import me.sjtumeow.meow.model.result.AnswerDetailResult;
 import me.sjtumeow.meow.model.result.FailureMessageResult;
 import me.sjtumeow.meow.model.result.FavoriteStatusResult;
@@ -26,6 +27,7 @@ import me.sjtumeow.meow.model.result.NewEntityIdResult;
 import me.sjtumeow.meow.service.InteractionService;
 import me.sjtumeow.meow.service.ItemService;
 import me.sjtumeow.meow.util.FormatValidator;
+import me.sjtumeow.meow.util.StringUtil;
 
 @RestController
 @RequestMapping("/api")
@@ -131,5 +133,15 @@ public class AnswerController {
             return ResponseEntity.notFound().build();
         interactionService.cancelFavorite(user, answer);
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping(path = "/answers/{id}/report", consumes = "application/json")
+    @Authorization
+    ResponseEntity<?> doReportAnswer(@RequestBody ReportForm rf, @CurrentUser User user, @PathVariable("id") Long id) {
+        Answer answer = itemService.findAnswerById(id, false);
+        if (answer == null)
+            return ResponseEntity.notFound().build();
+        interactionService.doReport(answer, user, StringUtil.replaceNull(rf.getReason()));
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 }

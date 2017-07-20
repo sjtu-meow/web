@@ -17,6 +17,7 @@ import me.sjtumeow.meow.authorization.annotation.CurrentUser;
 import me.sjtumeow.meow.model.Question;
 import me.sjtumeow.meow.model.User;
 import me.sjtumeow.meow.model.form.AddQuestionForm;
+import me.sjtumeow.meow.model.form.ReportForm;
 import me.sjtumeow.meow.model.result.FailureMessageResult;
 import me.sjtumeow.meow.model.result.FollowStatusResult;
 import me.sjtumeow.meow.model.result.NewEntityIdResult;
@@ -100,5 +101,16 @@ public class QuestionController {
             return ResponseEntity.notFound().build();
         interactionService.cancelFollowQuestion(user, question);
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping(path = "/{id}/report", consumes = "application/json")
+    @Authorization
+    ResponseEntity<?> doReportQuestion(@RequestBody ReportForm rf, @CurrentUser User user,
+            @PathVariable("id") Long id) {
+        Question question = itemService.findQuestionById(id, false);
+        if (question == null)
+            return ResponseEntity.notFound().build();
+        interactionService.doReport(question, user, StringUtil.replaceNull(rf.getReason()));
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 }

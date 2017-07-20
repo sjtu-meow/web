@@ -8,6 +8,9 @@ import java.util.List;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 import me.sjtumeow.meow.dao.CommentRepository;
@@ -15,6 +18,7 @@ import me.sjtumeow.meow.dao.FavoriteRepository;
 import me.sjtumeow.meow.dao.FollowQuestionRepository;
 import me.sjtumeow.meow.dao.FollowUserRepository;
 import me.sjtumeow.meow.dao.LikeRepository;
+import me.sjtumeow.meow.dao.ReportRepository;
 import me.sjtumeow.meow.model.Answer;
 import me.sjtumeow.meow.model.Article;
 import me.sjtumeow.meow.model.Comment;
@@ -26,13 +30,16 @@ import me.sjtumeow.meow.model.Like;
 import me.sjtumeow.meow.model.Moment;
 import me.sjtumeow.meow.model.Profile;
 import me.sjtumeow.meow.model.Question;
+import me.sjtumeow.meow.model.Report;
 import me.sjtumeow.meow.model.User;
+import me.sjtumeow.meow.model.form.UpdateReportForm;
 import me.sjtumeow.meow.model.result.AnswerSummaryResult;
 import me.sjtumeow.meow.model.result.ArticleSummaryResult;
 import me.sjtumeow.meow.model.result.BaseSummaryResult;
 import me.sjtumeow.meow.model.result.MomentSummaryResult;
 import me.sjtumeow.meow.model.result.QuestionSummaryResult;
 import me.sjtumeow.meow.service.InteractionService;
+import me.sjtumeow.meow.util.StringUtil;
 
 @Service
 public class InteractionServiceImpl implements InteractionService {
@@ -51,6 +58,9 @@ public class InteractionServiceImpl implements InteractionService {
 
     @Autowired
     private CommentRepository commentRepository;
+
+    @Autowired
+    private ReportRepository reportRepository;
 
     // Like
 
@@ -218,6 +228,18 @@ public class InteractionServiceImpl implements InteractionService {
 
     // Comment
 
+    public Iterable<Comment> findAllComments(String keyword) {
+        return commentRepository.findByContentContaining(keyword);
+    }
+
+    public Iterable<Comment> findAllCommentsPageable(Integer page, Integer size, String keyword) {
+        return commentRepository.findByContentContaining(keyword, new PageRequest(page, size));
+    }
+
+    public Comment findCommentById(Long id, boolean isAdmin) {
+        return isAdmin ? commentRepository.findOne(id) : commentRepository.findOneActive(id);
+    }
+
     public User getCommentCreator(Long id) {
         Comment comment = commentRepository.findOneActive(id);
         return comment == null ? null : comment.getProfile().getUser();
@@ -235,6 +257,46 @@ public class InteractionServiceImpl implements InteractionService {
         if (!commentRepository.existsActive(id))
             return false;
         commentRepository.softDelete(id);
+        return true;
+    }
+
+    // Report
+
+    public Iterable<Report> findAllReports(Integer type, String status) {
+        Boolean closed = StringUtil.parseReportStatus(status);
+        return closed == null ? reportRepository.findByItemType(type, new Sort(Direction.DESC, "createdAt"))
+                : reportRepository.findByItemTypeAndClosed(type, closed, new Sort(Direction.DESC, "createdAt"));
+    }
+
+    public Iterable<Report> findAllReportsPageable(Integer page, Integer size, Integer type, String status) {
+        Boolean closed = StringUtil.parseReportStatus(status);
+        return closed == null
+                ? reportRepository.findByItemType(type, new PageRequest(page, size, Direction.DESC, "createdAt"))
+                : reportRepository.findByItemTypeAndClosed(type, closed,
+                        new PageRequest(page, size, Direction.DESC, "createdAt"));
+    }
+
+    public Report findReportById(Long id) {
+        return reportRepository.findOne(id);
+    }
+
+    @Transactional
+    public Long doReport(Item item, User user, String reason) {
+        Report report = new Report(item, user.getProfile(), reason);
+        reportRepository.save(report);
+        return report.getId();
+    }
+
+    @Transactional
+    public boolean updateReport(Long id, UpdateReportForm urf) {
+        Report report = reportRepository.findOne(id);
+        if (report == null)
+            return false;
+
+        Boolean closed = urf.getClosed();
+        if (closed != null)
+            report.setClosed(closed);
+        reportRepository.save(report);
         return true;
     }
 
