@@ -79,13 +79,13 @@
 
 <script>
 import CommentBox from './CommentBox.vue'
-// import CommentReportBox from './CommentReportBox.vue'
+import CommentReportBox from './CommentReportBox.vue'
 
 export default {
   name: 'Comments',
   components: {
-    CommentBox
-    // CommentReportBox
+    CommentBox,
+    CommentReportBox
   },
   data() {
     return {
