@@ -1,6 +1,6 @@
 <template>
 <div id="app" class="wrapper" style="height: auto;">
-  <nav-bar :loggedIn="loggedIn" @login="promptLogin" @logout="logout"></nav-bar>
+  <nav-bar :loggedIn="loggedIn" @logout="logout"></nav-bar>
   <side-bar :loggedIn="loggedIn"></side-bar>
   <div class="content-wrapper" style="min-height: 320px;">
     <router-view></router-view>
