@@ -9,6 +9,7 @@ import me.sjtumeow.meow.model.Answer;
 import me.sjtumeow.meow.model.Item;
 import me.sjtumeow.meow.model.Profile;
 import me.sjtumeow.meow.model.Question;
+import me.sjtumeow.meow.util.StringUtil;
 
 public class QuestionDetailResult {
     protected Long id;
@@ -33,8 +34,11 @@ public class QuestionDetailResult {
         this.answers = new ArrayList<AnswerDetailResult>();
 
         for (Answer answer : question.getAnswers()) {
-            if (!answer.isDeleted())
-                answers.add(new AnswerDetailResult(answer));
+            if (!answer.isDeleted()) {
+                AnswerDetailResult adr = new AnswerDetailResult(answer);
+                adr.setContent(StringUtil.extractHTMLSummary(answer.getContent()));
+                answers.add(adr);
+            }
         }
 
         Collections.sort(answers, new Comparator<AnswerDetailResult>() {
