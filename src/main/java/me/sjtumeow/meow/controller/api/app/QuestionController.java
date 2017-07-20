@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import me.sjtumeow.meow.authorization.annotation.Authorization;
@@ -23,6 +24,8 @@ import me.sjtumeow.meow.model.result.NewEntityIdResult;
 import me.sjtumeow.meow.model.result.QuestionDetailResult;
 import me.sjtumeow.meow.service.InteractionService;
 import me.sjtumeow.meow.service.ItemService;
+import me.sjtumeow.meow.util.FormatValidator;
+import me.sjtumeow.meow.util.StringUtil;
 
 @RestController
 @RequestMapping("/api/questions")
@@ -33,6 +36,14 @@ public class QuestionController {
 
     @Autowired
     private InteractionService interactionService;
+
+    @GetMapping
+    Iterable<?> getQuestions(@RequestParam(required = false) Integer page, @RequestParam(required = false) Integer size,
+            @RequestParam(required = false) String keyword) {
+        return (!FormatValidator.checkNonNegativeInt(page) || !FormatValidator.checkPositiveInt(size))
+                ? itemService.findAllQuestions(StringUtil.replaceNull(keyword), false)
+                : itemService.findAllQuestionsPageable(page, size, StringUtil.replaceNull(keyword), false);
+    }
 
     @GetMapping("/{id}")
     ResponseEntity<?> getQuestion(@PathVariable("id") Long id) {
