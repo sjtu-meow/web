@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import me.sjtumeow.meow.authorization.annotation.Authorization;
 import me.sjtumeow.meow.authorization.annotation.CurrentUser;
+import me.sjtumeow.meow.model.Answer;
+import me.sjtumeow.meow.model.Article;
 import me.sjtumeow.meow.model.Moment;
 import me.sjtumeow.meow.model.User;
 import me.sjtumeow.meow.model.form.AddCommentForm;
@@ -44,6 +46,38 @@ public class CommentController {
 
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(new NewEntityIdResult(interactionService.addComment(moment, user, content)));
+    }
+
+    @PostMapping(path = "/articles/{id}/comments", consumes = "application/json")
+    @Authorization
+    ResponseEntity<?> addArticleComment(@RequestBody AddCommentForm acf, @CurrentUser User user,
+            @PathVariable("id") Long id) {
+        Article article = itemService.findArticleById(id, false);
+        if (article == null)
+            return ResponseEntity.notFound().build();
+
+        String content = acf.getContent();
+        if (content == null || content.trim().isEmpty())
+            return ResponseEntity.badRequest().body(new FailureMessageResult("评论内容不能为空"));
+
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(new NewEntityIdResult(interactionService.addComment(article, user, content)));
+    }
+
+    @PostMapping(path = "/answers/{id}/comments", consumes = "application/json")
+    @Authorization
+    ResponseEntity<?> addAnswerComment(@RequestBody AddCommentForm acf, @CurrentUser User user,
+            @PathVariable("id") Long id) {
+        Answer answer = itemService.findAnswerById(id, false);
+        if (answer == null)
+            return ResponseEntity.notFound().build();
+
+        String content = acf.getContent();
+        if (content == null || content.trim().isEmpty())
+            return ResponseEntity.badRequest().body(new FailureMessageResult("评论内容不能为空"));
+
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(new NewEntityIdResult(interactionService.addComment(answer, user, content)));
     }
 
     @DeleteMapping("/comments/{id}")
