@@ -11,6 +11,12 @@
       </div>
     </div>
 
+    <div class="row">
+      <div class="col-md-12">
+        <question-report-box @deleteQuestion="promptDeleteQuestion" @recoverQuestion="promptRecoverQuestion" @expandContent="expandQuestionContent" />
+      </div>
+    </div>
+
     <!-- Delete Question Modal -->
     <div class="modal fade" id="delete-question-modal" tabindex="-1" role="dialog" aria-labelledby="delete-question-modal-title">
       <div class="modal-dialog modal-sm" role="document">
@@ -131,11 +137,13 @@
 
 <script>
 import QuestionBox from './QuestionBox.vue'
+import QuestionReportBox from './QuestionReportBox.vue'
 
 export default {
   name: 'Questions',
   components: {
-    QuestionBox
+    QuestionBox,
+    QuestionReportBox
   },
   data() {
     return {
