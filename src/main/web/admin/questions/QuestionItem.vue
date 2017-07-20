@@ -11,7 +11,7 @@
   <div class="panel-body">
     <div class="row">
       <div class="col-md-11">
-        <p>{{question.content.substring(0, contentPreviewLength)}}</p>
+        {{question.content.substring(0, contentPreviewLength)}}{{question.content.length > contentPreviewLength ? '…' : ''}}
         <button v-if="question.content.length > contentPreviewLength" type="button" class="btn btn-link btn-xs" @click="expandQuestionContent">展开</button>
       </div>
       <div class="col-md-1">
@@ -56,7 +56,7 @@ export default {
   props: ['question'],
   data() {
     return {
-      contentPreviewLength: 20
+      contentPreviewLength: 200
     }
   },
   methods: {
