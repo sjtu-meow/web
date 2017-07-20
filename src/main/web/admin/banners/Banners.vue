@@ -2,7 +2,7 @@
 <section>
   <section class="content-header">
     <h1>
-      当前吧呢
+      吧呢管理
       <button type="button" class="btn btn-default" data-toggle="modal" data-target="#add-banner-modal">
         <span class="glyphicon glyphicon-plus"/>
       </button>
@@ -10,24 +10,36 @@
   </section>
 
   <section class="content">
-    <transition-group name="list">
-      <template v-for="banner in banners">
-        <moment-banner v-if="banner.itemType === 0" :banner="banner" :key="banner.id"
-          @deleteBanner="promptDeleteBanner" @moveUp="moveUp" @moveDown="moveDown"
-          @expandContent="expandContent"@triggerCoverInputClick="triggerCoverInputClick"/>
-        <article-banner v-if="banner.itemType === 1" :banner="banner" :key="banner.id"
-          @deleteBanner="promptDeleteBanner" @moveUp="moveUp" @moveDown="moveDown"
-          @expandContent="expandContent"@triggerCoverInputClick="triggerCoverInputClick"/>
-        <question-banner v-if="banner.itemType === 2" :banner="banner" :key="banner.id"
-          @deleteBanner="promptDeleteBanner" @moveUp="moveUp" @moveDown="moveDown"
-          @expandContent="expandContent"@triggerCoverInputClick="triggerCoverInputClick"/>
-        <answer-banner v-if="banner.itemType === 3" :banner="banner" :key="banner.id"
-          @deleteBanner="promptDeleteBanner" @moveUp="moveUp" @moveDown="moveDown"
-          @expandContent="expandContent"@triggerCoverInputClick="triggerCoverInputClick"/>
-      </template>
-    </transition-group>
-
-
+    <div class="row">
+      <div class="col-md-12">
+        <div class="box">
+          <div class="box-header">
+            <h3 class="box-title">当前吧呢</h3>
+          </div>
+          <!-- /.box-header -->
+          <div class="box-body">
+            <transition-group name="list">
+              <template v-for="banner in banners">
+                <moment-banner v-if="banner.itemType === 0" :banner="banner" :key="banner.id"
+                  @deleteBanner="promptDeleteBanner" @moveUp="moveUp" @moveDown="moveDown"
+                  @expandContent="expandContent"@triggerCoverInputClick="triggerCoverInputClick"/>
+                <article-banner v-if="banner.itemType === 1" :banner="banner" :key="banner.id"
+                  @deleteBanner="promptDeleteBanner" @moveUp="moveUp" @moveDown="moveDown"
+                  @expandContent="expandContent"@triggerCoverInputClick="triggerCoverInputClick"/>
+                <question-banner v-if="banner.itemType === 2" :banner="banner" :key="banner.id"
+                  @deleteBanner="promptDeleteBanner" @moveUp="moveUp" @moveDown="moveDown"
+                  @expandContent="expandContent"@triggerCoverInputClick="triggerCoverInputClick"/>
+                <answer-banner v-if="banner.itemType === 3" :banner="banner" :key="banner.id"
+                  @deleteBanner="promptDeleteBanner" @moveUp="moveUp" @moveDown="moveDown"
+                  @expandContent="expandContent"@triggerCoverInputClick="triggerCoverInputClick"/>
+              </template>
+            </transition-group>
+          </div>
+          <!-- /.box-body -->
+        </div>
+        <!-- /.box -->
+      </div>
+    </div>
   </section>
 
   <!-- For ajax image upload -->
