@@ -10,11 +10,12 @@
       </div>
     </div>
 
-    <!-- <div class="row">
+    <div class="row">
       <div class="col-md-12">
-        <moment-report-box @deleteMoment="promptDeleteMoment" @recoverMoment="promptRecoverMoment" @expandContent="expandContent" />
+        <moment-report-box @closeReport="closeReport" @openReport="openReport"
+          @deleteMoment="promptDeleteMoment" @recoverMoment="promptRecoverMoment" @expandContent="expandContent" />
       </div>
-    </div> -->
+    </div>
   </section>
 
   <!-- Delete Modal -->
@@ -79,11 +80,13 @@
 
 <script>
 import MomentBox from './MomentBox.vue'
+import MomentReportBox from './MomentReportBox.vue'
 
 export default {
   name: 'Moments',
   components: {
-    MomentBox
+    MomentBox,
+    MomentReportBox
   },
   data() {
     return {
@@ -108,6 +111,14 @@ export default {
     }
   },
   methods: {
+    closeReport(report) {
+      // TODO
+      alert('还没实现呢')
+    },
+    openReport(report) {
+      // TODO
+      alert('还没实现呢')
+    },
     promptDeleteMoment(moment) {
       this.momentToDelete = moment;
       $('#delete-moment-modal').modal('show');
