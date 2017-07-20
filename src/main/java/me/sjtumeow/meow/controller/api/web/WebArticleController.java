@@ -19,33 +19,34 @@ import me.sjtumeow.meow.service.ItemService;
 @RestController
 @RequestMapping("/api/web/articles")
 public class WebArticleController {
-	
-	@Autowired
-    private ItemService itemService;
-	
-	@Autowired
-	private WebAuthUtility webAuthUtility;
-	
-	@PostMapping(consumes = "application/json")
-	ResponseEntity<?> addArticle(HttpSession session, @RequestBody AddArticleForm aaf) {
-		if (!webAuthUtility.checkAuth(session))
-			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new FailureMessageResult("请先登录"));
-		
-		String title = aaf.getTitle();
-		if (title == null || title.trim().isEmpty())
-			return ResponseEntity.badRequest().body(new FailureMessageResult("文章标题不能为空"));
-		
-		String content = aaf.getContent();
-		if (content == null || content.trim().isEmpty())
-			return ResponseEntity.badRequest().body(new FailureMessageResult("文章内容不能为空"));
-		
-		String cover = aaf.getCover();
-		if (cover == null || cover.trim().isEmpty())
-			return ResponseEntity.badRequest().body(new FailureMessageResult("文章缺少封面图"));
 
-		return ResponseEntity.status(HttpStatus.CREATED).body(new NewEntityIdResult(itemService.addArticle(aaf, webAuthUtility.getCurrentUser(session))));
-	}
-	
-	// TODO: Web article editor store/update(?) article
-	
+    @Autowired
+    private ItemService itemService;
+
+    @Autowired
+    private WebAuthUtility webAuthUtility;
+
+    @PostMapping(consumes = "application/json")
+    ResponseEntity<?> addArticle(HttpSession session, @RequestBody AddArticleForm aaf) {
+        if (!webAuthUtility.checkAuth(session))
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new FailureMessageResult("请先登录"));
+
+        String title = aaf.getTitle();
+        if (title == null || title.trim().isEmpty())
+            return ResponseEntity.badRequest().body(new FailureMessageResult("文章标题不能为空"));
+
+        String content = aaf.getContent();
+        if (content == null || content.trim().isEmpty())
+            return ResponseEntity.badRequest().body(new FailureMessageResult("文章内容不能为空"));
+
+        String cover = aaf.getCover();
+        if (cover == null || cover.trim().isEmpty())
+            return ResponseEntity.badRequest().body(new FailureMessageResult("文章缺少封面图"));
+
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(new NewEntityIdResult(itemService.addArticle(aaf, webAuthUtility.getCurrentUser(session))));
+    }
+
+    // TODO: Web article editor store/update(?) article
+
 }

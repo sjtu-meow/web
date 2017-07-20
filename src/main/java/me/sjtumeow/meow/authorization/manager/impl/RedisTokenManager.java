@@ -1,6 +1,5 @@
 package me.sjtumeow.meow.authorization.manager.impl;
 
-
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import me.sjtumeow.meow.authorization.manager.TokenManager;
@@ -13,6 +12,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 
 /**
  * 通过Redis存储和验证token的实现类
+ * 
  * @see me.sjtumeow.meow.authorization.manager.TokenManager
  * @author ScienJus
  * @date 2015/7/31.
@@ -23,7 +23,7 @@ public class RedisTokenManager implements TokenManager {
     private RedisTemplate<Long, String> redis;
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
-	@Autowired
+    @Autowired
     public void setRedis(RedisTemplate redis) {
         this.redis = redis;
         //泛型设置成Long后必须更改对应的序列化方案

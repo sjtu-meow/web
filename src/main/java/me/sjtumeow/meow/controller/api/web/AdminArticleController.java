@@ -20,30 +20,33 @@ import me.sjtumeow.meow.util.StringUtil;
 @RestController
 @RequestMapping("/api/admin/articles")
 public class AdminArticleController {
-	
-	@Autowired
+
+    @Autowired
     private ItemService itemService;
-	
-	@GetMapping
-	Iterable<?> getArticles(@RequestParam(required = false) Integer page, @RequestParam(required = false) Integer size, @RequestParam(required = false) String keyword) {
-		return (!FormatValidator.checkNonNegativeInt(page) || !FormatValidator.checkPositiveInt(size)) ? 
-				itemService.findAllArticles(StringUtil.replaceNull(keyword), true) : itemService.findAllArticlesPageable(page, size, StringUtil.replaceNull(keyword), true);
-	}
-	
-	@GetMapping("/{id}")
-	ResponseEntity<?> getArticle(@PathVariable("id") Long id) {
-		Article article = itemService.findArticleById(id, true);
+
+    @GetMapping
+    Iterable<?> getArticles(@RequestParam(required = false) Integer page, @RequestParam(required = false) Integer size,
+            @RequestParam(required = false) String keyword) {
+        return (!FormatValidator.checkNonNegativeInt(page) || !FormatValidator.checkPositiveInt(size))
+                ? itemService.findAllArticles(StringUtil.replaceNull(keyword), true)
+                : itemService.findAllArticlesPageable(page, size, StringUtil.replaceNull(keyword), true);
+    }
+
+    @GetMapping("/{id}")
+    ResponseEntity<?> getArticle(@PathVariable("id") Long id) {
+        Article article = itemService.findArticleById(id, true);
         return article == null ? ResponseEntity.notFound().build() : ResponseEntity.ok(article);
-	}
-	
-	@PatchMapping("/{id}")
-	ResponseEntity<?> updateArticle(@RequestBody UpdateArticleForm uaf, @PathVariable("id") Long id) {
-		return itemService.updateArticle(id, uaf) ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
-	}
-	
-	@DeleteMapping("/{id}")
-	ResponseEntity<?> deleteArticle(@PathVariable("id") Long id) {
-		return itemService.deleteArticle(id) ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
+    }
+
+    @PatchMapping(path = "/{id}", consumes = "application/json")
+    ResponseEntity<?> updateArticle(@RequestBody UpdateArticleForm uaf, @PathVariable("id") Long id) {
+        return itemService.updateArticle(id, uaf) ? ResponseEntity.noContent().build()
+                : ResponseEntity.notFound().build();
+    }
+
+    @DeleteMapping("/{id}")
+    ResponseEntity<?> deleteArticle(@PathVariable("id") Long id) {
+        return itemService.deleteArticle(id) ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
     }
 
 }

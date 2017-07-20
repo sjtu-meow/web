@@ -13,13 +13,13 @@ import me.sjtumeow.meow.service.BannerService;
 @RestController
 @RequestMapping("/api/banners")
 public class BannerController {
-	
-	@Autowired
+
+    @Autowired
     private BannerService bannerService;
-	
-	@GetMapping
-	List<BannerResult> getBanners() {
-		return bannerService.findAll();
-	}
+
+    @GetMapping
+    List<BannerResult> getBanners() {
+        return bannerService.findAll();
+    }
 
 }

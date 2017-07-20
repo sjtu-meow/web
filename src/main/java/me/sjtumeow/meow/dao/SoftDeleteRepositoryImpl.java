@@ -30,12 +30,14 @@ import org.springframework.util.Assert;
 
 /**
  *
- * @param <T> the class of the entity
- * @param <ID> the ID class of the entity
+ * @param <T>
+ *            the class of the entity
+ * @param <ID>
+ *            the ID class of the entity
  *
  */
 public class SoftDeleteRepositoryImpl<T, ID extends Serializable> extends SimpleJpaRepository<T, ID>
-    implements SoftDeleteRepository<T, ID> {
+        implements SoftDeleteRepository<T, ID> {
 
     private final JpaEntityInformation<T, ?> entityInformation;
     private final EntityManager em;
@@ -87,7 +89,7 @@ public class SoftDeleteRepositoryImpl<T, ID extends Serializable> extends Simple
     @Override
     public T findOneActive(ID id) {
         return super.findOne(
-            Specifications.where(new ByIdSpecification<T, ID>(entityInformation, id)).and(notDeleted()));
+                Specifications.where(new ByIdSpecification<T, ID>(entityInformation, id)).and(notDeleted()));
     }
 
     @Override
@@ -138,7 +140,7 @@ public class SoftDeleteRepositoryImpl<T, ID extends Serializable> extends Simple
 
         if (entity == null)
             throw new EmptyResultDataAccessException(
-                String.format("No %s entity with id %s exists!", entityInformation.getJavaType(), id), 1);
+                    String.format("No %s entity with id %s exists!", entityInformation.getJavaType(), id), 1);
 
         softDelete(entity, localDateTime);
     }
@@ -155,7 +157,7 @@ public class SoftDeleteRepositoryImpl<T, ID extends Serializable> extends Simple
         update.set(DELETED_FIELD, localDateTime);
 
         update.where(
-            cb.equal(root.<ID>get(entityInformation.getIdAttribute().getName()), entityInformation.getId(entity)));
+                cb.equal(root.<ID>get(entityInformation.getIdAttribute().getName()), entityInformation.getId(entity)));
 
         em.createQuery(update).executeUpdate();
     }

@@ -5,10 +5,10 @@ import me.sjtumeow.meow.model.form.UserCredentialsForm;
 import me.sjtumeow.meow.model.result.LoginTokenResult;
 
 public interface AuthService {
-	
-	LoginTokenResult generateUserToken(UserCredentialsForm cred);
-	
-	void deleteUserToken(User user);
-	
-	boolean verifySmsCode(String phone, String code);
+
+    LoginTokenResult generateUserToken(UserCredentialsForm cred);
+
+    void deleteUserToken(User user);
+
+    boolean verifySmsCode(String phone, String code);
 }

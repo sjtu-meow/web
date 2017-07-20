@@ -1,6 +1,8 @@
 package me.sjtumeow.meow.model;
 
+import java.util.ArrayList;
 import java.util.List;
+
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
@@ -28,7 +30,12 @@ public class Moment extends Item {
     }
 
     public List<Media> getMedias() {
-        return medias;
+        List<Media> result = new ArrayList<Media>();
+        for (Media media : medias) {
+            if (!result.contains(media))
+                result.add(media);
+        }
+        return result;
     }
 
     public void setMedias(List<Media> medias) {

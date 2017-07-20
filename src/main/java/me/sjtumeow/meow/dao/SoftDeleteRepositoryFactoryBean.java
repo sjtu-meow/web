@@ -10,12 +10,14 @@ import org.springframework.data.repository.core.RepositoryMetadata;
 import org.springframework.data.repository.core.support.RepositoryFactorySupport;
 
 public class SoftDeleteRepositoryFactoryBean<T extends JpaRepository<S, ID>, S, ID extends Serializable>
-    extends JpaRepositoryFactoryBean<T, S, ID> {
+        extends JpaRepositoryFactoryBean<T, S, ID> {
 
     /**
-     * Creates a new {@link JpaRepositoryFactoryBean} for the given repository interface.
+     * Creates a new {@link JpaRepositoryFactoryBean} for the given repository
+     * interface.
      *
-     * @param repositoryInterface must not be {@literal null}.
+     * @param repositoryInterface
+     *            must not be {@literal null}.
      */
     public SoftDeleteRepositoryFactoryBean(Class<? extends T> repositoryInterface) {
         super(repositoryInterface);

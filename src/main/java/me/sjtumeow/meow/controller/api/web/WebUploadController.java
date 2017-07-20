@@ -16,17 +16,17 @@ import me.sjtumeow.meow.service.UploadService;
 @RestController
 @RequestMapping("/api/web/upload/token")
 public class WebUploadController {
-	
-	@Autowired
+
+    @Autowired
     private UploadService uploadService;
-	
-	@Autowired
-	private WebAuthUtility webAuthUtility;
-	
-	@GetMapping
-	ResponseEntity<?> getUploadToken(HttpSession session) {
-		if (!webAuthUtility.checkAuth(session))
-			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new FailureMessageResult("请先登录"));
-		return ResponseEntity.ok(uploadService.getUploadToken());
-	}
+
+    @Autowired
+    private WebAuthUtility webAuthUtility;
+
+    @GetMapping
+    ResponseEntity<?> getUploadToken(HttpSession session) {
+        if (!webAuthUtility.checkAuth(session))
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new FailureMessageResult("请先登录"));
+        return ResponseEntity.ok(uploadService.getUploadToken());
+    }
 }

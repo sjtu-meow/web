@@ -2,82 +2,70 @@ package me.sjtumeow.meow.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+
+import org.hibernate.annotations.Formula;
+
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
-public class Comment extends BaseEntity {
-    
-	private static final long serialVersionUID = 1L;
+public class Comment extends Item {
 
-	@Id
-    @GeneratedValue
-    @Column(nullable = false)
-    private Long id;
+    private static final long serialVersionUID = 1L;
 
-	@Column(nullable = false)
-    private Long parent;
-    
     @JsonBackReference
     @ManyToOne
     @JoinColumn(nullable = false)
     private Item item;
 
-    @JsonBackReference
-    @ManyToOne(optional = false)
-    private Profile profile;
+    @Formula("item_id")
+    private Long itemId;
+
+    private Integer itemType;
 
     @Column(nullable = false)
     private String content;
-    
+
     public Comment() {
-    	this.parent = 0L;
+        type = Item.ITEM_TYPE_COMMENT;
     }
-    
+
     public Comment(Item item, Profile profile, String content) {
-    	this.item = item;
-    	this.parent = 0L;
-    	this.profile = profile;
-    	this.content = content;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Long getParent() {
-        return parent;
-    }
-
-    public void setParent(Long parent) {
-        this.parent = parent;
-    }
-    
-    public Item getItem() {
-		return item;
-	}
-
-	public void setItem(Item item) {
-		this.item = item;
-	}
-
-    public Profile getProfile() {
-        return profile;
-    }
-
-    public void setProfile(Profile profile) {
+        type = Item.ITEM_TYPE_COMMENT;
+        this.item = item;
+        this.itemType = item.getType();
         this.profile = profile;
+        this.content = content;
+    }
+
+    public Item getItem() {
+        return item;
+    }
+
+    public Long getItemId() {
+        return itemId;
+    }
+
+    public Integer getItemType() {
+        return itemType;
     }
 
     public String getContent() {
         return content;
+    }
+
+    public void setItem(Item item) {
+        this.item = item;
+        this.itemType = item.getType();
+    }
+
+    public void setItemId(Long itemId) {
+        this.itemId = itemId;
+    }
+
+    public void setItemType(Integer itemType) {
+        this.itemType = itemType;
     }
 
     public void setContent(String content) {

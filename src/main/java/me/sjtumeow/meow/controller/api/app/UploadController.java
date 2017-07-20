@@ -12,14 +12,14 @@ import me.sjtumeow.meow.service.UploadService;
 @RestController
 @RequestMapping("/api/upload/token")
 public class UploadController {
-	
-	@Autowired
+
+    @Autowired
     private UploadService uploadService;
-	
-	@GetMapping
-	@Authorization
-	QiniuTokenResult getUploadToken() {
-		return uploadService.getUploadToken();
-	}
-	
+
+    @GetMapping
+    @Authorization
+    QiniuTokenResult getUploadToken() {
+        return uploadService.getUploadToken();
+    }
+
 }

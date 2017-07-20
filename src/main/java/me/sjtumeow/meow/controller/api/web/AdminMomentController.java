@@ -20,29 +20,32 @@ import me.sjtumeow.meow.util.StringUtil;
 @RestController
 @RequestMapping("/api/admin/moments")
 public class AdminMomentController {
-	
-	@Autowired
+
+    @Autowired
     private ItemService itemService;
-	
-	@GetMapping
-	Iterable<?> getMoments(@RequestParam(required = false) Integer page, @RequestParam(required = false) Integer size, @RequestParam(required = false) String keyword) {
-		return (!FormatValidator.checkNonNegativeInt(page) || !FormatValidator.checkPositiveInt(size)) ? 
-				itemService.findAllMoments(StringUtil.replaceNull(keyword), true) : itemService.findAllMomentsPageable(page, size, StringUtil.replaceNull(keyword), true);
-	}
-	
-	@GetMapping("/{id}")
-	ResponseEntity<?> getMoment(@PathVariable("id") Long id) {
-		Moment moment = itemService.findMomentById(id, true);
+
+    @GetMapping
+    Iterable<?> getMoments(@RequestParam(required = false) Integer page, @RequestParam(required = false) Integer size,
+            @RequestParam(required = false) String keyword) {
+        return (!FormatValidator.checkNonNegativeInt(page) || !FormatValidator.checkPositiveInt(size))
+                ? itemService.findAllMoments(StringUtil.replaceNull(keyword), true)
+                : itemService.findAllMomentsPageable(page, size, StringUtil.replaceNull(keyword), true);
+    }
+
+    @GetMapping("/{id}")
+    ResponseEntity<?> getMoment(@PathVariable("id") Long id) {
+        Moment moment = itemService.findMomentById(id, true);
         return moment == null ? ResponseEntity.notFound().build() : ResponseEntity.ok(moment);
-	}
-	
-	@PatchMapping("/{id}")
-	ResponseEntity<?> updateMoment(@RequestBody UpdateMomentForm umf, @PathVariable("id") Long id) {
-		return itemService.updateMoment(id, umf) ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
-	}
-	
-	@DeleteMapping("/{id}")
-	ResponseEntity<?> deleteMoment(@PathVariable("id") Long id) {
+    }
+
+    @PatchMapping(path = "/{id}", consumes = "application/json")
+    ResponseEntity<?> updateMoment(@RequestBody UpdateMomentForm umf, @PathVariable("id") Long id) {
+        return itemService.updateMoment(id, umf) ? ResponseEntity.noContent().build()
+                : ResponseEntity.notFound().build();
+    }
+
+    @DeleteMapping("/{id}")
+    ResponseEntity<?> deleteMoment(@PathVariable("id") Long id) {
         return itemService.deleteMoment(id) ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
     }
 

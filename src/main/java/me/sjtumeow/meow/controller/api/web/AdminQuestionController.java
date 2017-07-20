@@ -20,30 +20,33 @@ import me.sjtumeow.meow.util.StringUtil;
 @RestController
 @RequestMapping("/api/admin/questions")
 public class AdminQuestionController {
-	
-	@Autowired
+
+    @Autowired
     private ItemService itemService;
-	
-	@GetMapping
-	Iterable<?> getQuestions(@RequestParam(required = false) Integer page, @RequestParam(required = false) Integer size, @RequestParam(required = false) String keyword) {
-		return (!FormatValidator.checkNonNegativeInt(page) || !FormatValidator.checkPositiveInt(size)) ? 
-				itemService.findAllQuestions(StringUtil.replaceNull(keyword), true) : itemService.findAllQuestionsPageable(page, size, StringUtil.replaceNull(keyword), true);
-	}
-	
-	@GetMapping("/{id}")
-	ResponseEntity<?> getQuestion(@PathVariable("id") Long id) {
-		Question question = itemService.findQuestionById(id, true);
+
+    @GetMapping
+    Iterable<?> getQuestions(@RequestParam(required = false) Integer page, @RequestParam(required = false) Integer size,
+            @RequestParam(required = false) String keyword) {
+        return (!FormatValidator.checkNonNegativeInt(page) || !FormatValidator.checkPositiveInt(size))
+                ? itemService.findAllQuestions(StringUtil.replaceNull(keyword), true)
+                : itemService.findAllQuestionsPageable(page, size, StringUtil.replaceNull(keyword), true);
+    }
+
+    @GetMapping("/{id}")
+    ResponseEntity<?> getQuestion(@PathVariable("id") Long id) {
+        Question question = itemService.findQuestionById(id, true);
         return question == null ? ResponseEntity.notFound().build() : ResponseEntity.ok(question);
-	}
-	
-	@PatchMapping("/{id}")
-	ResponseEntity<?> updateQuestion(@RequestBody UpdateQuestionForm uqf, @PathVariable("id") Long id) {
-		return itemService.updateQuestion(id, uqf) ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
-	}
-	
-	@DeleteMapping("/{id}")
-	ResponseEntity<?> deleteQuestion(@PathVariable("id") Long id) {
-		return itemService.deleteQuestion(id) ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
+    }
+
+    @PatchMapping(path = "/{id}", consumes = "application/json")
+    ResponseEntity<?> updateQuestion(@RequestBody UpdateQuestionForm uqf, @PathVariable("id") Long id) {
+        return itemService.updateQuestion(id, uqf) ? ResponseEntity.noContent().build()
+                : ResponseEntity.notFound().build();
+    }
+
+    @DeleteMapping("/{id}")
+    ResponseEntity<?> deleteQuestion(@PathVariable("id") Long id) {
+        return itemService.deleteQuestion(id) ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
     }
 
 }

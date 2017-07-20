@@ -21,34 +21,34 @@ import me.sjtumeow.meow.service.UserService;
 @RestController
 @RequestMapping("/api/web/auth")
 public class WebAuthController {
-	
-	@Autowired
+
+    @Autowired
     private UserService userService;
-	
-	@Autowired
-	private WebAuthUtility webAuthUtility;
-	
-	@GetMapping
-	LoginStatusResult checkStatus(HttpSession session) {
-		return new LoginStatusResult(webAuthUtility.checkAuth(session));
-	}
-	
-	@PostMapping(consumes = "application/json")
-	ResponseEntity<?> login(HttpSession session, @RequestBody UserCredentialsForm cred) {
-		if (userService.checkPassword(cred)) {
-			if (userService.isBanned(cred.getPhone())) {
-				return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new FailureMessageResult("您的账号已被封禁!"));
-			}
-			webAuthUtility.login(session, userService.findByPhone(cred.getPhone(), false).getId());
-			return ResponseEntity.noContent().build();
-		} else {
-			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new FailureMessageResult("手机号或密码错误"));
-		}
-	}
-	
-	@DeleteMapping
-	ResponseEntity<?> logout(HttpSession session) {
-		webAuthUtility.logout(session);
-		return ResponseEntity.noContent().build();
-	}
+
+    @Autowired
+    private WebAuthUtility webAuthUtility;
+
+    @GetMapping
+    LoginStatusResult checkStatus(HttpSession session) {
+        return new LoginStatusResult(webAuthUtility.checkAuth(session));
+    }
+
+    @PostMapping(consumes = "application/json")
+    ResponseEntity<?> login(HttpSession session, @RequestBody UserCredentialsForm cred) {
+        if (userService.checkPassword(cred)) {
+            if (userService.isBanned(cred.getPhone())) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new FailureMessageResult("您的账号已被封禁!"));
+            }
+            webAuthUtility.login(session, userService.findByPhone(cred.getPhone(), false).getId());
+            return ResponseEntity.noContent().build();
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new FailureMessageResult("手机号或密码错误"));
+        }
+    }
+
+    @DeleteMapping
+    ResponseEntity<?> logout(HttpSession session) {
+        webAuthUtility.logout(session);
+        return ResponseEntity.noContent().build();
+    }
 }

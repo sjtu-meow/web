@@ -10,7 +10,7 @@ import javax.persistence.OneToOne;
 
 @Entity
 public class Profile extends BaseEntity {
-    
+
     private static final long serialVersionUID = 1L;
 
     String nickname, bio, avatar;
@@ -23,14 +23,14 @@ public class Profile extends BaseEntity {
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     @JsonBackReference
     private User user;
-    
-    public Long getId() {
-		return id;
-	}
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public User getUser() {
         return user;

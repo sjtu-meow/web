@@ -13,15 +13,15 @@ import me.sjtumeow.meow.service.ItemService;
 @RestController
 @RequestMapping("/api/search")
 public class SearchController {
-	
-	@Autowired
+
+    @Autowired
     private ItemService itemService;
-	
-	@GetMapping
-	ResponseEntity<?> search(@RequestParam(required = false) String keyword) {
-		if (keyword == null || keyword.trim().isEmpty())
-			return ResponseEntity.badRequest().body(new FailureMessageResult("搜索关键词不能为空"));
-		
-		return ResponseEntity.ok(itemService.comprehensiveSearch(keyword));
-	}
+
+    @GetMapping
+    ResponseEntity<?> search(@RequestParam(required = false) String keyword) {
+        if (keyword == null || keyword.trim().isEmpty())
+            return ResponseEntity.badRequest().body(new FailureMessageResult("搜索关键词不能为空"));
+
+        return ResponseEntity.ok(itemService.comprehensiveSearch(keyword));
+    }
 }

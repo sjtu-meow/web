@@ -11,6 +11,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 
 /**
  * 配置类，增加自定义拦截器和解析器
+ * 
  * @see me.sjtumeow.meow.authorization.resolvers.CurrentUserMethodArgumentResolver
  * @see me.sjtumeow.meow.authorization.interceptor.AuthorizationInterceptor
  */

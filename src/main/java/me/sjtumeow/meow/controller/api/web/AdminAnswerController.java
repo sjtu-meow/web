@@ -17,23 +17,24 @@ import me.sjtumeow.meow.service.ItemService;
 @RestController
 @RequestMapping("/api/admin/answers")
 public class AdminAnswerController {
-	
-	@Autowired
+
+    @Autowired
     private ItemService itemService;
-	
-	@GetMapping("/{id}")
-	ResponseEntity<?> getAnswer(@PathVariable("id") Long id) {
-		Answer answer = itemService.findAnswerById(id, true);
+
+    @GetMapping("/{id}")
+    ResponseEntity<?> getAnswer(@PathVariable("id") Long id) {
+        Answer answer = itemService.findAnswerById(id, true);
         return answer == null ? ResponseEntity.notFound().build() : ResponseEntity.ok(answer);
-	}
-	
-	@PatchMapping("/{id}")
-	ResponseEntity<?> updateAnswer(@RequestBody UpdateAnswerForm uaf, @PathVariable("id") Long id) {
-		return itemService.updateAnswer(id, uaf) ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
-	}
-	
-	@DeleteMapping("/{id}")
-	ResponseEntity<?> deleteAnswer(@PathVariable("id") Long id) {
-		return itemService.deleteAnswer(id) ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
+    }
+
+    @PatchMapping(path = "/{id}", consumes = "application/json")
+    ResponseEntity<?> updateAnswer(@RequestBody UpdateAnswerForm uaf, @PathVariable("id") Long id) {
+        return itemService.updateAnswer(id, uaf) ? ResponseEntity.noContent().build()
+                : ResponseEntity.notFound().build();
+    }
+
+    @DeleteMapping("/{id}")
+    ResponseEntity<?> deleteAnswer(@PathVariable("id") Long id) {
+        return itemService.deleteAnswer(id) ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
     }
 }
