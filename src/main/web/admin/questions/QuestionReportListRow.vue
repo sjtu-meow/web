@@ -1,33 +1,27 @@
 <template>
 <tr>
-  <td>
+  <td :class="{'text-muted': report.closed}">
     {{report.id}} {{report.closed ? '（已关闭）' : ''}}
   </td>
-  <td>{{report.profile.nickname}}（{{report.profile.id}}）</td>
-  <td>{{report.reason}}</td>
-  <td>{{report.itemId}}</td>
-  <td>
+  <td :class="{'text-muted': report.closed}">{{report.profile.nickname}}（{{report.profile.id}}）</td>
+  <td :class="{'text-muted': report.closed}">{{report.reason}}</td>
+  <td :class="{'text-muted': report.closed}">{{report.itemId}}</td>
+  <td :class="{'text-muted': report.closed}">
     {{question.content.substring(0, contentPreviewLength)}}{{question.content.length > contentPreviewLength ? '…' : ''}}
     <button v-if="question.content.length > contentPreviewLength" type="button" class="btn btn-link btn-xs" @click="expandContent">展开</button>
   </td>
   <td>
-    <template v-for="media in question.medias">
-      <img v-if="media.type === 'Image'" class="img-rounded" :src="media.url" style="height: 60px; padding-bottom: 4px">
-      <video v-if="media.type === 'Video'" :src="media.url" style="height: 60px; padding-bottom: 4px" controls/>
-    </template>
-  </td>
-  <td>
     <button v-if="question.deleted" type="button" class="btn btn-primary btn-xs" @click="recoverQuestion">
-      <span class="glyphicon glyphicon-ok"/>
+      恢复问题
     </button>
     <button v-else type="button" class="btn btn-danger btn-xs" @click="deleteQuestion">
-      <span class="glyphicon glyphicon-remove"/>
+      删除问题
     </button>
-    <button v-if="report.closed" type="button" class="btn btn-primary btn-xs" @click="openReport">
-      <span class="glyphicon glyphicon-ok"/>
+    <button v-if="report.closed" type="button" class="btn btn-danger btn-xs" @click="openReport">
+      重启举报
     </button>
-    <button v-else type="button" class="btn btn-danger btn-xs" @click="closeReport">
-      <span class="glyphicon glyphicon-remove"/>
+    <button v-else type="button" class="btn btn-primary btn-xs" @click="closeReport">
+      结束举报
     </button>
   </td>
 </tr>

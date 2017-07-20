@@ -19,8 +19,8 @@
         <tr>
           <th>#</th>
           <th>用户</th>
-          <th>点滴文字预览</th>
-          <th>媒体</th>
+          <th>点滴预览</th>
+          <th>点滴媒体</th>
           <th></th>
         </tr>
       </thead>

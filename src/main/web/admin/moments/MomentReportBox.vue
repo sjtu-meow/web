@@ -21,10 +21,9 @@
           <th>举报人</th>
           <th>举报信息</th>
           <th>点滴ID</th>
-          <th>点滴文字预览</th>
-          <th>媒体</th>
-          <th>点滴</th>
-          <th>举报</th>
+          <th>点滴预览</th>
+          <th>点滴媒体</th>
+          <th></th>
         </tr>
       </thead>
       <tbody>
@@ -62,7 +61,7 @@ export default {
           id: 3
         },
         reason: '吓死我了这个点滴',
-        itemId: 5,
+        itemId: 1,
         itemType: 0,
         closed: false
       }],

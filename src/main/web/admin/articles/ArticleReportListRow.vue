@@ -1,27 +1,27 @@
 <template>
 <tr>
-  <td>
+  <td :class="{'text-muted': report.closed}">
     {{report.id}} {{report.closed ? '（已关闭）' : ''}}
   </td>
-  <td>{{report.profile.nickname}}（{{report.profile.id}}）</td>
-  <td>{{report.reason}}</td>
-  <td>{{report.itemId}}</td>
-  <td>
+  <td :class="{'text-muted': report.closed}">{{report.profile.nickname}}（{{report.profile.id}}）</td>
+  <td :class="{'text-muted': report.closed}">{{report.reason}}</td>
+  <td :class="{'text-muted': report.closed}">{{report.itemId}}</td>
+  <td :class="{'text-muted': report.closed}">
     {{plainContent.substring(0, contentPreviewLength)}}{{plainContent.length > contentPreviewLength ? '…' : ''}}
     <button type="button" class="btn btn-link btn-xs" @click="expandContent">查看详情</button>
   </td>
   <td>
     <button v-if="article.deleted" type="button" class="btn btn-primary btn-xs" @click="recoverArticle">
-      <span class="glyphicon glyphicon-ok"/> 恢复文章
+      恢复文章
     </button>
     <button v-else type="button" class="btn btn-danger btn-xs" @click="deleteArticle">
-      <span class="glyphicon glyphicon-remove"/> 删除文章
+      删除文章
     </button>
-    <button v-if="report.closed" type="button" class="btn btn-primary btn-xs" @click="openReport">
-      <span class="glyphicon glyphicon-ok"/> 开启举报
+    <button v-if="report.closed" type="button" class="btn btn-danger btn-xs" @click="openReport">
+      重启举报
     </button>
-    <button v-else type="button" class="btn btn-danger btn-xs" @click="closeReport">
-      <span class="glyphicon glyphicon-remove"/> 关闭举报
+    <button v-else type="button" class="btn btn-primary btn-xs" @click="closeReport">
+      结束举报
     </button>
   </td>
 </tr>

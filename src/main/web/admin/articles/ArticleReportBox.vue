@@ -60,7 +60,7 @@ export default {
           id: 3
         },
         reason: '吓死我了这个文章',
-        itemId: 6,
+        itemId: 4,
         itemType: 1,
         closed: false
       }],
