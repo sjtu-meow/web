@@ -87,8 +87,8 @@ public class MomentController {
         Moment moment = itemService.findMomentById(id, false);
         if (moment == null)
             return ResponseEntity.notFound().build();
-        interactionService.doLike(user, moment);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+        return interactionService.doLike(user, moment) ? ResponseEntity.status(HttpStatus.CREATED).build()
+                : ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/{id}/like")
@@ -115,8 +115,8 @@ public class MomentController {
         Moment moment = itemService.findMomentById(id, false);
         if (moment == null)
             return ResponseEntity.notFound().build();
-        interactionService.doFavorite(user, moment);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+        return interactionService.doFavorite(user, moment) ? ResponseEntity.status(HttpStatus.CREATED).build()
+                : ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/{id}/favorite")

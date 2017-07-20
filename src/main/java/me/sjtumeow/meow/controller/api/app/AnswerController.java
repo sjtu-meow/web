@@ -91,8 +91,8 @@ public class AnswerController {
         Answer answer = itemService.findAnswerById(id, false);
         if (answer == null)
             return ResponseEntity.notFound().build();
-        interactionService.doLike(user, answer);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+        return interactionService.doLike(user, answer) ? ResponseEntity.status(HttpStatus.CREATED).build()
+                : ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/answers/{id}/like")
@@ -119,8 +119,8 @@ public class AnswerController {
         Answer answer = itemService.findAnswerById(id, false);
         if (answer == null)
             return ResponseEntity.notFound().build();
-        interactionService.doFavorite(user, answer);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+        return interactionService.doFavorite(user, answer) ? ResponseEntity.status(HttpStatus.CREATED).build()
+                : ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/answers/{id}/favorite")

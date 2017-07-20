@@ -6,6 +6,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
@@ -18,15 +19,14 @@ public class Comment extends BaseEntity {
     @Column(nullable = false)
     private Long id;
 
-    @Column(nullable = false)
-    private Long parent;
+    //@Column(nullable = false)
+    //private Long parent; // Maybe change to Comment, self OneToMany
 
     @JsonBackReference
     @ManyToOne
     @JoinColumn(nullable = false)
     private Item item;
 
-    @JsonBackReference
     @ManyToOne(optional = false)
     private Profile profile;
 
@@ -34,12 +34,12 @@ public class Comment extends BaseEntity {
     private String content;
 
     public Comment() {
-        this.parent = 0L;
+        //this.parent = 0L;
     }
 
     public Comment(Item item, Profile profile, String content) {
         this.item = item;
-        this.parent = 0L;
+        //this.parent = 0L;
         this.profile = profile;
         this.content = content;
     }
@@ -52,13 +52,13 @@ public class Comment extends BaseEntity {
         this.id = id;
     }
 
-    public Long getParent() {
+    /*public Long getParent() {
         return parent;
     }
-
+    
     public void setParent(Long parent) {
         this.parent = parent;
-    }
+    }*/
 
     public Item getItem() {
         return item;

@@ -98,8 +98,8 @@ public class ArticleController {
         Article article = itemService.findArticleById(id, false);
         if (article == null)
             return ResponseEntity.notFound().build();
-        interactionService.doLike(user, article);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+        return interactionService.doLike(user, article) ? ResponseEntity.status(HttpStatus.CREATED).build()
+                : ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/{id}/like")
@@ -126,8 +126,8 @@ public class ArticleController {
         Article article = itemService.findArticleById(id, false);
         if (article == null)
             return ResponseEntity.notFound().build();
-        interactionService.doFavorite(user, article);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+        return interactionService.doFavorite(user, article) ? ResponseEntity.status(HttpStatus.CREATED).build()
+                : ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/{id}/favorite")

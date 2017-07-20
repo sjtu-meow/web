@@ -55,10 +55,11 @@ public class InteractionServiceImpl implements InteractionService {
     }
 
     @Transactional
-    public void doLike(User user, Item item) {
+    public boolean doLike(User user, Item item) {
         if (checkLike(user, item))
-            return;
+            return false;
         likeRepository.save(new Like(user, item));
+        return true;
     }
 
     @Transactional
@@ -112,10 +113,11 @@ public class InteractionServiceImpl implements InteractionService {
     }
 
     @Transactional
-    public void doFavorite(User user, Item item) {
+    public boolean doFavorite(User user, Item item) {
         if (checkFavorite(user, item))
-            return;
+            return false;
         favoriteRepository.save(new Favorite(user, item));
+        return true;
     }
 
     @Transactional
@@ -155,10 +157,11 @@ public class InteractionServiceImpl implements InteractionService {
     }
 
     @Transactional
-    public void doFollowQuestion(User user, Question question) {
+    public boolean doFollowQuestion(User user, Question question) {
         if (checkFollowQuestion(user, question))
-            return;
+            return false;
         followQuestionRepository.save(new FollowQuestion(user, question));
+        return true;
     }
 
     @Transactional
@@ -196,10 +199,11 @@ public class InteractionServiceImpl implements InteractionService {
     }
 
     @Transactional
-    public void doFollowUser(User follower, User followee) {
+    public boolean doFollowUser(User follower, User followee) {
         if (checkFollowUser(follower, followee))
-            return;
+            return false;
         followUserRepository.save(new FollowUser(follower, followee));
+        return true;
     }
 
     @Transactional

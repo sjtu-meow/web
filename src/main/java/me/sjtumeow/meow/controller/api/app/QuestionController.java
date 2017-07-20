@@ -18,7 +18,6 @@ import me.sjtumeow.meow.model.Question;
 import me.sjtumeow.meow.model.User;
 import me.sjtumeow.meow.model.form.AddQuestionForm;
 import me.sjtumeow.meow.model.result.FailureMessageResult;
-import me.sjtumeow.meow.model.result.FavoriteStatusResult;
 import me.sjtumeow.meow.model.result.FollowStatusResult;
 import me.sjtumeow.meow.model.result.NewEntityIdResult;
 import me.sjtumeow.meow.model.result.QuestionDetailResult;
@@ -75,34 +74,6 @@ public class QuestionController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/{id}/favorite")
-    @Authorization
-    ResponseEntity<?> checkFavoriteQuestion(@CurrentUser User user, @PathVariable("id") Long id) {
-        Question question = itemService.findQuestionById(id, false);
-        return question == null ? ResponseEntity.notFound().build()
-                : ResponseEntity.ok(new FavoriteStatusResult(interactionService.checkFavorite(user, question)));
-    }
-
-    @PostMapping("/{id}/favorite")
-    @Authorization
-    ResponseEntity<?> doFavoriteQuestion(@CurrentUser User user, @PathVariable("id") Long id) {
-        Question question = itemService.findQuestionById(id, false);
-        if (question == null)
-            return ResponseEntity.notFound().build();
-        interactionService.doFavorite(user, question);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
-    }
-
-    @DeleteMapping("/{id}/favorite")
-    @Authorization
-    ResponseEntity<?> cancelFavoriteQuestion(@CurrentUser User user, @PathVariable("id") Long id) {
-        Question question = itemService.findQuestionById(id, false);
-        if (question == null)
-            return ResponseEntity.notFound().build();
-        interactionService.cancelFavorite(user, question);
-        return ResponseEntity.noContent().build();
-    }
-
     @GetMapping("/{id}/follow")
     @Authorization
     ResponseEntity<?> checkFollowQuestion(@CurrentUser User user, @PathVariable("id") Long id) {
@@ -117,8 +88,8 @@ public class QuestionController {
         Question question = itemService.findQuestionById(id, false);
         if (question == null)
             return ResponseEntity.notFound().build();
-        interactionService.doFollowQuestion(user, question);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+        return interactionService.doFollowQuestion(user, question) ? ResponseEntity.status(HttpStatus.CREATED).build()
+                : ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/{id}/follow")
