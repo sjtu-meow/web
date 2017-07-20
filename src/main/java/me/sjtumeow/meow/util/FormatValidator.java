@@ -24,7 +24,7 @@ public class FormatValidator {
         return s != null && s.matches("^\\d{6}$");
     }
 
-    public static boolean checkItemType(Integer x) {
+    public static boolean checkBannerItemType(Integer x) {
         return x != null && (x == Item.ITEM_TYPE_MOMENT || x == Item.ITEM_TYPE_ARTICLE || x == Item.ITEM_TYPE_QUESTION
                 || x == Item.ITEM_TYPE_ANSWER);
     }

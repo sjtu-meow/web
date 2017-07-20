@@ -1,5 +1,16 @@
 package me.sjtumeow.meow.service.impl;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import me.sjtumeow.meow.dao.AnswerRepository;
 import me.sjtumeow.meow.dao.ArticleRepository;
 import me.sjtumeow.meow.dao.BannerRepository;
@@ -11,17 +22,6 @@ import me.sjtumeow.meow.model.form.UpdateBannerForm;
 import me.sjtumeow.meow.model.result.BannerResult;
 import me.sjtumeow.meow.service.BannerService;
 import me.sjtumeow.meow.util.FormatValidator;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.Sort.Direction;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class BannerServiceImpl implements BannerService {
@@ -67,7 +67,7 @@ public class BannerServiceImpl implements BannerService {
                 return "缺少图片";
             if (ubf.getItemId() == null)
                 return "缺少项目编号";
-            if (!FormatValidator.checkItemType(ubf.getItemType()))
+            if (!FormatValidator.checkBannerItemType(ubf.getItemType()))
                 return "非法的项目类型";
 
             switch (ubf.getItemType()) {
@@ -86,8 +86,6 @@ public class BannerServiceImpl implements BannerService {
                 case Item.ITEM_TYPE_ANSWER:
                     if (!answerRepository.existsActive(ubf.getItemId()))
                         return "编号为 " + ubf.getItemId() + " 的回答不存在";
-                    break;
-                default:
                     break;
             }
         }

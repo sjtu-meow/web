@@ -11,8 +11,8 @@ import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 
 import org.hibernate.annotations.Formula;
 
@@ -28,6 +28,7 @@ public abstract class Item extends BaseEntity {
     public static final int ITEM_TYPE_ARTICLE = 1;
     public static final int ITEM_TYPE_QUESTION = 2;
     public static final int ITEM_TYPE_ANSWER = 3;
+    public static final int ITEM_TYPE_COMMENT = 4;
 
     @Id
     @GeneratedValue(strategy = GenerationType.TABLE)
@@ -37,8 +38,8 @@ public abstract class Item extends BaseEntity {
     @Column(nullable = false)
     Integer type;
 
-    @OneToOne
-    @JoinColumn
+    @ManyToOne
+    @JoinColumn(nullable = false)
     Profile profile;
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "item")
