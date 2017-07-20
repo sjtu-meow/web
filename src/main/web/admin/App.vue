@@ -21,6 +21,7 @@ import Articles from './articles/Articles.vue'
 import Questions from './questions/Questions.vue'
 import Banners from './banners/Banners.vue'
 import Pushes from './pushes/Pushes.vue'
+import Comments from './comments/Comments.vue'
 
 Vue.use(VueRouter);
 Vue.use(VueResource);
@@ -50,6 +51,10 @@ const router = new VueRouter({
     {
       path: '/pushes',
       component: Pushes,
+    },
+    {
+      path: '/comments',
+      component: Comments
     }
   ]
 })
