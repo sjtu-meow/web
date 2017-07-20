@@ -67,7 +67,7 @@ export default {
       .then(function(response) {
         this.moment = response.body;
       }, function(response) {
-        alert(response.body.message || '获取问题失败');
+        alert(response.body.message || '获取点滴失败');
       })
   },
   methods: {
