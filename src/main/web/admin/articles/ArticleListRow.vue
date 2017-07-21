@@ -1,9 +1,9 @@
 <template>
 <tr>
-  <td>{{article.id}}</td>
-  <td>{{article.profile.nickname}}（{{article.profile.id}}）</td>
-  <td>{{article.title}}</td>
-  <td>
+  <td :class="{'text-muted': article.deleted}">{{article.id}} {{article.deleted ? '（已删）' : ''}}</td>
+  <td :class="{'text-muted': article.deleted}">{{article.profile.nickname}}（{{article.profile.id}}）</td>
+  <td :class="{'text-muted': article.deleted}">{{article.title}}</td>
+  <td :class="{'text-muted': article.deleted}">
     {{plainContent.substring(0, contentPreviewLength)}}{{plainContent.length > contentPreviewLength ? '…' : ''}}
     <button type="button" class="btn btn-link btn-xs" @click="expandContent">查看详情</button>
   </td>

@@ -110,22 +110,7 @@ export default {
   },
   data() {
     return {
-      pushes: [{
-        id: 1,
-        text: '没想到小小猫咪竟然蕴含着无穷寿命',
-        itemType: 0,
-        itemId: 23
-      }, {
-        id: 2,
-        text: '没想到中中猫咪竟然蕴含着无穷寿命',
-        itemType: 0,
-        itemId: 23
-      }, {
-        id: 3,
-        text: '没想到大大猫咪竟然蕴含着无穷寿命',
-        itemType: 0,
-        itemId: 23
-      }],
+      pushes: [],
       pagination: {
         currentPage: 0,
         totalPages: 1
