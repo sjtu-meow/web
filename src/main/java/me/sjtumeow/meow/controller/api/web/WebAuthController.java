@@ -30,7 +30,7 @@ public class WebAuthController {
 
     @GetMapping
     LoginStatusResult checkStatus(HttpSession session) {
-        return new LoginStatusResult(webAuthUtility.checkAuth(session));
+        return new LoginStatusResult(webAuthUtility.checkAuth(session), webAuthUtility.checkAdmin(session));
     }
 
     @PostMapping(consumes = "application/json")
