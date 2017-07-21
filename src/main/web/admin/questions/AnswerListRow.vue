@@ -1,8 +1,8 @@
 <template>
 <tr>
-  <td>{{answer.id}}{{answer.deleted ? '（已删）' : ''}}</td>
-  <td>{{answer.profile.nickname}}（{{answer.profile.id}}）</td>
-  <td>
+  <td :class="{'text-muted': answer.deleted}">{{answer.id}}{{answer.deleted ? '（已删）' : ''}}</td>
+  <td :class="{'text-muted': answer.deleted}">{{answer.profile.nickname}}（{{answer.profile.id}}）</td>
+  <td :class="{'text-muted': answer.deleted}">
     {{plainContent.substring(0, contentPreviewLength)}}{{plainContent.length > contentPreviewLength ? '…' : ''}}
     <button type="button" class="btn btn-link btn-xs" @click="expandAnswerContent">查看详情</button>
   </td>

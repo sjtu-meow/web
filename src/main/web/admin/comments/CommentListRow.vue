@@ -1,15 +1,15 @@
 <template>
 <tr>
-  <td>
+  <td :class="{'text-muted': comment.deleted}">
     {{comment.id}} {{comment.deleted ? '（已删）' : ''}}
   </td>
-  <td>{{comment.profile.nickname}}（{{comment.profile.id}}）</td>
-  <td>
+  <td :class="{'text-muted': comment.deleted}">{{comment.profile.nickname}}（{{comment.profile.id}}）</td>
+  <td :class="{'text-muted': comment.deleted}">
     {{comment.content.substring(0, contentPreviewLength)}}{{comment.content.length > contentPreviewLength ? '…' : ''}}
     <button v-if="comment.content.length > contentPreviewLength" type="button" class="btn btn-link btn-xs" @click="expandCommentContent">展开</button>
   </td>
-  <td>{{itemTextualType}}</td>
-  <td>{{comment.itemId}}</td>
+  <td :class="{'text-muted': comment.deleted}">{{itemTextualType}}</td>
+  <td :class="{'text-muted': comment.deleted}">{{comment.itemId}}</td>
   <td>
     <button v-if="comment.deleted" type="button" class="btn btn-primary btn-xs" @click="recoverComment">
       <span class="glyphicon glyphicon-ok"/>
@@ -27,7 +27,7 @@ export default {
   props: ['comment'],
   data() {
     return {
-      contentPreviewLength: 2,
+      contentPreviewLength: 50,
       item: {
         content: ''
       }

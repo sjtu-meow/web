@@ -321,9 +321,9 @@ export default {
     },
     setAdminUser() {
       this.$http.patch('/api/admin/users/' + this.userToSetAdmin.id, {
-        admin: true
+        isAdmin: true
       }).then(function(response) {
-        this.userToSetAdmin.admin = true;
+        this.userToSetAdmin.isAdmin = true;
         $('#set-admin-user-modal').modal('hide');
       }, function(response) {
         alert(response.body.message || '修改失败')
@@ -335,9 +335,9 @@ export default {
     },
     unsetAdminUser() {
       this.$http.patch('/api/admin/users/' + this.userToUnsetAdmin.id, {
-        admin: false
+        isAdmin: false
       }).then(function(response) {
-        this.userToUnsetAdmin.admin = false;
+        this.userToUnsetAdmin.isAdmin = false;
         $('#unset-admin-user-modal').modal('hide');
       }, function(response) {
         alert(response.body.message || '修改失败')

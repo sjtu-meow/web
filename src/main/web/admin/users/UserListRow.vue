@@ -1,12 +1,12 @@
 <template>
 <tr>
   <!-- TODO: update attribute name -->
-  <td>{{user.id}} {{user.admin ? '🤓' : ''}} {{user.deleted ? '（已删）' : ''}}</td>
+  <td :class="{'text-muted': user.deleted}">{{user.id}} {{user.isAdmin ? '🤓' : ''}} {{user.deleted ? '（已删）' : ''}}</td>
   <td>
     <img class="img-circle" :src="user.profile.avatar ? user.profile.avatar : 'https://pbs.twimg.com/profile_images/625633822235693056/lNGUneLX.jpg'"
       height="40px" />
   </td>
-  <td>
+  <td :class="{'text-muted': user.deleted}">
     <template v-if="editingNickname">
       <div class="input-group input-group-sm">
         <input type="text" class="form-control" v-model="newNickname">
@@ -24,7 +24,7 @@
       </button>
     </template>
   </td>
-  <td>
+  <td :class="{'text-muted': user.deleted}">
     <template v-if="editingBio">
       <div class="input-group input-group-sm">
         <input type="text" class="form-control" v-model="newBio">
@@ -42,10 +42,10 @@
       </button>
     </template>
   </td>
-  <td>
+  <td :class="{'text-muted': user.deleted}">
     {{user.phone}}
   </td>
-  <td>
+  <td :class="{'text-muted': user.deleted}">
     <template v-if="editingPassword">
       <div class="input-group input-group-sm">
         <input type="password" class="form-control" v-model="newPassword">
@@ -64,7 +64,7 @@
     </template>
   </td>
   <td>
-    <button v-if="user.admin" type="button" class="btn btn-default btn-xs" @click="unsetAdmin">
+    <button v-if="user.isAdmin" type="button" class="btn btn-default btn-xs" @click="unsetAdmin">
       <span class="glyphicon glyphicon-eye-close"/>
     </button>
     <button v-else type="button" class="btn btn-default btn-xs" @click="setAdmin">

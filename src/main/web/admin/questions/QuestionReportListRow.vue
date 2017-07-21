@@ -1,7 +1,7 @@
 <template>
 <tr>
   <td :class="{'text-muted': report.closed}">
-    {{report.id}} {{report.closed ? '（已关闭）' : ''}}
+    {{report.id}} {{report.closed ? '（已结束）' : ''}}
   </td>
   <td :class="{'text-muted': report.closed}">{{report.profile.nickname}}（{{report.profile.id}}）</td>
   <td :class="{'text-muted': report.closed}">{{report.reason}}</td>

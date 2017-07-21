@@ -1,7 +1,7 @@
 <template>
 <div class="panel panel-default">
   <div class="panel-heading">
-    <h3 class="panel-title">
+    <h3 class="panel-title"  :class="{'text-muted': question.deleted}">
       #{{question.id}}{{question.deleted ? '（已删）' : ''}} {{question.title}}
       <small>来自 {{question.profile.nickname}}（{{question.profile.id}}）</small>
     </h3>
@@ -10,7 +10,7 @@
   <!-- Default panel contents -->
   <div class="panel-body">
     <div class="row">
-      <div class="col-md-11">
+      <div class="col-md-11"  :class="{'text-muted': question.deleted}">
         {{question.content.substring(0, contentPreviewLength)}}{{question.content.length > contentPreviewLength ? '…' : ''}}
         <button v-if="question.content.length > contentPreviewLength" type="button" class="btn btn-link btn-xs" @click="expandQuestionContent">展开</button>
       </div>
@@ -30,10 +30,10 @@
     <table class="table table-hover">
       <thead>
         <tr>
-          <th class="col-md-1">#</th>
-          <th class="col-md-2">用户</th>
-          <th class="col-md-8">回答文字预览</th>
-          <th class="col-md-1"></th>
+          <th class="col-md-1" :class="{'text-muted': question.deleted}">#</th>
+          <th class="col-md-2" :class="{'text-muted': question.deleted}">用户</th>
+          <th class="col-md-8" :class="{'text-muted': question.deleted}">回答文字预览</th>
+          <th class="col-md-1" :class="{'text-muted': question.deleted}"></th>
         </tr>
       </thead>
       <tbody>

@@ -64,8 +64,6 @@
                   <img :src="newBanner.image">
                 </a>
               </div>
-            </form>
-            <form class="col-md-6">
               <div class="form-group">
                 <label class="control-label" for="new-banner-type">类型</label>
                 <select class="form-control" id="new-banner-type" v-model="newBanner.itemTextualType" required>
@@ -81,6 +79,11 @@
                 <input type="number" class="form-control" id="new-banner-item-id" v-model="newBanner.itemId" required/>
                 <span class="help-block"></span>
               </div>
+            </form>
+            <form class="col-md-6">
+              <label>内容预览</label>
+              <h4>{{previewTitle}}</h4>
+              <p v-for="line in previewContent.split('\n')">{{line}}</p>
             </form>
           </div>
           <p v-if="banners.length >= bannerSizeBound" class="text-danger">当前吧呢数量为 <b>{{banners.length}}</b>，系统仅保留前 <b>{{bannerSizeBound}}</b> 个吧呢</p>
@@ -150,12 +153,116 @@ export default {
       newBanner: {
         itemTextualType: '',
         itemId: '',
-        image: 'http://lorempixel.com/400/200'
+        image: 'http://lorempixel.com/400/200',
+        valid: false
       },
+      previewTitle: '',
+      previewContent: '',
       bannerToUpdateImage: {},
       bannerToDelete: {},
       promptForDeletion: '',
       bannerSizeBound: 5
+    }
+  },
+  watch: {
+    newBanner: {
+      deep: true,
+      handler(newVal) {
+        if (newVal.itemTextualType === '' || newVal.itemId === '') {
+          return;
+        }
+
+        switch (newVal.itemTextualType) {
+          case '点滴':
+            this.$http.get('/api/admin/moments/' + newVal.itemId).then(
+              function(response) {
+                if (response.body.deleted) {
+                  this.previewTitle = '点滴已被删除';
+                  this.newBanner.valid = false;
+                } else {
+                  this.previewTitle = '来自' + response.body.profile.nickname + '的点滴';
+                  this.previewContent = response.body.content;
+                  this.newBanner.valid = true;
+                }
+              },
+              function(response) {
+                this.previewTitle = response.body.message || '获取点滴失败';
+                this.previewContent = '';
+                this.newBanner.valid = false;
+              }
+            )
+            break;
+          case '文章':
+            this.$http.get('/api/admin/articles/' + newVal.itemId).then(
+              function(response) {
+                if (response.body.deleted) {
+                  this.previewTitle = '文章已被删除';
+                  this.newBanner.valid = false;
+                } else {
+                  this.previewTitle = response.body.title;
+                  this.previewContent = $(response.body.content).text();
+                  this.newBanner.valid = true;
+                }
+              },
+              function(response) {
+                this.previewTitle = response.body.message || '获取文章失败';
+                this.previewContent = '';
+                this.newBanner.valid = false;
+              }
+            )
+            break;
+          case '问题':
+            this.$http.get('/api/admin/questions/' + newVal.itemId).then(
+              function(response) {
+                if (response.body.deleted) {
+                  this.previewTitle = '问题已被删除';
+                  this.newBanner.valid = false;
+                } else {
+                  this.previewTitle = response.body.title;
+                  this.previewContent = response.body.content;
+                  this.newBanner.valid = true;
+                }
+              },
+              function(response) {
+                this.previewTitle = response.body.message || '获取问题失败';
+                this.previewContent = '';
+                this.newBanner.valid = false;
+              }
+            )
+            break;
+          case '回答':
+            this.$http.get('/api/admin/answers/' + newVal.itemId).then(
+              function(response) {
+                if (response.body.deleted) {
+                  this.previewTitle = '回答已被删除';
+                  this.newBanner.valid = false;
+                } else {
+                  this.previewTitle = response.body.profile.nickname;
+                  this.previewContent = $(response.body.content).text();
+                  this.$http.get('/api/admin/questions/' + response.body.questionId)
+                    .then(function(response) {
+                      this.previewTitle += '的回答（' + response.body.title + '）';
+                      this.newBanner.valid = true;
+                    }, function(response) {
+                      this.previewTitle = response.body.message || '获取问题失败';
+                      this.previewContent = '';
+                      this.newBanner.valid = false;
+                    });
+                }
+              },
+              function(response) {
+                this.previewTitle = response.body.message || '获取回答失败';
+                this.previewContent = '';
+                this.newBanner.valid = false;
+              }
+            )
+            break;
+          default:
+            this.previewTitle = '类型错误';
+            this.previewContent = '';
+            this.newBanner.valid = false;
+        }
+      }
     }
   },
   created() {
@@ -243,6 +350,10 @@ export default {
         })
     },
     addBanner() {
+      if (!this.newBanner.valid) {
+        return;
+      }
+
       let itemType = 4; // an invalid value
       switch (this.newBanner.itemTextualType) {
         case '点滴':
@@ -271,8 +382,6 @@ export default {
       for (var i = 1; i < this.banners.length; i++) {
         ++this.banners[i].displayOrder;
       }
-
-      // TODO: remove trailing banners
 
       // update to server
       this.updateBanners();

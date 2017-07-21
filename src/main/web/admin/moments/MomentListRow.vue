@@ -1,14 +1,14 @@
 <template>
 <tr>
-  <td>
+  <td :class="{'text-muted': moment.deleted}">
     {{moment.id}} {{moment.deleted ? '（已删）' : ''}}
   </td>
-  <td>{{moment.profile.nickname}}（{{moment.profile.id}}）</td>
-  <td>
+  <td :class="{'text-muted': moment.deleted}">{{moment.profile.nickname}}（{{moment.profile.id}}）</td>
+  <td :class="{'text-muted': moment.deleted}">
     {{moment.content.substring(0, contentPreviewLength)}}{{moment.content.length > contentPreviewLength ? '…' : ''}}
     <button v-if="moment.content.length > contentPreviewLength" type="button" class="btn btn-link btn-xs" @click="expandContent">展开</button>
   </td>
-  <td>
+  <td :class="{'text-muted': moment.deleted}">
     <template v-for="media in moment.medias">
       <img v-if="media.type === 'Image'" class="img-rounded" :src="media.url" style="height: 60px; padding-bottom: 4px">
       <video v-if="media.type === 'Video'" :src="media.url" style="height: 60px; padding-bottom: 4px" controls/>
