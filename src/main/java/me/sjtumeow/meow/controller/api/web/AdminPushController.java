@@ -1,12 +1,20 @@
 package me.sjtumeow.meow.controller.api.web;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import me.sjtumeow.meow.model.PushArchive;
+import me.sjtumeow.meow.model.form.PushForm;
+import me.sjtumeow.meow.model.result.CreateResult;
+import me.sjtumeow.meow.model.result.FailureMessageResult;
+import me.sjtumeow.meow.model.result.NewEntityIdResult;
 import me.sjtumeow.meow.service.PushService;
 import me.sjtumeow.meow.util.FormatValidator;
 import me.sjtumeow.meow.util.StringUtil;
@@ -26,14 +34,11 @@ public class AdminPushController {
                 : pushService.findAllPageable(page, size, StringUtil.replaceNull(keyword));
     }
 
-    // PushFrom contains: itemId, itemType and text
-    // Do parameter check in Controller or Service?
-
-    /*@PostMapping(consumes = "application/json")
-    ResponseEntity<?> createPush(@RequestBody PushForm ubfl) {
-        String result = bannerService.update(ubfl);
-        return result.isEmpty() ? ResponseEntity.noContent().build()
-                : ResponseEntity.badRequest().body(new FailureMessageResult(result));
-    }*/
+    @PostMapping(consumes = "application/json")
+    ResponseEntity<?> createPush(@RequestBody PushForm pf) {
+        CreateResult cr = pushService.create(pf);
+        return cr.isResult() ? ResponseEntity.status(HttpStatus.CREATED).body(new NewEntityIdResult(cr.getId()))
+                : ResponseEntity.badRequest().body(new FailureMessageResult(cr.getMessage()));
+    }
 
 }

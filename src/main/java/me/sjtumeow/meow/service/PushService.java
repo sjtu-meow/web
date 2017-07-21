@@ -1,7 +1,8 @@
 package me.sjtumeow.meow.service;
 
-import me.sjtumeow.meow.model.Item;
 import me.sjtumeow.meow.model.PushArchive;
+import me.sjtumeow.meow.model.form.PushForm;
+import me.sjtumeow.meow.model.result.CreateResult;
 
 public interface PushService {
 
@@ -9,5 +10,5 @@ public interface PushService {
 
     Iterable<PushArchive> findAllPageable(Integer page, Integer size, String keyword);
 
-    Long create(Item item, String text);
+    CreateResult create(PushForm pf);
 }
