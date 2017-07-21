@@ -121,10 +121,11 @@ export default {
       newPush: {
         text: '',
         itemTextualType: '',
-        itemId: ''
+        itemId: '',
+        valid: false
       },
       previewTitle: '',
-      previewContent: ''
+      previewContent: '',
     }
   },
   watch: {
@@ -139,61 +140,91 @@ export default {
           case '点滴':
             this.$http.get('/api/admin/moments/' + newVal.itemId).then(
               function(response) {
-                this.previewTitle = '来自' + response.body.profile.nickname + '的点滴';
-                this.previewContent = response.body.content;
+                if (response.body.deleted) {
+                  this.previewTitle = '点滴已被删除';
+                  this.newPush.valid = false;
+                } else {
+                  this.previewTitle = '来自' + response.body.profile.nickname + '的点滴';
+                  this.previewContent = response.body.content;
+                  this.newPush.valid = true;
+                }
               },
               function(response) {
                 this.previewTitle = response.body.message || '获取点滴失败';
-                this.previewContent = ''
+                this.previewContent = '';
+                this.newPush.valid = false;
               }
             )
             break;
           case '文章':
             this.$http.get('/api/admin/articles/' + newVal.itemId).then(
               function(response) {
-                this.previewTitle = response.body.title;
-                this.previewContent = $(response.body.content).text();
+                if (response.body.deleted) {
+                  this.previewTitle = '文章已被删除';
+                  this.newPush.valid = false;
+                } else {
+                  this.previewTitle = response.body.title;
+                  this.previewContent = $(response.body.content).text();
+                  this.newPush.valid = true;
+                }
               },
               function(response) {
                 this.previewTitle = response.body.message || '获取文章失败';
-                this.previewContent = ''
+                this.previewContent = '';
+                this.newPush.valid = false;
               }
             )
             break;
           case '问题':
             this.$http.get('/api/admin/questions/' + newVal.itemId).then(
               function(response) {
-                this.previewTitle = response.body.title;
-                this.previewContent = response.body.content;
+                if (response.body.deleted) {
+                  this.previewTitle = '问题已被删除';
+                  this.newPush.valid = false;
+                } else {
+                  this.previewTitle = response.body.title;
+                  this.previewContent = response.body.content;
+                  this.newPush.valid = true;
+                }
               },
               function(response) {
                 this.previewTitle = response.body.message || '获取问题失败';
-                this.previewContent = ''
+                this.previewContent = '';
+                this.newPush.valid = false;
               }
             )
             break;
           case '回答':
             this.$http.get('/api/admin/answers/' + newVal.itemId).then(
               function(response) {
-                this.previewTitle = response.body.profile.nickname;
-                this.$http.get('/api/admin/questions/' + response.body.questionId)
-                  .then(function(response) {
-                    this.previewTitle += '的回答（' + response.body.title + '）';
-                  }, function(response) {
-                    this.previewTitle = response.body.message || '获取问题失败';
-                  });
-
-                this.previewContent = $(response.body.content).text();
+                if (response.body.deleted) {
+                  this.previewTitle = '回答已被删除';
+                  this.newPush.valid = false;
+                } else {
+                  this.previewTitle = response.body.profile.nickname;
+                  this.previewContent = $(response.body.content).text();
+                  this.$http.get('/api/admin/questions/' + response.body.questionId)
+                    .then(function(response) {
+                      this.previewTitle += '的回答（' + response.body.title + '）';
+                      this.newPush.valid = true;
+                    }, function(response) {
+                      this.previewTitle = response.body.message || '获取问题失败';
+                      this.previewContent = '';
+                      this.newPush.valid = false;
+                    });
+                }
               },
               function(response) {
                 this.previewTitle = response.body.message || '获取回答失败';
-                this.previewContent = ''
+                this.previewContent = '';
+                this.newPush.valid = false;
               }
             )
             break;
           default:
             this.previewTitle = '类型错误';
-            this.previewContent = ''
+            this.previewContent = '';
+            this.newPush.valid = false;
         }
       }
     }
@@ -223,13 +254,15 @@ export default {
       $('#add-push-modal').modal('show');
     },
     addPush() {
-      this.$http.post('/api/admin/pushes', {})
-        .then(function(response) {
-          this.fetchPushes(this.pagination.totalPages - 1);
-          $('#add-push-modal').modal('hide');
-        }, function(response) {
-          alert(response.body.message)
-        });
+      if (this.newPush.valid) {
+        this.$http.post('/api/admin/pushes', {})
+          .then(function(response) {
+            this.fetchPushes(this.pagination.totalPages - 1);
+            $('#add-push-modal').modal('hide');
+          }, function(response) {
+            alert(response.body.message)
+          });
+      }
     },
     search() {
       this.keywordOfResult = this.keywordFromInput;
