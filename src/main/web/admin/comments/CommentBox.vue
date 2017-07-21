@@ -51,16 +51,7 @@ export default {
   },
   data() {
     return {
-      comments: [{
-        id: 1,
-        profile: {
-          nickname: '小蛤蛤',
-          id: 1
-        },
-        itemType: 0,
-        itemId: 1,
-        content: '又去死我了'
-      }],
+      comments: [],
       pagination: {
         currentPage: 0,
         totalPages: 1

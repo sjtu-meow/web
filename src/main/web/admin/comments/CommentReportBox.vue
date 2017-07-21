@@ -53,17 +53,7 @@ export default {
   },
   data() {
     return {
-      reports: [{
-        id: 1,
-        profile: {
-          nickname: '小蛤蛤',
-          id: 3
-        },
-        reason: '吓死我了这个评论',
-        itemId: 1,
-        itemType: 4,
-        closed: false
-      }],
+      reports: [],
       pagination: {
         currentPage: 0,
         totalPages: 1
@@ -95,12 +85,22 @@ export default {
         })
     },
     closeReport(report) {
-      // TODO
-      alert('还没实现呢')
+      this.$http.patch('/api/admin/reports/' + report.id, {
+        closed: true
+      }).then(function(response) {
+        report.closed = true;
+      }, function(response) {
+        alert(response.body.message || '修改失败');
+      })
     },
     openReport(report) {
-      // TODO
-      alert('还没实现呢')
+      this.$http.patch('/api/admin/reports/' + report.id, {
+        closed: false
+      }).then(function(response) {
+        report.closed = false;
+      }, function(response) {
+        alert(response.body.message || '修改失败');
+      })
     },
     deleteComment(comment) {
       this.$emit('deleteComment', comment)

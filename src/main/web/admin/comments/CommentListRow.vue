@@ -27,7 +27,7 @@ export default {
   props: ['comment'],
   data() {
     return {
-      contentPreviewLength: 2,
+      contentPreviewLength: 50,
       item: {
         content: ''
       }

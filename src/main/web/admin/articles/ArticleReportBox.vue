@@ -95,12 +95,22 @@ export default {
         })
     },
     closeReport(report) {
-      // TODO
-      alert('还没实现呢')
+      this.$http.patch('/api/admin/reports/' + report.id, {
+        closed: true
+      }).then(function(response) {
+        report.closed = true;
+      }, function(response) {
+        alert(response.body.message || '修改失败');
+      })
     },
     openReport(report) {
-      // TODO
-      alert('还没实现呢')
+      this.$http.patch('/api/admin/reports/' + report.id, {
+        closed: false
+      }).then(function(response) {
+        report.closed = false;
+      }, function(response) {
+        alert(response.body.message || '修改失败');
+      })
     },
     deleteArticle(article) {
       this.$emit('deleteArticle', article)
