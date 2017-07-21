@@ -3,6 +3,7 @@ package me.sjtumeow.meow.model.result;
 public class CreateResult {
     protected boolean result;
     protected Long id;
+    protected String message;
 
     public CreateResult() {
         this.result = false;
@@ -13,20 +14,33 @@ public class CreateResult {
         this.id = id;
     }
 
-    public boolean isResult() {
-        return result;
+    public CreateResult(String message) {
+        this.result = false;
+        this.message = message;
     }
 
-    public Long getId() {
-        return id;
+    public boolean isResult() {
+        return result;
     }
 
     public void setResult(boolean result) {
         this.result = result;
     }
 
+    public Long getId() {
+        return id;
+    }
+
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
 
 }

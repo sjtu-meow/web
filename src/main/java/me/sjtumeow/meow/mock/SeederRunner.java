@@ -184,7 +184,20 @@ public class SeederRunner implements ApplicationRunner {
 
                 // Report
 
+                reportRepository.save(new Report(moment, user1.getProfile(), "这点滴不清真啊!"));
+                reportRepository.save(new Report(article, user1.getProfile(), "这文章不清真啊!"));
+                reportRepository.save(new Report(question, user1.getProfile(), "这问题不清真啊!"));
+                reportRepository.save(new Report(answer, user1.getProfile(), "这回答不清真啊!"));
+
+                reportRepository.save(new Report(moment, user2.getProfile(), "这点滴不清真啊!"));
+                reportRepository.save(new Report(article, user2.getProfile(), "这文章不清真啊!"));
                 reportRepository.save(new Report(question, user2.getProfile(), "这问题不清真啊!"));
+                reportRepository.save(new Report(answer, user2.getProfile(), "这回答不清真啊!"));
+
+                reportRepository.save(new Report(comment1, user1.getProfile(), "这评论不清真啊!"));
+                reportRepository.save(new Report(comment2, user2.getProfile(), "这评论不清真啊!"));
+                reportRepository.save(new Report(comment4, user1.getProfile(), "这评论不清真啊!"));
+
             }
 
             // Soft delete test

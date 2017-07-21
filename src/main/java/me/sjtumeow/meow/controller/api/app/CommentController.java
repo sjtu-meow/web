@@ -100,9 +100,8 @@ public class CommentController {
     @Authorization
     ResponseEntity<?> doReportComment(@RequestBody ReportForm rf, @CurrentUser User user, @PathVariable("id") Long id) {
         Comment comment = interactionService.findCommentById(id, false);
-        if (comment == null)
-            return ResponseEntity.notFound().build();
-        interactionService.doReport(comment, user, StringUtil.replaceNull(rf.getReason()));
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+        return comment == null ? ResponseEntity.notFound().build()
+                : ResponseEntity.status(HttpStatus.CREATED).body(new NewEntityIdResult(
+                        interactionService.doReport(comment, user, StringUtil.replaceNull(rf.getReason()))));
     }
 }

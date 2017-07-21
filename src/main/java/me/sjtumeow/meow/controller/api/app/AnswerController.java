@@ -139,9 +139,8 @@ public class AnswerController {
     @Authorization
     ResponseEntity<?> doReportAnswer(@RequestBody ReportForm rf, @CurrentUser User user, @PathVariable("id") Long id) {
         Answer answer = itemService.findAnswerById(id, false);
-        if (answer == null)
-            return ResponseEntity.notFound().build();
-        interactionService.doReport(answer, user, StringUtil.replaceNull(rf.getReason()));
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+        return answer == null ? ResponseEntity.notFound().build()
+                : ResponseEntity.status(HttpStatus.CREATED).body(new NewEntityIdResult(
+                        interactionService.doReport(answer, user, StringUtil.replaceNull(rf.getReason()))));
     }
 }

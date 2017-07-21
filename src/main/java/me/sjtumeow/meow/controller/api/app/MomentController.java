@@ -134,9 +134,8 @@ public class MomentController {
     @Authorization
     ResponseEntity<?> doReportMoment(@RequestBody ReportForm rf, @CurrentUser User user, @PathVariable("id") Long id) {
         Moment moment = itemService.findMomentById(id, false);
-        if (moment == null)
-            return ResponseEntity.notFound().build();
-        interactionService.doReport(moment, user, StringUtil.replaceNull(rf.getReason()));
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+        return moment == null ? ResponseEntity.notFound().build()
+                : ResponseEntity.status(HttpStatus.CREATED).body(new NewEntityIdResult(
+                        interactionService.doReport(moment, user, StringUtil.replaceNull(rf.getReason()))));
     }
 }

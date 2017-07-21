@@ -8,8 +8,10 @@ import me.sjtumeow.meow.model.Profile;
 import me.sjtumeow.meow.model.Question;
 import me.sjtumeow.meow.model.Report;
 import me.sjtumeow.meow.model.User;
+import me.sjtumeow.meow.model.form.ReportForm;
 import me.sjtumeow.meow.model.form.UpdateReportForm;
 import me.sjtumeow.meow.model.result.BaseSummaryResult;
+import me.sjtumeow.meow.model.result.CreateResult;
 import me.sjtumeow.meow.model.result.QuestionSummaryResult;
 
 public interface InteractionService {
@@ -73,6 +75,8 @@ public interface InteractionService {
     Report findReportById(Long id);
 
     Long doReport(Item item, User user, String reason);
+
+    CreateResult doReport(ReportForm rf, User user);
 
     boolean updateReport(Long id, UpdateReportForm urf);
 }

@@ -67,7 +67,7 @@ public class BannerServiceImpl implements BannerService {
                 return "缺少图片";
             if (ubf.getItemId() == null)
                 return "缺少项目编号";
-            if (!FormatValidator.checkBannerItemType(ubf.getItemType()))
+            if (!FormatValidator.checkMainItemType(ubf.getItemType()))
                 return "非法的项目类型";
 
             switch (ubf.getItemType()) {

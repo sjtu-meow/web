@@ -108,9 +108,8 @@ public class QuestionController {
     ResponseEntity<?> doReportQuestion(@RequestBody ReportForm rf, @CurrentUser User user,
             @PathVariable("id") Long id) {
         Question question = itemService.findQuestionById(id, false);
-        if (question == null)
-            return ResponseEntity.notFound().build();
-        interactionService.doReport(question, user, StringUtil.replaceNull(rf.getReason()));
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+        return question == null ? ResponseEntity.notFound().build()
+                : ResponseEntity.status(HttpStatus.CREATED).body(new NewEntityIdResult(
+                        interactionService.doReport(question, user, StringUtil.replaceNull(rf.getReason()))));
     }
 }

@@ -145,9 +145,8 @@ public class ArticleController {
     @Authorization
     ResponseEntity<?> doReportArticle(@RequestBody ReportForm rf, @CurrentUser User user, @PathVariable("id") Long id) {
         Article article = itemService.findArticleById(id, false);
-        if (article == null)
-            return ResponseEntity.notFound().build();
-        interactionService.doReport(article, user, StringUtil.replaceNull(rf.getReason()));
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+        return article == null ? ResponseEntity.notFound().build()
+                : ResponseEntity.status(HttpStatus.CREATED).body(new NewEntityIdResult(
+                        interactionService.doReport(article, user, StringUtil.replaceNull(rf.getReason()))));
     }
 }
