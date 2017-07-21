@@ -9,6 +9,7 @@ import me.sjtumeow.meow.model.Question;
 import me.sjtumeow.meow.model.Report;
 import me.sjtumeow.meow.model.User;
 import me.sjtumeow.meow.model.form.ReportForm;
+import me.sjtumeow.meow.model.form.UpdateCommentForm;
 import me.sjtumeow.meow.model.form.UpdateReportForm;
 import me.sjtumeow.meow.model.result.BaseSummaryResult;
 import me.sjtumeow.meow.model.result.CreateResult;
@@ -63,6 +64,8 @@ public interface InteractionService {
     User getCommentCreator(Long id);
 
     Long addComment(Item item, User user, String content);
+
+    boolean updateComment(Long id, UpdateCommentForm ucf);
 
     boolean deleteComment(Long id);
 

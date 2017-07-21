@@ -37,6 +37,7 @@ import me.sjtumeow.meow.model.Question;
 import me.sjtumeow.meow.model.Report;
 import me.sjtumeow.meow.model.User;
 import me.sjtumeow.meow.model.form.ReportForm;
+import me.sjtumeow.meow.model.form.UpdateCommentForm;
 import me.sjtumeow.meow.model.form.UpdateReportForm;
 import me.sjtumeow.meow.model.result.AnswerSummaryResult;
 import me.sjtumeow.meow.model.result.ArticleSummaryResult;
@@ -269,6 +270,18 @@ public class InteractionServiceImpl implements InteractionService {
         Comment comment = new Comment(item, user.getProfile(), content);
         commentRepository.save(comment);
         return comment.getId();
+    }
+
+    @Transactional
+    public boolean updateComment(Long id, UpdateCommentForm ucf) {
+        Comment comment = commentRepository.findOne(id);
+        if (comment == null)
+            return false;
+
+        if (ucf.getIsDeleted() != null && !ucf.getIsDeleted())
+            comment.recover();
+        commentRepository.save(comment);
+        return true;
     }
 
     @Transactional

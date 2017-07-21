@@ -4,12 +4,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import me.sjtumeow.meow.model.Comment;
+import me.sjtumeow.meow.model.form.UpdateCommentForm;
 import me.sjtumeow.meow.service.InteractionService;
 import me.sjtumeow.meow.util.FormatValidator;
 import me.sjtumeow.meow.util.StringUtil;
@@ -33,6 +36,12 @@ public class AdminCommentController {
     ResponseEntity<?> getComment(@PathVariable("id") Long id) {
         Comment comment = interactionService.findCommentById(id, true);
         return comment == null ? ResponseEntity.notFound().build() : ResponseEntity.ok(comment);
+    }
+
+    @PatchMapping(path = "/{id}", consumes = "application/json")
+    ResponseEntity<?> updateComment(@RequestBody UpdateCommentForm ucf, @PathVariable("id") Long id) {
+        return interactionService.updateComment(id, ucf) ? ResponseEntity.noContent().build()
+                : ResponseEntity.notFound().build();
     }
 
     @DeleteMapping("/{id}")
