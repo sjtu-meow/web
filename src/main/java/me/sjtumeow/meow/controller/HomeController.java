@@ -7,11 +7,16 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class HomeController {
     @GetMapping("/")
     public String getIndex() {
-        return "index";
+        return "login";
+    }
+
+    @GetMapping("/editor")
+    public String getEditor() {
+        return "editor";
     }
 
     @GetMapping("/admin")
     public String getAdminIndex() {
-        return "admin/index";
+        return "admin";
     }
 }
