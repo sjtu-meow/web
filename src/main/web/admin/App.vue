@@ -76,7 +76,7 @@ export default {
       this.$http.delete('/api/web/auth')
         .then(function(response) {
           this.loggedIn = false;
-          window.location = window.location.pathname;
+          window.location = '/';
         }, function(response) {
           alert(response.body.message || '退出失败');
         })

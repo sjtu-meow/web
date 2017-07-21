@@ -35,7 +35,7 @@
           {'name': '点滴管理', 'icon': 'fa-tint', 'link': '/moments'},
           {'name': '文章管理', 'icon': 'fa-file-text', 'link': '/articles'},
           {'name': '问答管理', 'icon': 'fa-question', 'link': '/questions'},
-          {'name': '回复管理', 'icon': 'fa-comments', 'link': '/comments'}
+          {'name': '评论管理', 'icon': 'fa-comments', 'link': '/comments'}
         ]
       }
     }
