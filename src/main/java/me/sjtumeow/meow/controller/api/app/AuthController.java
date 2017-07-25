@@ -31,7 +31,7 @@ public class AuthController {
     ResponseEntity<?> login(@RequestBody UserCredentialsForm cred) {
         if (userService.checkPassword(cred)) {
             return userService.isBanned(cred.getPhone())
-                    ? ResponseEntity.status(HttpStatus.FORBIDDEN).body(new FailureMessageResult("您的账号已被封禁!"))
+                    ? ResponseEntity.status(HttpStatus.FORBIDDEN).body(new FailureMessageResult("您的账号已被封禁！"))
                     : ResponseEntity.status(HttpStatus.CREATED).body(authService.generateUserToken(cred));
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new FailureMessageResult("手机号或密码错误"));

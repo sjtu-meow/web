@@ -37,10 +37,10 @@ public class WebAuthController {
     ResponseEntity<?> login(HttpSession session, @RequestBody UserCredentialsForm cred) {
         if (userService.checkPassword(cred)) {
             if (userService.isBanned(cred.getPhone())) {
-                return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new FailureMessageResult("您的账号已被封禁!"));
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new FailureMessageResult("您的账号已被封禁！"));
             }
             webAuthUtility.login(session, userService.findByPhone(cred.getPhone(), false).getId());
-            return ResponseEntity.noContent().build();
+            return ResponseEntity.ok(new LoginStatusResult(true, webAuthUtility.checkAdmin(session)));
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new FailureMessageResult("手机号或密码错误"));
         }

@@ -20,7 +20,7 @@ public class WebAuthorizationInterceptor extends HandlerInterceptorAdapter {
         String requestURI = request.getRequestURI();
         HttpSession session = request.getSession();
 
-        if (requestURI.startsWith("/api/web") && !requestURI.startsWith("/api/web/auth")
+        if (requestURI.startsWith("/api/web") && !requestURI.equals("/api/web/auth")
                 && !webAuthUtility.checkAuth(session)) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             webAuthUtility.respondFailureMessage(response, "请先登录");
@@ -39,8 +39,6 @@ public class WebAuthorizationInterceptor extends HandlerInterceptorAdapter {
                 return false;
             }
         }
-
-        // TODO: Web page accesses also need to be checked for authorization.
 
         return true;
     }
