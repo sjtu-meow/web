@@ -1,47 +1,31 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
     <head>
-        <title>Page Not Found.</title>
-
-        <link href="https://fonts.googleapis.com/css?family=Lato:100" rel="stylesheet" type="text/css">
-
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="renderer" content="webkit">
+        <title>404 Not Found</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
         <style>
-            html, body {
-                height: 100%;
-            }
-
-            body {
-                margin: 0;
-                padding: 0;
-                width: 100%;
-                color: #000;
-                display: table;
-                font-weight: 100;
-                font-family: 'Lato';
-            }
-
-            .container {
+            .center-container {
+                position: absolute;
+                top: 50%; left: 50%;
+                transform: translate(-50%,-50%);
                 text-align: center;
-                display: table-cell;
-                vertical-align: middle;
             }
-
-            .content {
-                text-align: center;
-                display: inline-block;
-            }
-
             .title {
-                font-size: 72px;
-                margin-bottom: 40px;
+                font-size: 24px;
+                margin-bottom: 20px;
             }
         </style>
     </head>
     <body>
-        <div class="container">
-            <div class="content">
-                <div class="title">Page Not Found.</div>
-            </div>
+        <div class="center-container">
+            <div class="title">喵喵喵迷路啦！</div>
+            <img class="img-responsive center-block" src="/img/404.jpg" />
+            <br />
+            <a class="btn btn-default" href="/" role="button"><span class="glyphicon glyphicon-send" aria-hidden="true"></span> 送我回家！</a>
         </div>
     </body>
 </html>
