@@ -71,7 +71,7 @@
       <label for="inputPhone" class="sr-only">手机号</label>
       <input type="text" name="phone" id="inputPhone" class="form-control" placeholder="手机号" required="required" autofocus="autofocus" v-model="phone" />
       <label for="inputPassword" class="sr-only">密码</label>
-      <input type="password" name="password" id="inputPassword" class="form-control" placeholder="密码" required="required" v-model="password" />
+      <input type="password" name="password" id="inputPassword" class="form-control" placeholder="密码" required="required" v-model="password" @keyup.enter="submitForm" />
       <p class="text-danger">
         {{message}}
       </p>
