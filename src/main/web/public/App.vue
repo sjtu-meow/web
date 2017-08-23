@@ -8,8 +8,7 @@
           <li role="presentation"><a href="#" @click="saveArticle">保存</a></li>
           <li role="presentation"><a href="#" @click="postArticle">发布</a></li>
           <li role="presentation">
-            <a v-show="loggedIn" @click="logout">退出</a>
-            <a v-show="!loggedIn" data-toggle="modal" data-target="#loginModal">登录</a>
+            <a @click="logout">退出</a>
           </li>
         </ul>
       </nav>
@@ -47,39 +46,6 @@
     <!-- summernote entry point -->
     <div id="summernote"></div>
 
-    <!-- login modal -->
-    <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalTitle">
-      <div class="modal-dialog modal-sm" role="document">
-        <div class="modal-content">
-          <!-- title -->
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title" id="loginModalTitle">登录</h4>
-          </div>
-
-          <!-- form body -->
-          <div class="modal-body">
-            <form>
-              <div class="form-group">
-                <label for="phone">手机号</label>
-                <input type="text" class="form-control" id="phone" placeholder="手机号" v-model="phone">
-              </div>
-              <div class="form-group">
-                <label for="password">密码</label>
-                <input type="password" class="form-control" id="password" placeholder="密码" v-model="password">
-              </div>
-            </form>
-          </div>
-
-          <!-- footer button -->
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-            <button type="button" class="btn btn-primary" @click="login">登录</button>
-          </div>
-        </div>
-      </div>
-    </div>
-
     <footer class="footer">
       <p>&copy; 2017 SJTU-Meow.</p>
     </footer>
@@ -98,7 +64,6 @@ export default {
   name: 'app',
   data() {
     return {
-      loggedIn: true,
       title: '',
       summary: '',
       coverUrl: 'https://i.ytimg.com/vi/prALrHUJ8Ns/hqdefault.jpg'
@@ -155,12 +120,22 @@ export default {
         }
       });
     });
+
+    this.$http.get('/api/web/auth')
+      .then(function(response) {
+        if (response.body.loggedIn === false) {
+          alert('请先登录');
+          window.location.href = '/';
+        }
+      }, function(response) {
+        alert(response.body.message || '获取登录状态失败');
+        window.location.href = '/';
+      })
   },
   methods: {
     logout() {
       this.$http.delete('/api/web/auth')
         .then(function(response) {
-          this.loggedIn = false;
           window.location.href = '/';
         }, function(response) {
           alert(response.body.message || '退出失败');

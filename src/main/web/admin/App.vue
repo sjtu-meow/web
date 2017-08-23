@@ -1,7 +1,7 @@
 <template>
 <div id="app" class="wrapper" style="height: auto;">
-  <nav-bar :loggedIn="loggedIn" @logout="logout"></nav-bar>
-  <side-bar :loggedIn="loggedIn"></side-bar>
+  <nav-bar @logout="logout"></nav-bar>
+  <side-bar></side-bar>
   <div class="content-wrapper" style="min-height: 320px;">
     <router-view></router-view>
   </div>
@@ -66,16 +66,25 @@ export default {
     NavBar,
     SideBar
   },
-  data() {
-    return {
-      loggedIn: true
-    }
+  created() {
+    this.$http.get('/api/web/auth')
+      .then(function(response) {
+        if (response.body.loggedIn === false) {
+          alert('请先登录')
+          window.location.href = '/';
+        } else if (response.body.admin === false) {
+          alert('权限不足')
+          window.location.href = '/';
+        }
+      }, function(response) {
+        alert(response.body.message || '获取登录状态失败');
+        window.location.href = '/';
+      })
   },
   methods: {
     logout() {
       this.$http.delete('/api/web/auth')
         .then(function(response) {
-          this.loggedIn = false;
           window.location = '/';
         }, function(response) {
           alert(response.body.message || '退出失败');
