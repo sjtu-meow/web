@@ -6,6 +6,8 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 
+import org.hibernate.annotations.Formula;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
@@ -23,6 +25,9 @@ public class Question extends Item {
     @JsonIgnore
     @OneToMany(mappedBy = "question")
     private Set<FollowQuestion> followers;
+
+    @Formula("(SELECT COUNT(*) FROM follow_question fq WHERE fq.question_id = id)")
+    private Integer followCount;
 
     public Question() {
         type = Item.ITEM_TYPE_QUESTION;
@@ -64,5 +69,13 @@ public class Question extends Item {
 
     public void setFollowers(Set<FollowQuestion> followers) {
         this.followers = followers;
+    }
+
+    public Integer getFollowCount() {
+        return followCount;
+    }
+
+    public void setFollowCount(Integer followCount) {
+        this.followCount = followCount;
     }
 }

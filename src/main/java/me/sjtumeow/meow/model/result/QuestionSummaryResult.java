@@ -11,6 +11,7 @@ public class QuestionSummaryResult extends BaseSummaryResult {
     protected Profile profile;
     protected String title;
     protected Integer answerCount;
+    protected Integer followCount;
     protected String createTime;
     protected String updateTime;
     protected boolean isDeleted;
@@ -23,6 +24,7 @@ public class QuestionSummaryResult extends BaseSummaryResult {
         this.createTime = question.getCreateTime();
         this.updateTime = question.getUpdateTime();
         this.isDeleted = question.isDeleted();
+        this.followCount = question.getFollowCount();
         this.answerCount = 0;
 
         for (Answer answer : question.getAnswers()) {
@@ -63,6 +65,10 @@ public class QuestionSummaryResult extends BaseSummaryResult {
         return isDeleted;
     }
 
+    public Integer getFollowCount() {
+        return followCount;
+    }
+
     public void setId(Long id) {
         this.id = id;
     }
@@ -93,5 +99,9 @@ public class QuestionSummaryResult extends BaseSummaryResult {
 
     public void setDeleted(boolean isDeleted) {
         this.isDeleted = isDeleted;
+    }
+
+    public void setFollowCount(Integer followCount) {
+        this.followCount = followCount;
     }
 }
