@@ -451,21 +451,29 @@ public class ItemServiceImpl implements ItemService {
 
         // Add recommended contents
 
-        /*for (Moment moment : momentRepository.findAllActive()) {
+        List<Moment> moments = new ArrayList<Moment>();
+        momentRepository.findAllActive(new Sort(Direction.DESC, "likeCount")).forEach(moments::add);
+        for (Moment moment : moments.subList(0, 5)) {
             result.add(new MomentSummaryResult(moment));
         }
-        
-        for (Article article : articleRepository.findAllActive()) {
+
+        List<Article> articles = new ArrayList<Article>();
+        articleRepository.findAllActive(new Sort(Direction.DESC, "likeCount")).forEach(articles::add);
+        for (Article article : articles.subList(0, 5)) {
             result.add(new ArticleSummaryResult(article));
         }
-        
-        for (Question question : questionRepository.findAllActive()) {
+
+        List<Question> questions = new ArrayList<Question>();
+        questionRepository.findAllActive(new Sort(Direction.DESC, "followCount")).forEach(questions::add);
+        for (Question question : questions.subList(0, 5)) {
             result.add(new QuestionSummaryResult(question));
         }
-        
-        for (Answer answer : answerRepository.findAllActive()) {
+
+        List<Answer> answers = new ArrayList<Answer>();
+        answerRepository.findAllActive(new Sort(Direction.DESC, "likeCount")).forEach(answers::add);
+        for (Answer answer : answers.subList(0, 5)) {
             result.add(new AnswerSummaryResult(answer));
-        }*/
+        }
 
         // Add following questions
 
