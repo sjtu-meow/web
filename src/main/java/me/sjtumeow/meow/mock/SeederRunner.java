@@ -101,6 +101,8 @@ public class SeederRunner implements ApplicationRunner {
         Profile profile2 = user2.getProfile();
 
         for (int i = 0; i < 10; i++) {
+            System.out.println(String.format("Running seeder i = %d...", i));
+
             Long userId = userService.create(String.format("188%d", 88888001 + i), "111111", false,
                     String.format("吃瓜群众%d", i + 1), i % 2 == 0 ? "不存在的" : null, "http://lorempixel.com/50/50");
 
@@ -111,11 +113,11 @@ public class SeederRunner implements ApplicationRunner {
             moment.setContent(faker.shakespeare().hamletQuote());
             momentRepository.save(moment);
 
-            if (i == 0) {
+            if (i % 10 == 0) {
                 mediaRepository
                         .save(new Media(MediaType.Video, "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4", moment));
             } else {
-                for (int j = 0; j < i; ++j) {
+                for (int j = 0; j < i % 10; ++j) {
                     mediaRepository.save(new Media(MediaType.Image, "http://lorempixel.com/200/200", moment));
                 }
             }
@@ -162,7 +164,7 @@ public class SeederRunner implements ApplicationRunner {
 
             // Interaction test
 
-            if (i == 5) {
+            if (i % 10 == 5) {
 
                 // Like
 
@@ -202,16 +204,16 @@ public class SeederRunner implements ApplicationRunner {
 
             // Soft delete test
 
-            if (i == 0) {
+            if (i % 10 == 0) {
                 userService.delete(userId);
                 articleRepository.softDelete(article);
                 questionRepository.softDelete(question);
                 answerRepository.softDelete(answer);
             }
-            if (i == 3) {
+            if (i % 10 == 3) {
                 momentRepository.softDelete(moment);
             }
-            if (i >= 8) {
+            if (i % 10 >= 8) {
                 commentRepository.softDelete(comment1);
                 commentRepository.softDelete(comment2);
                 commentRepository.softDelete(comment4);
@@ -219,7 +221,7 @@ public class SeederRunner implements ApplicationRunner {
 
             // XSS test
 
-            if (i == 2) {
+            if (i % 10 == 2) {
                 moment.setContent("<script>alert('xss!')</script>");
                 comment1.setContent("<script>alert('xss!')</script>");
                 comment2.setContent("<script>alert('xss!')</script>");
@@ -249,7 +251,7 @@ public class SeederRunner implements ApplicationRunner {
 
             // Push Archive
 
-            if (i == 5) {
+            if (i % 10 == 5) {
                 pushArchiveRepository.save(new PushArchive(moment, "99% 的人都没注意到的点滴！删前速看！"));
                 pushArchiveRepository.save(new PushArchive(article, "99% 的人都没看过的深度好文！删前速看！"));
                 pushArchiveRepository.save(new PushArchive(question, "99% 的人都答不出的问题！删前速看！"));
