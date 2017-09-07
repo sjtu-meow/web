@@ -3,14 +3,14 @@
   <div class="box-header">
     <h3 class="box-title">问题举报</h3>
 
-    <div class="box-tools">
+    <!-- <div class="box-tools">
       <div class="input-group input-group-sm" style="width: 150px;">
         <input type="text" class="form-control pull-right" placeholder="搜索" v-model="keywordFromInput">
         <div class="input-group-btn">
           <button type="button" class="btn btn-default" @click="search"><i class="fa fa-search"></i></button>
         </div>
       </div>
-    </div>
+    </div> -->
   </div>
   <!-- /.box-header -->
   <div class="box-body table-responsive no-padding">
