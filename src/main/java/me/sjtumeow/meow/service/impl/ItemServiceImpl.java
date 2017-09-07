@@ -3,6 +3,7 @@ package me.sjtumeow.meow.service.impl;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,7 @@ import me.sjtumeow.meow.dao.MomentRepository;
 import me.sjtumeow.meow.dao.QuestionRepository;
 import me.sjtumeow.meow.model.Answer;
 import me.sjtumeow.meow.model.Article;
+import me.sjtumeow.meow.model.FollowQuestion;
 import me.sjtumeow.meow.model.Media;
 import me.sjtumeow.meow.model.Moment;
 import me.sjtumeow.meow.model.Question;
@@ -430,6 +432,79 @@ public class ItemServiceImpl implements ItemService {
         for (Answer answer : answerRepository.findByContentContainingAndDeletedAtIsNull(keyword)) {
             result.add(new AnswerSummaryResult(answer));
         }
+
+        Collections.sort(result, new Comparator<BaseSummaryResult>() {
+            @Override
+            public int compare(BaseSummaryResult lhs, BaseSummaryResult rhs) {
+                Integer res = lhs.getCreateTime().compareTo(rhs.getCreateTime());
+                return res == 0 ? 0 : -res / Math.abs(res);
+            }
+        });
+
+        return result;
+    }
+
+    // Home Page
+
+    public List<BaseSummaryResult> getHomePageContents(User user) {
+        List<BaseSummaryResult> result = new ArrayList<BaseSummaryResult>();
+
+        // Add recommended contents
+
+        List<Moment> moments = new ArrayList<Moment>();
+        momentRepository.findAllActive(new Sort(Direction.DESC, "likeCount")).forEach(moments::add);
+        for (Moment moment : moments.subList(0, 5)) {
+            result.add(new MomentSummaryResult(moment));
+        }
+
+        List<Article> articles = new ArrayList<Article>();
+        articleRepository.findAllActive(new Sort(Direction.DESC, "likeCount")).forEach(articles::add);
+        for (Article article : articles.subList(0, 5)) {
+            result.add(new ArticleSummaryResult(article));
+        }
+
+        List<Question> questions = new ArrayList<Question>();
+        questionRepository.findAllActive(new Sort(Direction.DESC, "followCount")).forEach(questions::add);
+        for (Question question : questions.subList(0, 5)) {
+            result.add(new QuestionSummaryResult(question));
+        }
+
+        List<Answer> answers = new ArrayList<Answer>();
+        answerRepository.findAllActive(new Sort(Direction.DESC, "likeCount")).forEach(answers::add);
+        for (Answer answer : answers.subList(0, 5)) {
+            result.add(new AnswerSummaryResult(answer));
+        }
+
+        // Add following questions
+
+        for (FollowQuestion fq : user.getFollowingQuestions()) {
+            result.add(new QuestionSummaryResult(fq.getQuestion()));
+        }
+
+        // Add personal contents
+
+        for (Moment moment : momentRepository.findByProfileIdAndDeletedAtIsNull(user.getId())) {
+            result.add(new MomentSummaryResult(moment));
+        }
+
+        for (Article article : articleRepository.findByProfileIdAndDeletedAtIsNull(user.getId())) {
+            result.add(new ArticleSummaryResult(article));
+        }
+
+        for (Question question : questionRepository.findByProfileIdAndDeletedAtIsNull(user.getId())) {
+            result.add(new QuestionSummaryResult(question));
+        }
+
+        for (Answer answer : answerRepository.findByProfileIdAndDeletedAtIsNull(user.getId())) {
+            result.add(new AnswerSummaryResult(answer));
+        }
+
+        // Get rid of duplicates
+
+        HashSet<Long> tempIdList = new HashSet<Long>();
+        result.removeIf(e -> !tempIdList.add(e.getId()));
+
+        // Sort by time in descending order
 
         Collections.sort(result, new Comparator<BaseSummaryResult>() {
             @Override

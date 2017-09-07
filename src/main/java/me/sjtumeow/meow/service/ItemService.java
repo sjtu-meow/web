@@ -135,4 +135,8 @@ public interface ItemService {
 
     List<BaseSummaryResult> comprehensiveSearch(String keyword);
 
+    // Home Page
+
+    List<BaseSummaryResult> getHomePageContents(User user);
+
 }

@@ -16,6 +16,7 @@ public class AnswerSummaryResult extends BaseSummaryResult {
     protected boolean isDeleted;
 
     public AnswerSummaryResult(Answer answer) {
+        this.id = answer.getId();
         this.questionId = answer.getQuestion().getId();
         this.questionTitle = answer.getQuestion().getTitle();
         this.questionProfile = answer.getQuestion().getProfile();
