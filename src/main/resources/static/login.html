@@ -93,21 +93,26 @@
       methods: {
         submitForm() {
           let self = this;
-          $.post('/api/web/auth', {
-            phone: this.phone,
-            password: this.password
-          }, function(data) {
-            alert(data);
-            if (data.success) {
-              if (data.isAdmin) {
-                window.location.href = "/admin"
+          $.ajax({
+            url: 'http://106.14.156.19/api/web/auth',
+            type: "POST",
+            data: JSON.stringify({
+              phone: this.phone,
+              password: this.password
+            }),
+            contentType: "application/json",
+            success: function(data) {
+              if (data.success) {
+                if (data.isAdmin) {
+                  window.location.href = "/admin"
+                } else {
+                  window.location.href = "/editor"
+                }
               } else {
-                window.location.href = "/editor"
+                self.message = '手机号或密码错误'
               }
-            } else {
-              self.message = '手机号或密码错误'
             }
-          })
+          });
         }
       }
     })
