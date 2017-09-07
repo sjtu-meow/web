@@ -156,7 +156,7 @@ export default {
       }).then(function(response) {
           alert('发布成功')
         }, function(response) {
-          alert(response.body.error || '发布失败');
+          alert(response.body.message || '发布失败');
         })
     },
     triggerCoverInputClick: function() {
