@@ -252,7 +252,7 @@ export default {
     promptRecoverAnswer(answer, question) {
       this.answerToRecover = answer;
       if (question) {
-        this.questionToRecover = question;  
+        this.questionToRecover = question;
       }
       $('#recover-answer-modal').modal('show');
     },

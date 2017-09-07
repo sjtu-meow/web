@@ -50,17 +50,7 @@ export default {
   },
   data() {
     return {
-      reports: [{
-        id: 1,
-        profile: {
-          nickname: '小蛤蛤',
-          id: 3
-        },
-        reason: '吓死我了这个问题',
-        itemId: 7,
-        itemType: 2,
-        closed: false
-      }],
+      reports: [],
       pagination: {
         currentPage: 0,
         totalPages: 1
