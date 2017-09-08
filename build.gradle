@@ -82,6 +82,13 @@ dependencies {
 
 }
 
+task frontEnd(type:Exec) {
+    workingDir 'src/main/web'
+    commandLine 'yarn && yarn build'
+}
+
+build.dependsOn frontEnd
+
 idea {
     module {
         inheritOutputDirs = false
