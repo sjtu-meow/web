@@ -71,7 +71,7 @@ export default {
       .then(function(response) {
         if (response.body.loggedIn === false) {
           alert('请先登录')
-          // window.location.href = '/';
+          window.location.href = '/';
         } else if (response.body.admin === false) {
           alert('权限不足')
           window.location.href = '/';

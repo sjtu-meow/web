@@ -5,7 +5,6 @@
     <div class="header clearfix">
       <nav>
         <ul class="nav nav-pills pull-right">
-          <li role="presentation"><a href="#" @click="saveArticle">保存</a></li>
           <li role="presentation"><a href="#" @click="postArticle">发布</a></li>
           <li role="presentation">
             <a @click="logout">退出</a>
@@ -83,7 +82,7 @@ export default {
           ['style', ['bold', 'italic', 'clear']],
           ['color', ['color']],
           ['para', ['ul', 'ol', 'paragraph']],
-          ['insert', ['link', 'picture', 'video']],
+          ['insert', ['picture']],
           ['code', ['codeview']]
         ],
         callbacks: {
@@ -143,9 +142,6 @@ export default {
     },
     getArticleHtml() {
       return $('#summernote').summernote('code');
-    },
-    saveArticle() {
-      alert('还没实现呢');
     },
     postArticle() {
       this.$http.post('/api/web/articles', {
