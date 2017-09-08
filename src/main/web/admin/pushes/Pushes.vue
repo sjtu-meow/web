@@ -254,14 +254,35 @@ export default {
       $('#add-push-modal').modal('show');
     },
     addPush() {
+      let itemType = 4;
+      switch (newPush.itemTextualType) {
+        case '点滴':
+          itemType = 0;
+          break;
+        case '文章':
+          itemType = 1;
+          break;
+        case '问题':
+          itemType = 2;
+          break;
+        case '回答':
+          itemType = 3;
+          break;
+        default:
+          break;
+      }
+
       if (this.newPush.valid) {
-        this.$http.post('/api/admin/pushes', {})
-          .then(function(response) {
-            this.fetchPushes(this.pagination.totalPages - 1);
-            $('#add-push-modal').modal('hide');
-          }, function(response) {
-            alert(response.body.message)
-          });
+        this.$http.post('/api/admin/pushes', {
+          itemId: newPush.itemId,
+          itemType: itemType,
+          text: newPush.text
+        }).then(function(response) {
+          this.fetchPushes(this.pagination.totalPages - 1);
+          $('#add-push-modal').modal('hide');
+        }, function(response) {
+          alert(response.body.message)
+        });
       }
     },
     search() {
