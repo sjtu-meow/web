@@ -102,7 +102,7 @@
             }),
             contentType: "application/json",
             success: function(data) {
-              if (data.success) {
+              if (data.loggedIn) {
                 if (data.isAdmin) {
                   window.location.href = "/admin"
                 } else {
