@@ -255,7 +255,7 @@ export default {
     },
     addPush() {
       let itemType = 4;
-      switch (newPush.itemTextualType) {
+      switch (this.newPush.itemTextualType) {
         case '点滴':
           itemType = 0;
           break;
@@ -274,9 +274,9 @@ export default {
 
       if (this.newPush.valid) {
         this.$http.post('/api/admin/pushes', {
-          itemId: newPush.itemId,
+          itemId: this.newPush.itemId,
           itemType: itemType,
-          text: newPush.text
+          text: this.newPush.text
         }).then(function(response) {
           this.fetchPushes(this.pagination.totalPages - 1);
           $('#add-push-modal').modal('hide');
