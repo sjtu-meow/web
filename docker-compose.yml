@@ -1,0 +1,12 @@
+version: '3'
+services:
+    web:
+        image: meow:1.0.SNAPSHOT
+        ports:
+            - "80:80"
+    redis:
+        image: redis:alpine
+    mysql:
+        image: mysql:5.7
+        environment:
+            MYSQL_DATABASE: meow
