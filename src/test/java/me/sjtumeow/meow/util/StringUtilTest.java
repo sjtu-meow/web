@@ -15,20 +15,24 @@ public class StringUtilTest {
 
     @Test
     public void filterRichText() throws Exception {
-        String html = "<script></script>";
-        assertEquals("", StringUtil.filterRichText(html));
-        String str = "<b>str</b>";
-        assertEquals(str, StringUtil.filterRichText(str));
+        assertEquals("", StringUtil.filterRichText("<script>alert('hello')</script>"));
+        assertEquals("text", StringUtil.filterRichText("<a href=\"http://example.com\">text</a>"));
+        assertEquals("<p>blocks</p>", StringUtil.filterRichText("<p>blocks</p>"));
+        assertEquals("<b>formatting</b>", StringUtil.filterRichText("<b>formatting</b>"));
+        assertEquals("<img src=\"http://lorempixel.com/50/50\" />", StringUtil.filterRichText("<img src=\"http://lorempixel.com/50/50\" />"));
+        assertEquals("<div style=\"color: #3c3;\">styled div</div>", StringUtil.filterRichText("<div style=\"color: #3c3;\">styled div</div>"));
     }
 
     @Test
     public void extractHTMLSummary() throws Exception {
+        assertEquals("paragraph 1", StringUtil.extractHTMLSummary("<p>paragraph 1</p><p>paragraph 2</p>"));
+        assertEquals("", StringUtil.extractHTMLSummary("<p>malformed data"));
     }
 
     @Test
     public void wrapLikeSubstr() throws Exception {
-        String keyword = "str";
-        assertEquals("%str%",StringUtil.wrapLikeSubstr(keyword));
+        assertEquals("%str%",StringUtil.wrapLikeSubstr("str"));
+        assertEquals("%\_99\%%",StringUtil.wrapLikeSubstr("_99%"));
     }
 
     @Test
