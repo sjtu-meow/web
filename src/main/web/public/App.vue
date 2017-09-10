@@ -5,10 +5,6 @@
     <div class="header clearfix">
       <nav>
         <ul class="nav nav-pills pull-right">
-<<<<<<< HEAD
-=======
-          <!--<li role="presentation"><a href="#" @click="saveArticle">保存</a></li>-->
->>>>>>> 6cb766f6937089045e504e1fc782634bb37e1f22
           <li role="presentation"><a href="#" @click="postArticle">发布</a></li>
           <li role="presentation">
             <a @click="logout">退出</a>
