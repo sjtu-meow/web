@@ -20,7 +20,7 @@ public class StringUtilTest {
         assertEquals("<p>blocks</p>", StringUtil.filterRichText("<p>blocks</p>"));
         assertEquals("<b>formatting</b>", StringUtil.filterRichText("<b>formatting</b>"));
         assertEquals("<img src=\"http://lorempixel.com/50/50\" />", StringUtil.filterRichText("<img src=\"http://lorempixel.com/50/50\" />"));
-        assertEquals("<div style=\"color: #3c3;\">styled div</div>", StringUtil.filterRichText("<div style=\"color: #3c3;\">styled div</div>"));
+        assertEquals("<div style=\"color:#3c3\">styled div</div>", StringUtil.filterRichText("<div style=\"color: #3c3;\">styled div</div>"));
     }
 
     @Test
@@ -32,7 +32,7 @@ public class StringUtilTest {
     @Test
     public void wrapLikeSubstr() throws Exception {
         assertEquals("%str%",StringUtil.wrapLikeSubstr("str"));
-        assertEquals("%\_99\%%",StringUtil.wrapLikeSubstr("_99%"));
+        assertEquals("%\\_99\\%%",StringUtil.wrapLikeSubstr("_99%"));
     }
 
     @Test
