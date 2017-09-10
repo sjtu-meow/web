@@ -12,7 +12,7 @@
 
             <div class="box-tools">
               <div class="input-group input-group-sm" style="width: 150px;">
-                <input type="text" class="form-control pull-right" placeholder="搜索" v-model="keywordFromInput">
+                <input type="text" class="form-control pull-right" placeholder="搜索" v-model="keywordFromInput" @keyup.enter="search">
                 <div class="input-group-btn">
                   <button type="button" class="btn btn-default" @click="search"><i class="fa fa-search"></i></button>
                 </div>
@@ -255,7 +255,7 @@ export default {
     },
     addPush() {
       let itemType = 4;
-      switch (newPush.itemTextualType) {
+      switch (this.newPush.itemTextualType) {
         case '点滴':
           itemType = 0;
           break;
@@ -274,9 +274,9 @@ export default {
 
       if (this.newPush.valid) {
         this.$http.post('/api/admin/pushes', {
-          itemId: newPush.itemId,
+          itemId: this.newPush.itemId,
           itemType: itemType,
-          text: newPush.text
+          text: this.newPush.text
         }).then(function(response) {
           this.fetchPushes(this.pagination.totalPages - 1);
           $('#add-push-modal').modal('hide');
