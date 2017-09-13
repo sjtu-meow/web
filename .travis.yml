@@ -14,9 +14,7 @@ before_install:
     - echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
 install:
     - sudo apt-get update && sudo apt-get install yarn
-    - cd src/main/web
-    - yarn && yarn run build
-    - cd -
+    - ./gradlew build
 script:
     - ./gradlew check
 sudo: required

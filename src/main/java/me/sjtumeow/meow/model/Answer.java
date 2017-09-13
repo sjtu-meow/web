@@ -1,17 +1,20 @@
 package me.sjtumeow.meow.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 import org.hibernate.annotations.Formula;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 @Entity
 public class Answer extends Item {
 
     private static final long serialVersionUID = 1L;
 
+    @Column(columnDefinition = "TEXT")
     private String content;
 
     @JsonBackReference

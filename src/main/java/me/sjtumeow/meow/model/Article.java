@@ -1,5 +1,6 @@
 package me.sjtumeow.meow.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 
 @Entity
@@ -7,7 +8,10 @@ public class Article extends Item {
 
     private static final long serialVersionUID = 1L;
 
-    String title, summary, content, cover;
+    String title, summary, cover;
+
+    @Column(columnDefinition = "TEXT")
+    String content;
 
     public Article() {
         type = Item.ITEM_TYPE_ARTICLE;

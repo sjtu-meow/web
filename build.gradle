@@ -81,6 +81,7 @@ dependencies {
    
     compile group: 'com.googlecode.owasp-java-html-sanitizer', name: 'owasp-java-html-sanitizer', version: 'r239'
     
+    compile 'org.jsoup:jsoup:1.10.3'
 
 }
 
