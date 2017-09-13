@@ -1,10 +1,9 @@
 package me.sjtumeow.meow.util;
 
-import java.text.Normalizer;
-import javax.validation.constraints.AssertTrue;
-import org.junit.Test;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
-import static org.junit.Assert.*;
+import org.junit.Test;
 
 public class FormatValidatorTest {
     @Test

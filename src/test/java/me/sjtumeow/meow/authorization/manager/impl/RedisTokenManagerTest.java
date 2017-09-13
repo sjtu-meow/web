@@ -1,20 +1,23 @@
 package me.sjtumeow.meow.authorization.manager.impl;
 
-import me.sjtumeow.meow.authorization.manager.TokenManager;
-import me.sjtumeow.meow.authorization.model.TokenModel;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
-import sun.tools.jstat.Token;
 
-import static org.junit.Assert.*;
+import me.sjtumeow.meow.authorization.manager.TokenManager;
+import me.sjtumeow.meow.authorization.model.TokenModel;
 
 @SpringBootTest
 @RunWith(SpringRunner.class)
 public class RedisTokenManagerTest {
-    @Autowired TokenManager tokenManager;
+    @Autowired
+    TokenManager tokenManager;
 
     @Test
     public void checkToken() throws Exception {
