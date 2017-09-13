@@ -40,7 +40,7 @@ export default {
   },
   computed: {
     plainContent() {
-      return $(this.article.content).text()
+      return $('<div>' + this.article.content + '</div>').text()
     }
   }
 }

@@ -200,7 +200,7 @@ export default {
                   this.newBanner.valid = false;
                 } else {
                   this.previewTitle = response.body.title;
-                  this.previewContent = $(response.body.content).text();
+                  this.previewContent = $('<div>' + response.body.content + '</div>').text();
                   this.newBanner.valid = true;
                 }
               },
@@ -238,7 +238,8 @@ export default {
                   this.newBanner.valid = false;
                 } else {
                   this.previewTitle = response.body.profile.nickname;
-                  this.previewContent = $(response.body.content).text();
+
+                  this.previewContent = $('<div>' + response.body.content + '</div>').text();
                   this.$http.get('/api/admin/questions/' + response.body.questionId)
                     .then(function(response) {
                       this.previewTitle += '的回答（' + response.body.title + '）';

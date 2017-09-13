@@ -28,7 +28,7 @@ export default {
   },
   computed: {
     plainContent() {
-      return $(this.answer.content).text()
+      return $('<div>' + this.answer.content + '</div>').text()
     }
   },
   methods: {
